@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0B0C">
+  <meta name="robots" content="noindex">
+  <title>CUPRA Training Experience</title>
+  <meta name="description" content="Four chapters. Two weeks. One goal: Become the CUPRA 1st.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'%3E%3Crect width='64' height='40' fill='%230B0B0C'/%3E%3Cpath d='M6 8 L22 32 L32 18 M58 8 L42 32 L32 18 M20 8 L32 26 L44 8' fill='none' stroke='%23C1875A' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="device">
+  <div class="app" id="app">
+
+    <!-- INTRO -->
+    <section class="screen screen--intro" data-screen="intro" hidden>
+      <div class="intro">
+        <div class="intro__lines" aria-live="polite">
+          <p class="intro__line" data-line="0">The one who knows the roots.</p>
+          <p class="intro__line" data-line="1">The one who masters the craft.</p>
+          <p class="intro__line" data-line="2">The one who feels the drive.</p>
+          <p class="intro__line" data-line="3">The one they follow. You.</p>
+        </div>
+        <h1 class="intro__claim">
+          <span>Be the one</span>
+          <span>they follow.</span>
+        </h1>
+        <div class="intro__mark" aria-hidden="true">
+          <img src="/assets/logo.svg" alt="" width="48" height="30">
+        </div>
+      </div>
+      <button type="button" class="intro__skip" data-action="skip-intro">Skip</button>
+    </section>
+
+    <!-- HOME -->
+    <section class="screen screen--home" data-screen="home" hidden>
+      <header class="topbar">
+        <button type="button" class="brand" data-action="logo-tap" aria-label="CUPRA Training Experience">
+          <img src="/assets/logo.svg" alt="" width="32" height="20">
+          <span class="brand__name">CUPRA</span>
+        </button>
+        <button type="button" class="iconbtn" data-nav="/profile" aria-label="Your profile">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          <span class="iconbtn__dot" data-badge-dot hidden></span>
+        </button>
+      </header>
+
+      <div class="home__head">
+        <p class="eyebrow">Training Experience</p>
+        <h1 class="display">Become the<br>CUPRA 1st.</h1>
+        <p class="lead" data-copy="homeIntro"></p>
+      </div>
+
+      <div class="home__status" data-home-status hidden>
+        <div class="tile">
+          <p class="tile__label">Your points</p>
+          <p class="tile__value"><span data-total-points>0</span><small> pts</small></p>
+        </div>
+        <div class="tile">
+          <p class="tile__label">Badges</p>
+          <div class="badge-row" data-badge-row></div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn--primary btn--block" data-nav="/chapter/origin" data-home-cta>Start: ORIGIN</button>
+
+      <ol class="chapters" data-chapters></ol>
+
+      <p class="mystery" data-copy="mystery"></p>
+    </section>
+
+    <!-- CHAPTER ORIGIN -->
+    <section class="screen screen--chapter" data-screen="chapter" hidden>
+      <header class="topbar topbar--overlay">
+        <button type="button" class="iconbtn" data-action="back" aria-label="Back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+      </header>
+      <div class="hero hero--origin">
+        <p class="eyebrow">Chapter 01 · Open</p>
+        <h1 class="display display--xl">ORIGIN</h1>
+        <p class="hero__claim">The one who knows the roots.</p>
+        <div class="hero__progress">
+          <div class="ring" data-ring>
+            <svg viewBox="0 0 44 44" width="44" height="44">
+              <circle class="ring__track" cx="22" cy="22" r="18"/>
+              <circle class="ring__fill" cx="22" cy="22" r="18" data-ring-fill/>
+            </svg>
+          </div>
+          <p class="hero__points"><span data-total-points>0</span> / <span data-chapter-max>400</span> pts</p>
+        </div>
+      </div>
+
+      <div class="stack">
+        <p class="section-label">Content Drop</p>
+        <button type="button" class="card card--tap" data-nav="/chapter/origin/drop" data-card="drop">
+          <div class="card__thumb card__thumb--barcelona" aria-hidden="true">
+            <span class="play play--sm"></span>
+          </div>
+          <div class="card__body">
+            <p class="card__title">Story Capsule</p>
+            <p class="card__meta">1:20 min · <span class="copper">+40 bonus pts</span></p>
+          </div>
+          <span class="card__state" data-card-state></span>
+        </button>
+
+        <p class="section-label">Challenges</p>
+        <button type="button" class="card card--tap" data-nav="/chapter/origin/challenge" data-card="spirit">
+          <div class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><path d="M4 12h13M13 6l6 6-6 6"/></svg>
+          </div>
+          <div class="card__body">
+            <p class="card__title">The Spirit Check</p>
+            <p class="card__meta">Swipe · ~3 min · <span class="copper">up to 300 pts</span></p>
+          </div>
+          <span class="card__state" data-card-state></span>
+        </button>
+
+        <div class="card card--disabled" aria-disabled="true">
+          <div class="card__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+          </div>
+          <div class="card__body">
+            <p class="card__title">Born in Barcelona</p>
+            <p class="card__meta">Explore · ~4 min</p>
+          </div>
+          <span class="card__state card__state--soon">Coming soon</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT DROP -->
+    <section class="screen screen--drop" data-screen="drop" hidden>
+      <header class="topbar">
+        <button type="button" class="iconbtn" data-action="back" aria-label="Back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <p class="topbar__title">Story Capsule</p>
+        <span class="topbar__spacer"></span>
+      </header>
+
+      <button type="button" class="video" data-action="drop-tap" aria-label="Play story capsule">
+        <div class="video__still video__still--barcelona" aria-hidden="true"></div>
+        <span class="play" aria-hidden="true"></span>
+        <div class="video__bar" aria-hidden="true"><span class="video__progress" data-video-progress></span></div>
+        <div class="video__pill" data-drop-pill hidden>+40 pts</div>
+      </button>
+
+      <div class="stack">
+        <p class="eyebrow">ORIGIN · Content Drop</p>
+        <h2 class="headline">Where the new model comes from.</h2>
+        <p class="body muted">Ninety seconds on the roots: Barcelona, the racing spirit, the people who shaped it. Watch it once, keep the bonus.</p>
+      </div>
+
+      <div class="screen__footer">
+        <button type="button" class="btn btn--primary btn--block" data-nav="/chapter/origin/challenge" data-drop-continue>Continue to challenge</button>
+      </div>
+    </section>
+
+    <!-- CHALLENGE INTERSTITIAL -->
+    <section class="screen screen--challenge" data-screen="challenge" hidden>
+      <header class="topbar">
+        <button type="button" class="iconbtn" data-action="back" aria-label="Back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <p class="topbar__title">Challenge</p>
+        <span class="topbar__spacer"></span>
+      </header>
+
+      <div class="stack stack--center">
+        <p class="eyebrow">ORIGIN · Challenge 01</p>
+        <h1 class="display">The Spirit Check</h1>
+        <p class="body muted">One wrong answer and the run is over. The timer gets shorter with every streak. How well do you know what CUPRA stands for?</p>
+
+        <ul class="facts">
+          <li><span class="facts__k">Format</span><span class="facts__v">Swipe</span></li>
+          <li><span class="facts__k">Time</span><span class="facts__v">~3 min</span></li>
+          <li><span class="facts__k">Points</span><span class="facts__v copper">up to 300</span></li>
+        </ul>
+
+        <p class="hint" data-challenge-done hidden>You already completed this challenge. Play again anytime, your points stay.</p>
+      </div>
+
+      <div class="screen__footer">
+        <a class="btn btn--primary btn--block" data-challenge-link href="#">Play now</a>
+        <p class="hint">You will be back here after the run.</p>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="screen screen--result" data-screen="result" hidden>
+      <div class="stack stack--center stack--grow">
+        <p class="eyebrow">The Spirit Check · Completed</p>
+        <p class="score"><span data-result-score>0</span><small>pts</small></p>
+        <p class="score__sub">added to ORIGIN</p>
+        <p class="headline" data-result-feedback></p>
+      </div>
+      <div class="screen__footer">
+        <button type="button" class="btn btn--primary btn--block" data-nav="/badge">Claim your badge</button>
+      </div>
+    </section>
+
+    <!-- BADGE -->
+    <section class="screen screen--badge" data-screen="badge" hidden>
+      <div class="badge-stage">
+        <div class="badge-stage__glow" aria-hidden="true"></div>
+        <div class="badge-stage__badge">
+          <img src="/assets/badge-origin.svg" alt="ORIGIN badge" width="180" height="180">
+        </div>
+        <p class="eyebrow">Badge earned</p>
+        <h1 class="display">ORIGIN</h1>
+        <p class="badge-stage__claim" data-copy="badgeTitle"></p>
+      </div>
+      <div class="screen__footer">
+        <button type="button" class="btn btn--primary btn--block" data-nav="/">Back to home</button>
+      </div>
+    </section>
+
+    <!-- PROFILE -->
+    <section class="screen screen--profile" data-screen="profile" hidden>
+      <header class="topbar">
+        <button type="button" class="iconbtn" data-action="back" aria-label="Back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <p class="topbar__title">Your profile</p>
+        <span class="topbar__spacer"></span>
+      </header>
+
+      <div class="stack">
+        <div class="profile-head">
+          <div class="avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+          <div>
+            <p class="eyebrow">Sales Advisor</p>
+            <p class="headline">You</p>
+          </div>
+        </div>
+
+        <div class="tiles">
+          <div class="tile">
+            <p class="tile__label">Points</p>
+            <p class="tile__value"><span data-total-points>0</span><small> pts</small></p>
+          </div>
+          <div class="tile">
+            <p class="tile__label">Chapters</p>
+            <p class="tile__value"><span data-chapters-done>0</span><small> / 4</small></p>
+          </div>
+        </div>
+
+        <p class="section-label">Badges</p>
+        <div class="badge-grid" data-badge-grid></div>
+
+        <div class="note">
+          <p class="note__title">No leaderboard.</p>
+          <p class="muted">Only you see your progress. Every point counts – the reveal comes with the Competition.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- TEASER SHEET -->
+<div class="sheet" data-sheet hidden>
+  <div class="sheet__backdrop" data-action="close-sheet"></div>
+  <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <button type="button" class="sheet__close" data-action="close-sheet" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <p class="eyebrow" data-sheet-eyebrow>Locked</p>
+    <h2 class="display" id="sheet-title" data-sheet-title></h2>
+    <p class="hero__claim" data-sheet-claim></p>
+    <p class="body muted" data-sheet-teaser></p>
+    <p class="countdown countdown--lg"><span data-sheet-countdown></span></p>
+  </div>
+</div>
+
+<script src="/js/config.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -3,8 +3,8 @@
  * Zentrale Konfiguration. Alles, was vor dem Pitch angepasst werden muss, steht hier.
  */
 window.CTE_CONFIG = {
-  /** Deploy-URL der Streak Challenge (ohne Slash am Ende). TODO: Vercel-URL eintragen. */
-  challengeUrl: "http://localhost:3000",
+  /** Deploy-URL der Streak Challenge (ohne Slash am Ende). */
+  challengeUrl: "https://cuprastreak-challenge.vercel.app",
 
   /** Basis für den Rückweg. null = window.location.origin (Standard). */
   returnBase: null,

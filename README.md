@@ -67,7 +67,7 @@ QR-Code auf die Produktions-URL erzeugen.
 
 ## Vor dem Pitch
 
-- [ ] `challengeUrl` in `js/config.js` auf die Vercel-URL der Streak Challenge setzen
+- [x] `challengeUrl` in `js/config.js` auf die Vercel-URL der Streak Challenge gesetzt
 - [ ] Streak-Challenge-Branch `feature/return-link` mergen und deployen
 - [ ] `unlock.*` relativ zum Pitch-Tag prüfen (aktuell 21.09., 25.09., 28.09.2026)
 - [ ] CI-Assets tauschen: Farb-Tokens in `css/styles.css` (`:root`), Font-Link in `index.html`, Key-Visual (`.card__thumb--barcelona`, `.video__still--barcelona`), Logo und Badges in `assets/`

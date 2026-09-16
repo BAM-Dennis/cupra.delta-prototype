@@ -89,13 +89,12 @@
     if (lines) lines.innerHTML = CFG.copy.openerLines.map(function (l) { return '<p class="opener__line">' + esc(l) + "</p>"; }).join("");
     var ob = $("[data-opener-badges]");
     if (ob) ob.innerHTML = CFG.phase0.chapters.map(function () { return '<img src="/assets/badge-copper.svg" alt="">'; }).join("") + '<img src="/assets/badge-teal.svg" alt="">';
-    var il = $("[data-intro0-lines]");
-    if (il) {
+    $$("[data-intro0-lines], [data-opener-carousel]").forEach(function (il) {
       var arr = P0.introLines || [];
       il.innerHTML = arr.concat([arr[0]]).map(function (l, i) {
         return '<p class="intro0__line' + (i === arr.length - 1 ? " intro0__line--last" : "") + '">' + esc(l) + "</p>";
       }).join("");
-    }
+    });
   }
 
   function updateCounters() {
@@ -224,19 +223,12 @@
 
   /* ===== PHASE 0 ===== */
 
-  // INTRO: „THE ONE" steht, rechts laufen die Zeilen durch die Maske nach oben
-  var introLoop = null;
-  enter.intro0 = function (el) {
-    var lines = $("[data-intro0-lines]", el);
+  // Textkarussell: „THE ONE" steht, rechts laufen die Zeilen durch die Maske nach oben.
+  // loop=false stoppt nach der letzten Zeile.
+  function startCarousel(lines, mask, delay, loop) {
     var items = $$(".intro0__line", lines);
-    var enterBtn = $(".intro0__enter", el);
-    var mask = $(".intro0__mask", el);
-    var n = (P0.introLines || []).length;
-    var delay = (P0.intro && P0.intro.lineDelayMs) || 1500;
+    var n = items.length - 1;
     var index = 0;
-
-    enterBtn.classList.remove("is-visible");
-    later(function () { enterBtn.classList.add("is-visible"); }, (P0.intro && P0.intro.skipAfterMs) || 2000);
 
     function position(i, instant) {
       var item = items[i];
@@ -250,19 +242,21 @@
     }
 
     position(0, true);
-    introLoop = function step() {
+    function step() {
       index += 1;
-      if (index > n) {
-        // Duplikat der ersten Zeile erreicht: unsichtbar auf den Anfang springen
-        index = 0;
-        position(0, true);
-        index = 1;
-      }
+      if (index > n) { index = 0; position(0, true); index = 1; }
+      if (!loop && index >= n) { return; }
       position(index, false);
-      var hold = index === n - 1 ? delay * 1.6 : delay;
-      later(step, hold);
-    };
-    later(introLoop, delay);
+      later(step, index === n - 1 ? delay * 1.6 : delay);
+    }
+    later(step, delay);
+  }
+
+  enter.intro0 = function (el) {
+    var enterBtn = $(".intro0__enter", el);
+    enterBtn.classList.remove("is-visible");
+    later(function () { enterBtn.classList.add("is-visible"); }, (P0.intro && P0.intro.skipAfterMs) || 2000);
+    startCarousel($("[data-intro0-lines]", el), $(".intro0__mask", el), (P0.intro && P0.intro.lineDelayMs) || 1500, true);
   };
 
   function enterIntro() {
@@ -423,27 +417,21 @@
   // OPENER
   enter.opener = function (el) {
     var O = CFG.opener;
-    var lines = $$(".opener__line", el);
     var skip = $(".skip", el);
+    var enterBtn = $("[data-opener-enter]", el);
+    var n = (P0.introLines || []).length;
     el.classList.remove("phase-claim", "phase-badges", "phase-outro");
     skip.classList.remove("is-visible");
-    lines.forEach(function (l) { l.classList.remove("is-in", "is-past", "is-last"); });
+    enterBtn.classList.remove("is-visible");
 
-    var t = 500;
-    lines.forEach(function (line, i) {
-      later(function () {
-        line.classList.add("is-in");
-        if (i === lines.length - 1) line.classList.add("is-last");
-        if (i > 0) lines[i - 1].classList.add("is-past");
-      }, t + i * O.lineDelayMs);
-    });
-    var tClaim = t + lines.length * O.lineDelayMs;
+    startCarousel($("[data-opener-carousel]", el), $(".intro0__mask", el), O.lineDelayMs, false);
+    var tClaim = O.lineDelayMs * n + 600;
     var tBadges = tClaim + O.claimHoldMs;
     var tOutro = tBadges + O.badgesHoldMs;
     later(function () { skip.classList.add("is-visible"); }, O.skipAfterMs);
     later(function () { el.classList.add("phase-claim"); }, tClaim);
     later(function () { el.classList.remove("phase-claim"); el.classList.add("phase-badges"); }, tBadges);
-    later(function () { el.classList.remove("phase-badges"); el.classList.add("phase-outro"); }, tOutro);
+    later(function () { el.classList.remove("phase-badges"); el.classList.add("phase-outro"); enterBtn.classList.add("is-visible"); }, tOutro);
     later(finishOpener, tOutro + O.outroHoldMs);
   };
 
@@ -470,11 +458,58 @@
       cta.textContent = "Continue: K1 Refresher";
       cta.setAttribute("data-nav", "/k1");
     }
-    $("[data-chapters]", el).innerHTML = CFG.chapters.map(renderChapterRow).join("");
-    var ring = $("[data-ring]", el);
-    if (ring) setRing(ring, phasePoints() / P.chapterMax, state.k1Done);
+    $("[data-chapters]", el).innerHTML = CFG.chapters.map(renderP1Card).join("");
+    setRing($(".dash-status [data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
+    var k1ring = $('[data-chapters] [data-ring]', el);
+    if (k1ring) setRing(k1ring, phasePoints() / P.chapterMax, state.k1Done, RING32);
     tickCountdowns();
   };
+
+  function imageCard(opts) {
+    var left;
+    if (opts.state === "locked") {
+      left = '<div class="ring32 ring32--locked"><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle class="ring32__track" cx="16" cy="16" r="15.5"/></svg><img class="ring32__lock" src="/assets/figma/icon-lock.svg" alt=""></div>';
+    } else {
+      left = '<div class="ring32"' + (opts.ring ? " data-ring" : "") + '><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle class="ring32__track" cx="16" cy="16" r="15.5"/>' +
+        (opts.ring ? '<circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill' + (opts.full ? ' style="stroke-dashoffset:0"' : "") + "/>" : "") + "</svg>" +
+        (opts.state === "completed" ? '<span class="ring32__check" aria-hidden="true">✓</span>' : "") + "</div>";
+    }
+    return (
+      '<li><button type="button" class="ccard' + (opts.state === "locked" ? " ccard--locked" : "") + '" ' + opts.attrs + ">" +
+        '<img class="ccard__img" src="' + opts.image + '" alt="">' +
+        '<div class="ccard__overlay"></div>' +
+        '<div class="ccard__text"><p class="overline tr15">' + esc(opts.index) + '</p><p class="ccard__name">' + esc(opts.name) + '</p><p class="ccard__claim">' + esc(opts.claim || "") + "</p></div>" +
+        '<div class="ccard__score">' + left + '<p class="ccard__state">' + opts.stateHtml + "</p></div>" +
+      "</button></li>"
+    );
+  }
+
+  function renderP1Card(c) {
+    var st = chapterState(c);
+    var o = { index: c.index, name: c.name, image: c.image, state: st };
+    if (c.kind === "scan") {
+      o.claim = "Your Delta across five dimensions.";
+      o.stateHtml = "Completed &nbsp;·&nbsp; <b>5 dimensions</b>";
+      o.attrs = 'data-nav="' + c.nav + '"';
+      o.full = true; o.ring = true;
+    } else if (c.id === "k1") {
+      o.claim = c.sub;
+      o.ring = true;
+      o.stateHtml = (state.k1Done ? "Completed" : "Open") + " &nbsp;·&nbsp; <b>" + phasePoints() + " / " + P.chapterMax + " pts</b>";
+      o.attrs = 'data-nav="' + c.nav + '"';
+    } else if (st === "open") {
+      o.claim = c.teaser;
+      o.stateHtml = "Open &nbsp;·&nbsp; <b>0 / " + P.chapterMax + " pts</b>";
+      o.attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
+    } else {
+      o.claim = c.teaser;
+      o.stateHtml = c.lock === "countdown"
+        ? 'Unlocks in &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '"></b>'
+        : "<b>" + esc(c.lockText) + "</b>";
+      o.attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
+    }
+    return imageCard(o);
+  }
 
   function chapterState(c) {
     if (c.kind === "scan") return "completed";
@@ -528,23 +563,23 @@
 
   // K1
   enter.k1 = function (el) {
-    $("[data-k1-state]", el).textContent = state.k1Done ? "K1 · Completed" : "K1 · Open";
-    setRing($("[data-ring]", el), phasePoints() / P.chapterMax, state.k1Done);
-    setCardState($('[data-card="nugget"]', el), state.nuggetSeen, "Watched", "Watch");
-    setCardState($('[data-card="challenge"]', el), state.k1Done, "Done · " + state.k1Score + " pts", "Play");
+    $("[data-k1-state]", el).textContent = "K1  ·  " + (state.k1Done ? "Completed" : "Open");
+    setRing($("[data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
+    setRowState($('[data-card="nugget"]', el), state.nuggetSeen, !state.nuggetSeen, "Watch");
+    setRowState($('[data-card="challenge"]', el), state.k1Done, state.nuggetSeen && !state.k1Done, "Play");
   };
 
-  function setCardState(card, done, doneText, openText) {
-    var st = $("[data-card-state]", card);
-    card.classList.toggle("row--done", done);
-    st.className = "row__state " + (done ? "row__state--done" : "row__state--open");
-    st.textContent = (done ? "✓ " : "") + (done ? doneText : openText);
+  function setRowState(row, done, highlight, openText) {
+    row.classList.toggle("ccrow--hi", !!highlight);
+    $("[data-card-state]", row).innerHTML = done
+      ? '<img src="/assets/figma/icon-check-circle.svg" alt="Done">'
+      : openText;
   }
 
   // NUGGET (Phase 1)
   var nuggetReveal = null;
   enter.nugget = function (el) {
-    var video = $(".video", el);
+    var video = $(".vthumb", el);
     var pill = $("[data-nugget-pill]", el);
     var progress = $("[data-video-progress]", el);
     var revealed = false;
@@ -696,7 +731,8 @@
       return '<figure><img src="/assets/badge-copper.svg" alt=""><figcaption>' + esc(c.name) + "</figcaption></figure>";
     }).join("") + '<figure class="is-final"><img src="/assets/badge-teal.svg" alt=""><figcaption>' + esc(CFG.phase0.finalBadge) + "</figcaption></figure>";
     $("[data-phase0-chapters]", el).innerHTML = ch.map(function (c, i) {
-      return '<li><div class="row row--done"><span class="check" aria-hidden="true">✓</span><div class="row__body"><p class="row__index">Chapter ' + pad2(i + 1) + '</p><p class="row__title">' + esc(c.name) + '</p><p class="row__meta">' + esc(c.claim) + '</p></div><span class="row__state row__state--done">Completed</span></div></li>';
+      return imageCard({ index: "Chapter " + pad2(i + 1), name: c.name, claim: c.claim, image: c.image, state: "completed", ring: true, full: true,
+        stateHtml: "Completed &nbsp;·&nbsp; <b>Badge earned</b>", attrs: "disabled" });
     }).join("");
   };
 

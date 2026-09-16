@@ -71,22 +71,22 @@ window.CTE_CONFIG = {
 
   /** Home-Karten der Phase 1 */
   chapters: [
-    { id: "delta", kind: "scan", index: "Delta Scan", name: "Your starting point", hint: "Completed · 5 dimensions", nav: "/profile" },
-    { id: "k1", index: "K1", name: "Refresher", sub: "Prepares all three workshops", nav: "/k1" },
+    { id: "delta", kind: "scan", index: "Delta Scan", name: "Your starting point", hint: "Completed · 5 dimensions", nav: "/profile", image: "/assets/figma/thumb-born-in-barcelona.jpg" },
+    { id: "k1", index: "K1", name: "Refresher", sub: "Prepares all three workshops", nav: "/k1", image: "/assets/figma/card-origin.jpg" },
     {
-      id: "k2", index: "K2", name: "Segment & Target Customer", lock: "after-k1", lockText: "Unlocks after K1",
+      id: "k2", index: "K2", name: "Segment & Target Customer", lock: "after-k1", lockText: "Unlocks after K1", image: "/assets/figma/card-craftsmanship.jpg",
       teaser: "Who buys the new model, and why. Built for your biggest Delta: Segment & customer.",
     },
     {
-      id: "k3", index: "K3", name: "Competition", lock: "countdown",
+      id: "k3", index: "K3", name: "Competition", lock: "countdown", image: "/assets/figma/card-performance.jpg",
       teaser: "The three cars your customers compare against, and the one argument that wins.",
     },
     {
-      id: "k4", index: "K4", name: "Brand & Conviction", lock: "countdown",
+      id: "k4", index: "K4", name: "Brand & Conviction", lock: "countdown", image: "/assets/figma/card-tribe.jpg",
       teaser: "What CUPRA stands for when nobody is reading the spec sheet.",
     },
     {
-      id: "pc", index: "Final", name: "Performance Check", lock: "after-k4", lockText: "Unlocks after K4",
+      id: "pc", index: "Final", name: "Performance Check", lock: "after-k4", lockText: "Unlocks after K4", image: "/assets/figma/thumb-born-in-barcelona.jpg",
       teaser: "Your Delta Scan, played again. See how far you moved.",
     },
   ],
@@ -96,12 +96,16 @@ window.CTE_CONFIG = {
     nugget: {
       title: "Tech Overview",
       meta: "1:30 min",
+      eyebrow: "K1 Refresher · Nugget",
+      thumb: "/assets/figma/card-performance.jpg",
       headline: "What changed under the skin.",
       body: "Ninety seconds on the new model's platform, battery and cockpit. Watch it once, keep the bonus.",
     },
     challenge: {
       title: "Known or New?",
-      meta: "Swipe · ~3 min · up to 300 pts",
+      meta: "Swipe · ~3 min",
+      points: "up to 300 pts",
+      thumb: "/assets/figma/card-craftsmanship.jpg",
       rule: "Three features of the new model. Decide for each: known from the previous model, or new? One tap per card.",
       cards: [
         {
@@ -135,10 +139,10 @@ window.CTE_CONFIG = {
   phase0: {
     title: "Become the CUPRA 1st",
     chapters: [
-      { name: "Origin", claim: "The one who knows the roots." },
-      { name: "Craftsmanship", claim: "The one who masters the craft." },
-      { name: "Performance", claim: "The one who feels the drive." },
-      { name: "Tribe", claim: "The one they follow. You." },
+      { name: "Origin", claim: "The one who knows the roots.", image: "/assets/figma/card-origin.jpg" },
+      { name: "Craftsmanship", claim: "The one who masters the craft.", image: "/assets/figma/card-craftsmanship.jpg" },
+      { name: "Performance", claim: "The one who feels the drive.", image: "/assets/figma/card-performance.jpg" },
+      { name: "Tribe", claim: "The one they follow. You.", image: "/assets/figma/card-tribe.jpg" },
     ],
     finalBadge: "CUPRA 1st",
   },
@@ -225,7 +229,9 @@ window.CTE_CONFIG = {
     ],
     openerOutro1: "Chapter one is complete.",
     openerOutro2: "The Digital Campaign begins.",
-    homeEyebrow: "Phase 1 · The Digital Campaign",
+    homeEyebrow: "Training experience",
+    homeHeadline: "The Digital Campaign",
+    homeProgramLabel: "Delta",
     homeIntro: "Four chapters, one Performance Check. Every point counts – the reveal comes with the Competition.",
     archiveRow: "Become the CUPRA 1st · Completed",
     noLeaderboard: "Positions stay hidden until the Competition. Preview with demo data.",

@@ -162,95 +162,93 @@
         </div>
       </section>
 
-      <!-- ============ PHASE 1 (Konzept v2) ============ -->
+      <!-- ============ PHASE 1 (Konzept v2, im Phase-0-Stil) ============ -->
 
       <!-- OPENER -->
-      <section class="screen screen--opener" data-screen="opener" data-bgvariant="start" hidden>
-        <button type="button" class="skip" data-action="skip-opener">Skip</button>
-        <div class="opener__emblem">
-          <img class="opener__shape" src="/assets/design/gradient-shape.webp" alt="">
-          <img class="opener__mark" src="/assets/design/emblem.svg" alt="CUPRA">
+      <section class="screen screen--opener" data-screen="opener" data-bgvariant="intro" hidden>
+        <div class="meta meta--abs">
+          <span></span>
+          <button type="button" class="glassbtn skip skip--glass" data-action="skip-opener">Skip</button>
         </div>
-        <div class="opener__stage" data-action="opener-tap">
-          <div class="opener__lines" data-opener-lines></div>
+        <img class="intro0__emblem" src="/assets/design/emblem.svg" alt="CUPRA">
+        <div class="opener__stage">
+          <div class="intro0__text opener__carousel">
+            <span class="intro0__fixed" data-p0="introFixed"></span>
+            <div class="intro0__mask"><div class="intro0__lines" data-opener-carousel></div></div>
+          </div>
           <h1 class="opener__claim"><span>Be the one</span><span>they follow.</span></h1>
           <div class="opener__badges" data-opener-badges></div>
           <p class="opener__outro"><span data-copy="openerOutro1"></span><strong data-copy="openerOutro2"></strong></p>
         </div>
+        <div class="footer">
+          <button type="button" class="btn btn--primary intro0__enter" data-opener-enter data-action="skip-opener">Enter</button>
+        </div>
       </section>
 
       <!-- HOME -->
-      <section class="screen screen--home" data-screen="home" data-tab="home" hidden>
-        <header class="topbar">
-          <button type="button" class="brand" data-action="logo-tap" aria-label="CUPRA Training Experience">
-            <img src="/assets/design/emblem.svg" alt="" width="30" height="23">
-            <span class="brand__name">Training <em>Experience</em></span>
-          </button>
+      <section class="screen screen--dashboard" data-screen="home" data-bgvariant="dashboard" data-tab="home" hidden>
+        <div class="meta">
           <span class="chip">Phase 1</span>
-        </header>
-
-        <p class="overline overline--75" data-copy="homeEyebrow"></p>
-        <h1 class="h1">Be the one<br><span class="light">they follow.</span></h1>
-        <p class="lead" data-copy="homeIntro"></p>
-
-        <section class="panel">
-          <div class="score">
-            <span class="score__num" data-phase-points>0</span>
-            <span class="score__unit">pts</span>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+        </div>
+        <button type="button" class="delta" data-action="logo-tap" aria-label="CUPRA">
+          <div class="delta__triangle"><img src="/assets/figma/gradient-shape-dashboard.png" alt=""></div>
+          <img class="delta__emblem" src="/assets/design/emblem.svg" alt="">
+          <p class="delta__label" data-copy="homeProgramLabel"></p>
+        </button>
+        <div class="dash-intro">
+          <p class="overline tr15" data-copy="homeEyebrow"></p>
+          <h1 class="dash-h1" data-copy="homeHeadline"></h1>
+          <p class="dash-body" data-copy="homeIntro"></p>
+        </div>
+        <div class="dash-status">
+          <div class="score32">
+            <div class="ring32" data-ring>
+              <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">
+                <circle class="ring32__track" cx="16" cy="16" r="15.5"/>
+                <circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/>
+              </svg>
+            </div>
+            <p class="score32__text"><b data-phase-points>0</b> pts &nbsp;·&nbsp; Rank <b data-demo="rank"></b> &nbsp;·&nbsp; <b data-badge-count></b> badges</p>
           </div>
-          <div class="tiles">
-            <div class="tile">
-              <p class="tile__label">Rank</p>
-              <div class="tile__value"><img src="/assets/design/icon-position.svg" alt="" class="icon16"><span data-demo="rank"></span></div>
-            </div>
-            <div class="tile">
-              <p class="tile__label">Streak best</p>
-              <div class="tile__value"><img src="/assets/design/icon-rank-up.svg" alt="" class="icon16"><span data-streak-best></span></div>
-            </div>
-            <div class="tile">
-              <p class="tile__label">Badges</p>
-              <div class="tile__value"><span data-badge-count></span></div>
-            </div>
-          </div>
-        </section>
-
+        </div>
         <button type="button" class="btn btn--primary" data-home-cta data-nav="/k1">Continue: K1 Refresher</button>
 
-        <p class="overline overline--50 section">Your path</p>
-        <ol class="cards" data-chapters></ol>
+        <p class="overline tr15 section">Your path</p>
+        <ol class="ccards" data-chapters></ol>
 
-        <p class="overline overline--50 section">Play anytime</p>
-        <button type="button" class="row row--streak" data-action="open-streak">
-          <img src="/assets/design/logo-decorations.svg" alt="" class="row__deco">
-          <div class="row__body">
-            <p class="row__title">Streak</p>
-            <p class="row__meta">Your best: <b data-streak-best></b> · Global best: <span data-demo="streakGlobalBest"></span></p>
+        <p class="overline tr15 section">Play anytime</p>
+        <button type="button" class="ccrow ccrow--hi" data-action="open-streak">
+          <div class="ccrow__thumb"><img src="/assets/figma/thumb-born-in-barcelona.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/design/logo-decorations.svg" alt="" style="width:24px;height:24px;object-fit:contain"></span></div>
+          <div class="ccrow__text">
+            <p class="ccrow__title">Streak</p>
+            <p class="ccrow__meta">Your best: <b data-streak-best></b> · Global best: <b data-demo="streakGlobalBest"></b></p>
           </div>
-          <span class="row__cta">Play</span>
+          <span class="ccrow__right">Play</span>
         </button>
 
-        <p class="overline overline--50 section">Archive</p>
-        <button type="button" class="row row--archive" data-nav="/archive">
-          <img src="/assets/badge-teal.svg" alt="" class="row__badge">
-          <div class="row__body">
-            <p class="row__title" data-copy="archiveRow"></p>
-            <p class="row__meta"><span data-fmt="phase0Total"></span> pts · Phase 0</p>
+        <p class="overline tr15 section">Archive</p>
+        <button type="button" class="ccrow" data-nav="/archive">
+          <div class="ccrow__thumb"><img src="/assets/figma/card-origin.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-check-circle.svg" alt="" width="24" height="24"></span></div>
+          <div class="ccrow__text">
+            <p class="ccrow__title">Become the CUPRA 1st</p>
+            <p class="ccrow__meta">Phase 0 · Completed · <b class="copper"><span data-fmt="phase0Total"></span> pts</b></p>
           </div>
-          <span class="row__chev" aria-hidden="true">›</span>
+          <span class="ccrow__right">Open</span>
         </button>
       </section>
 
       <!-- DELTA PROFILE (beide Phasen) -->
-      <section class="screen" data-screen="profile" data-tab="profile" hidden>
-        <header class="topbar">
-          <button type="button" class="iconbtn" data-action="back" aria-label="Back"><span class="chev-left"></span></button>
-          <p class="topbar__title">Profile</p>
-          <span class="topbar__spacer"></span>
-        </header>
-
-        <p class="overline overline--75">Delta Scan · Completed</p>
-        <h1 class="h1">Your Delta<br><span class="light">Profile.</span></h1>
-        <p class="lead">Your starting point across five dimensions. The campaign sharpens what you need most.</p>
+      <section class="screen" data-screen="profile" data-bgvariant="chapter" data-tab="profile" hidden>
+        <div class="meta">
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <span></span>
+        </div>
+        <div class="ch-intro">
+          <p class="overline tr15">Delta Scan &nbsp;·&nbsp; Completed</p>
+          <h1 class="ch-title ch-title--md">Your Delta Profile</h1>
+          <p class="ch-claim">Your starting point across five dimensions. The campaign sharpens what you need most.</p>
+        </div>
 
         <section class="panel">
           <ul class="dims" data-dims></ul>
@@ -281,7 +279,7 @@
           </div>
         </div>
 
-        <p class="overline overline--50 section">Prototype view</p>
+        <p class="overline tr15 section">Prototype view</p>
         <div class="segmented" data-phase-toggle>
           <button type="button" data-action="set-phase" data-phase="0">Phase 0 · CUPRA 1st</button>
           <button type="button" data-action="set-phase" data-phase="1">Phase 1 · Campaign</button>
@@ -289,86 +287,82 @@
       </section>
 
       <!-- K1 DETAIL -->
-      <section class="screen" data-screen="k1" hidden>
-        <header class="topbar">
-          <button type="button" class="iconbtn" data-action="back" aria-label="Back"><span class="chev-left"></span></button>
-          <p class="topbar__title">Chapter 01</p>
-          <span class="topbar__spacer"></span>
-        </header>
-
-        <p class="overline overline--75" data-k1-state>K1 · Open</p>
-        <h1 class="h1 h1--xl">Refresher</h1>
-        <p class="lead">Prepares all three workshops.</p>
-        <span class="chip chip--copper" data-delta-chip></span>
-
-        <div class="progress">
-          <div class="ring" data-ring>
-            <svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true">
-              <circle class="ring__track" cx="22" cy="22" r="18"/>
-              <circle class="ring__fill" cx="22" cy="22" r="18" data-ring-fill/>
-            </svg>
-            <span class="ring__check" hidden data-ring-check>✓</span>
-          </div>
-          <p class="progress__text"><span data-phase-points>0</span> / <span data-fmt="chapterMax"></span> pts</p>
+      <section class="screen" data-screen="k1" data-bgvariant="chapter" hidden>
+        <div class="meta">
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
-
-        <p class="overline overline--50 section">Nugget</p>
-        <button type="button" class="row row--tap" data-nav="/k1/nugget" data-card="nugget">
-          <div class="thumb thumb--tech"><span class="play play--sm"></span></div>
-          <div class="row__body">
-            <p class="row__title" data-k1="nugget.title"></p>
-            <p class="row__meta"><span data-k1="nugget.meta"></span> · <span class="copper">+<span data-fmt="nugget"></span> bonus pts</span></p>
+        <div class="ch-intro">
+          <p class="overline tr15" data-k1-state>K1 · Open</p>
+          <h1 class="ch-title">Refresher</h1>
+          <p class="ch-claim">Prepares all three workshops.</p>
+          <span class="chip chip--copper" data-delta-chip></span>
+          <div class="score32">
+            <div class="ring32" data-ring>
+              <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">
+                <circle class="ring32__track" cx="16" cy="16" r="15.5"/>
+                <circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/>
+              </svg>
+            </div>
+            <p class="score32__text"><b data-phase-points>0</b> / <span data-fmt="chapterMax"></span> pts</p>
           </div>
-          <span class="row__state" data-card-state></span>
-        </button>
-
-        <p class="overline overline--50 section">Challenge</p>
-        <button type="button" class="row row--tap" data-nav="/k1/challenge" data-card="challenge">
-          <div class="row__icon"><img src="/assets/design/icon-rank-up.svg" alt="" class="icon24 rot90"></div>
-          <div class="row__body">
-            <p class="row__title" data-k1="challenge.title"></p>
-            <p class="row__meta" data-k1="challenge.meta"></p>
-          </div>
-          <span class="row__state" data-card-state></span>
-        </button>
+        </div>
+        <div class="clist">
+          <p class="overline tr15">Content Nugget</p>
+          <button type="button" class="ccrow" data-nav="/k1/nugget" data-card="nugget">
+            <div class="ccrow__thumb"><img src="/assets/figma/card-performance.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-play-24.svg" alt="" width="24" height="24"></span></div>
+            <div class="ccrow__text">
+              <p class="ccrow__title" data-k1="nugget.title"></p>
+              <p class="ccrow__meta"><span data-k1="nugget.meta"></span> · <b class="copper">+<span data-fmt="nugget"></span> Bonus pts</b></p>
+            </div>
+            <span class="ccrow__right" data-card-state></span>
+          </button>
+          <p class="overline tr15 pt20">Challenges</p>
+          <button type="button" class="ccrow" data-nav="/k1/challenge" data-card="challenge">
+            <div class="ccrow__thumb"><img src="/assets/figma/card-craftsmanship.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-challenge.svg" alt="" width="24" height="24"></span></div>
+            <div class="ccrow__text">
+              <p class="ccrow__title" data-k1="challenge.title"></p>
+              <p class="ccrow__meta"><span data-k1="challenge.meta"></span> · <b class="copper" data-k1="challenge.points"></b></p>
+            </div>
+            <span class="ccrow__right" data-card-state></span>
+          </button>
+        </div>
       </section>
 
       <!-- NUGGET (Phase 1) -->
-      <section class="screen" data-screen="nugget" hidden>
-        <header class="topbar">
-          <button type="button" class="iconbtn" data-action="back" aria-label="Back"><span class="chev-left"></span></button>
-          <p class="topbar__title" data-k1="nugget.title"></p>
-          <span class="topbar__spacer"></span>
-        </header>
-
-        <button type="button" class="video" data-action="nugget-tap" aria-label="Play nugget">
-          <div class="video__still thumb--tech"></div>
-          <span class="play"></span>
+      <section class="screen screen--nugget0" data-screen="nugget" data-bgvariant="chapter" hidden>
+        <div class="meta">
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+        </div>
+        <button type="button" class="vthumb" data-action="nugget-tap" aria-label="Play nugget">
+          <img class="vthumb__img" src="/assets/figma/card-performance.jpg" alt="">
+          <div class="vthumb__overlay"></div>
+          <img class="vthumb__play" src="/assets/figma/icon-play-88.svg" alt="" width="88" height="88">
           <div class="video__bar"><span class="video__progress" data-video-progress></span></div>
           <span class="gain gain--center" data-nugget-pill hidden><img src="/assets/design/icon-plus.svg" alt="" class="icon24"><span data-fmt="nugget"></span></span>
         </button>
-
-        <p class="overline overline--75 section">K1 · Nugget · <span data-k1="nugget.meta"></span></p>
-        <h2 class="h2" data-k1="nugget.headline"></h2>
-        <p class="body body--75" data-k1="nugget.body"></p>
-
+        <div class="ch-intro ch-intro--video">
+          <p class="overline tr15" data-k1="nugget.eyebrow"></p>
+          <h2 class="vtitle" data-k1="nugget.headline"></h2>
+          <p class="vbody" data-k1="nugget.body"></p>
+          <div class="score24"><img src="/assets/figma/icon-plus-circle.svg" alt="" width="24" height="24"><span class="copper-label"><span data-fmt="nugget"></span> pts</span></div>
+        </div>
         <div class="footer">
           <button type="button" class="btn btn--primary" data-nav="/k1/challenge">Continue to challenge</button>
         </div>
       </section>
 
       <!-- CHALLENGE INTRO -->
-      <section class="screen" data-screen="cintro" hidden>
-        <header class="topbar">
-          <button type="button" class="iconbtn" data-action="back" aria-label="Back"><span class="chev-left"></span></button>
-          <p class="topbar__title">Challenge</p>
-          <span class="topbar__spacer"></span>
-        </header>
-
+      <section class="screen" data-screen="cintro" data-bgvariant="chapter" hidden>
+        <div class="meta">
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <span></span>
+        </div>
         <div class="center grow">
-          <p class="overline overline--75">K1 · Challenge 01</p>
-          <h1 class="h1" data-k1="challenge.title"></h1>
-          <p class="body body--75" data-k1="challenge.rule"></p>
+          <p class="overline tr15">K1 &nbsp;·&nbsp; Challenge 01</p>
+          <h1 class="ch-title ch-title--md" data-k1="challenge.title"></h1>
+          <p class="ch-claim" data-k1="challenge.rule"></p>
           <div class="tiles tiles--wide">
             <div class="tile"><p class="tile__label">Format</p><div class="tile__value">Swipe</div></div>
             <div class="tile"><p class="tile__label">Time</p><div class="tile__value"><img src="/assets/design/icon-clock.svg" alt="" class="icon16">~3 min</div></div>
@@ -376,14 +370,13 @@
           </div>
           <p class="hint" data-challenge-done hidden>Already completed. Play again anytime, your points stay.</p>
         </div>
-
         <div class="footer">
           <button type="button" class="btn btn--primary" data-nav="/k1/challenge/play">Start</button>
         </div>
       </section>
 
       <!-- CHALLENGE PLAY -->
-      <section class="screen screen--play" data-screen="cplay" hidden>
+      <section class="screen screen--play" data-screen="cplay" data-bgvariant="chapter" hidden>
         <div class="gamehead">
           <div class="gamehead__row">
             <div>
@@ -401,7 +394,7 @@
 
         <div class="stage grow" data-play-stage>
           <div class="play__card" data-play-card>
-            <p class="overline overline--75">Feature <span data-play-feature-no>01</span></p>
+            <p class="overline tr15">Feature <span data-play-feature-no>01</span></p>
             <div class="feature">
               <p class="feature__name" data-play-feature></p>
               <p class="feature__detail" data-play-detail></p>
@@ -427,10 +420,10 @@
       </section>
 
       <!-- RESULT (beide Phasen) -->
-      <section class="screen screen--result" data-screen="result" hidden>
+      <section class="screen screen--result" data-screen="result" data-bgvariant="chapter" hidden>
         <div class="center grow">
-          <p class="overline overline--50 overline--lg" data-result-eyebrow>Challenge complete</p>
-          <h1 class="h1" data-result-headline></h1>
+          <p class="overline tr15" data-result-eyebrow>Challenge complete</p>
+          <h1 class="ch-title ch-title--md" data-result-headline></h1>
           <section class="panel panel--result">
             <div class="score score--xl">
               <span class="score__num" data-result-score>0</span>
@@ -449,13 +442,13 @@
       </section>
 
       <!-- BADGE (beide Phasen) -->
-      <section class="screen screen--badge" data-screen="badge" hidden>
+      <section class="screen screen--badge" data-screen="badge" data-bgvariant="chapter" hidden>
         <div class="center grow badge-stage">
           <div class="badge-stage__glow"></div>
           <img class="badge-stage__img" src="/assets/badge-copper.svg" alt="Badge" width="180" height="180">
-          <p class="overline overline--75">Badge earned</p>
-          <h1 class="h1"><span data-badge-name></span> <span class="light" data-badge-state></span></h1>
-          <p class="body body--75" data-badge-line></p>
+          <p class="overline tr15">Badge earned</p>
+          <h1 class="ch-title ch-title--md"><span data-badge-name></span> <span class="light" data-badge-state></span></h1>
+          <p class="ch-claim" data-badge-line></p>
         </div>
         <div class="footer">
           <button type="button" class="btn btn--primary" data-nav="/">Back to home</button>
@@ -463,39 +456,34 @@
       </section>
 
       <!-- ARCHIVE (Phase 1) -->
-      <section class="screen" data-screen="archive" data-tab="home" hidden>
-        <header class="topbar">
-          <button type="button" class="iconbtn" data-action="back" aria-label="Back"><span class="chev-left"></span></button>
-          <p class="topbar__title">Archive</p>
-          <span class="topbar__spacer"></span>
-        </header>
-
-        <p class="overline overline--75">Phase 0 · Completed</p>
-        <h1 class="h1">Become the<br><span class="light">CUPRA 1st.</span></h1>
-
+      <section class="screen" data-screen="archive" data-bgvariant="chapter" data-tab="home" hidden>
+        <div class="meta">
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <span></span>
+        </div>
+        <div class="ch-intro">
+          <p class="overline tr15">Phase 0 &nbsp;·&nbsp; Completed</p>
+          <h1 class="ch-title ch-title--md">Become the CUPRA 1st</h1>
+          <p class="ch-claim">Four chapters, five badges, <b data-fmt="phase0Total"></b> pts.</p>
+        </div>
         <section class="panel">
-          <div class="score">
-            <span class="score__num" data-fmt="phase0Total"></span>
-            <span class="score__unit">pts</span>
-          </div>
           <div class="badges" data-phase0-badges></div>
         </section>
-
-        <p class="overline overline--50 section">Chapters</p>
-        <ol class="cards" data-phase0-chapters></ol>
+        <p class="overline tr15 section">Chapters</p>
+        <ol class="ccards" data-phase0-chapters></ol>
       </section>
 
       <!-- LEADERBOARD (Phase 1) -->
-      <section class="screen screen--board" data-screen="leaderboard" data-tab="leaderboard" hidden>
-        <header class="topbar">
-          <span class="topbar__spacer"></span>
-          <p class="topbar__title">Leaderboard</p>
-          <span class="topbar__spacer"></span>
-        </header>
-
-        <p class="overline overline--75">The Competition</p>
-        <h1 class="h1">The <span class="light">Reveal.</span></h1>
-        <p class="hint hint--left" data-copy="noLeaderboard"></p>
+      <section class="screen screen--board" data-screen="leaderboard" data-bgvariant="chapter" data-tab="leaderboard" hidden>
+        <div class="meta">
+          <span></span>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+        </div>
+        <div class="ch-intro">
+          <p class="overline tr15">The Competition</p>
+          <h1 class="ch-title ch-title--md">The Reveal</h1>
+          <p class="ch-claim" data-copy="noLeaderboard"></p>
+        </div>
 
         <div class="segmented" data-board-views></div>
 

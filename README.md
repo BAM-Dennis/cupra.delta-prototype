@@ -3,7 +3,7 @@
 Mobiler Klick-Prototyp für den Tender-Pitch mit **zwei umschaltbaren Zuständen**:
 
 - **Phase 0 „Become the CUPRA 1st"** (Standard) nach Figma CUPRA-GLT-27: Intro mit Textkarussell → Intro-Video → Dashboard mit vier Bild-Kacheln (ORIGIN offen) → Kapitel ORIGIN mit Story Capsule und Born in Barcelona → Streak Challenge (extern) → Result → Badge.
-- **Phase 1 „The Digital Campaign"** nach Konzept v2.0 (`cupra-pitch-prototyp-konzept-v2.md`): Opener → Home → Delta Scan, K1 Refresher, Archiv, Leaderboard.
+- **Phase 1 „The Digital Campaign"** nach Konzept v2.0 (`cupra-pitch-prototyp-konzept-v2.md`): Opener → Home → Delta Scan, K1 Refresher, Archiv, Leaderboard. Optisch im selben Figma-Stil wie Phase 0 (Himmel-Hintergründe, DELTA-Kopf, Bild-Kacheln, Glas-Buttons), zusätzlich mit Bottom-Navigation.
 
 Umschalten per URL `/?phase=0` bzw. `/?phase=1` oder im Profil-Screen unter „Prototype view". Beide Phasen teilen sich das Delta-Profil.
 

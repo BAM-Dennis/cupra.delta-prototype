@@ -433,7 +433,7 @@ b, strong { font-weight: 500; }
 /* ---------- Leaderboard ---------- */
 
 .segmented { display: flex; gap: 4px; padding: 4px; border-radius: 6px; background: var(--w05); border: 1px solid var(--w10); margin-top: 18px; }
-.segmented button { flex: 1; height: 36px; border-radius: 4px; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .48px; color: var(--w50); transition: background .15s, color .15s; }
+.segmented button { flex: 1; height: 36px; padding: 0 10px; border-radius: 4px; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .48px; text-align: center; color: var(--w50); transition: background .15s, color .15s; }
 .segmented button.is-active { background: var(--w10); color: #fff; }
 .board { display: grid; gap: 4px; margin-top: 16px; }
 .brow { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 17px; border-radius: 6px; border: 1px solid var(--w05); background: var(--w05); backdrop-filter: blur(10px); animation: slide-up .5s var(--ease) both; }

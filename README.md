@@ -1,79 +1,86 @@
 # CUPRA Training Experience – Pitch-Prototyp
 
-Mobiler Klick-Prototyp für den Tender-Pitch (Konzept: `cupra-pitch-prototyp-konzept.md`).
+Mobiler Klick-Prototyp für den Tender-Pitch nach **Konzept v2.0** (`cupra-pitch-prototyp-konzept-v2.md`): Phase 0 „Become the CUPRA 1st" ist abgeschlossen und als Archiv erreichbar, Phase 1 „The Digital Campaign" ist eingeläutet, K1 Refresher ist spielbar, die echte Streak Challenge ist eingebunden.
+
 Statische Web-App ohne Build-Schritt: `index.html`, `css/styles.css`, `js/config.js`, `js/app.js`.
+Design nach Figma CUPRA-GLT-27, Referenz ist das Repo `cupra.streak-challenge` (Cupra-Font, Tokens, Hintergründe, Glas-Zeilen, Kupfer-Verlaufsbuttons).
 
 ## Lokal starten
 
 ```sh
 npx serve -s . -l 4173
-# oder
-python3 -m http.server 4173
 ```
 
-Dann `http://localhost:4173` auf dem Smartphone (gleiches WLAN, IP statt localhost) oder am Desktop öffnen.
-Am Desktop erscheint der Inhalt in einem zentrierten Phone-Frame (480 px).
-
-`serve -s` liefert für jeden Pfad `index.html` aus (SPA-Modus). Bei `python3 -m http.server` funktionieren Deep-Links wie `/badge` nicht, der Einstieg über `/` schon.
+Dann `http://localhost:4173` öffnen. Am Smartphone im gleichen WLAN die IP des Rechners statt localhost verwenden.
+Am Desktop erscheint der Inhalt in einem zentrierten Phone-Frame (430 px, wie die Streak Challenge).
 
 ## Journey
 
-Intro → Home → ORIGIN → Content Drop → Challenge-Interstitial → **Streak Challenge (extern)** → Result → Badge → Home (Rückkehrzustand) · Profil · Teaser bei gesperrten Kapiteln
+Opener (Claim → Phase-0-Badges → „The Digital Campaign begins") → Home → Delta-Profil · K1 Refresher → Nugget → Challenge „Known or New?" (3 Karten, gemockt) → Result → Badge → Home (K1 completed, K2 offen) · Streak-Kachel → **Streak Challenge (extern)** → zurück mit Toast · Archiv Phase 0 · Leaderboard-Reveal (Demo) · Teaser bei gesperrten Kapiteln
+
+Routen: `/` `/profile` `/k1` `/k1/nugget` `/k1/challenge` `/k1/challenge/play` `/k1/result` `/k1/badge` `/archive` `/leaderboard`
 
 ## Konfiguration (`js/config.js`)
 
 | Schlüssel | Bedeutung |
 |---|---|
-| `challengeUrl` | Deploy-URL der Streak Challenge. **Vor dem Pitch eintragen.** |
+| `challengeUrl` | Deploy-URL der Streak Challenge |
 | `returnBase` | Basis der Rückkehr-URL, `null` = eigene Origin |
-| `unlock.*` | Freischaltzeitpunkte der gesperrten Kapitel (ISO 8601). Countdowns laufen echt. |
-| `points` | Drop-Bonus, Punkte pro Streak, Cap, Demo-Fallback |
-| `intro` / `drop` | Timings der Intro-Animation und des Content-Drop-Mockups |
-| `chapters` / `copy` | Texte |
+| `unlock.k3` / `unlock.k4` | Freischaltzeitpunkte mit echtem Countdown (ISO 8601) |
+| `points` | Nugget-Bonus, Challenge-Demo-Wert, Kapitel-Maximum, Phase-0-Summe |
+| `demo` | Rang, Streak-Bestwert, globaler Bestwert, Ø-Zeit |
+| `opener` / `nugget` | Timings |
+| `delta` | Fünf Dimensionen mit Band (solid / sharpen / delta), Feedback-Text |
+| `chapters` | Home-Karten inkl. Sperr-Logik und Teaser-Texte |
+| `k1` | Nugget, Challenge-Karten (Feature, Outcome, Auflösung), Result, Badge |
+| `phase0` | Archiv-Kapitel und Badges |
+| `leaderboard` | Demo-Zeilen für Global / Market / Role |
 
 ## Integration Streak Challenge
 
-Der Prototyp öffnet die Challenge im selben Tab mit
+Streak-Kachel und Streak-Tab öffnen die Challenge im selben Tab:
 
 ```
-{challengeUrl}?return={origin}/?completed=spirit
+{challengeUrl}?return={origin}/?completed=streak
 ```
 
 Die Challenge zeigt am Ende „Back to training" und hängt den Streak-Wert an:
 
 ```
-{origin}/?completed=spirit&streak=8
+{origin}/?completed=streak&streak=17
 ```
 
-Punkte = `min(challengeMax, streak × perStreak)`, also 8 × 30 = 240. Alternativ wird `&score=240` direkt übernommen. Ohne Parameter gilt `fallbackScore` (240). Bei mehrfachem Spielen zählt der beste Wert.
-
-Die passende Anpassung der Streak Challenge liegt im Repo `cupra.streak-challenge` auf dem Branch `feature/return-link`.
+Der Prototyp übernimmt den Wert als neue Bestleistung (Streak-Kachel „Your best: 17"), zeigt einen Toast und landet auf Home. Ohne Wert bleibt der Demo-Bestwert 12.
 
 ## Zustand und Reset
 
-Zustand liegt in `localStorage` unter `cte.state` (`introSeen`, `dropSeen`, `spiritDone`, `challengeScore`, `badgeEarned`).
+Zustand in `localStorage` unter `cte.v2`: `openerSeen`, `nuggetSeen`, `k1Done`, `k1Score`, `badgeEarned`, `streakBest`.
 
 Reset für den nächsten Pitch:
 
 - `/?reset=1` aufrufen, oder
-- 5× auf das Logo oben links auf Home tippen (innerhalb 2 Sekunden).
+- 5× auf das Emblem oben links auf Home tippen (innerhalb 2 Sekunden).
 
-Testabkürzung ohne Challenge: `/?completed=spirit&streak=8`
+Testabkürzung: `/?completed=streak&streak=17` simuliert die Rückkehr aus der Challenge.
 
 ## Deployment
 
-Vercel, statisches Projekt ohne Build (Framework Preset „Other", Output Directory `.`). `vercel.json` enthält den SPA-Rewrite.
-QR-Code auf die Produktions-URL erzeugen.
+Vercel, statisches Projekt ohne Build (Framework Preset „Other", Build Command leer). `vercel.json` enthält den SPA-Rewrite auf `index.html`.
+
+## Assets
+
+- `assets/fonts/` Cupra Light / Book / Regular / Medium (woff2, aus der Streak Challenge)
+- `assets/design/` Figma-Export der Streak Challenge: Emblem, Hintergründe, Verlaufsform, Icons, Logo-Dekoration
+- `assets/badge-*.svg` Badges mit CUPRA-Emblem in Kupfer (Kapitel), Teal (CUPRA 1st) und gesperrt
 
 ## Vor dem Pitch
 
-- [x] `challengeUrl` in `js/config.js` auf die Vercel-URL der Streak Challenge gesetzt
-- [ ] Streak-Challenge-Branch `feature/return-link` mergen und deployen
-- [ ] `unlock.*` relativ zum Pitch-Tag prüfen (aktuell 21.09., 25.09., 28.09.2026)
-- [ ] CI-Assets tauschen: Farb-Tokens in `css/styles.css` (`:root`), Font-Link in `index.html`, Key-Visual (`.card__thumb--barcelona`, `.video__still--barcelona`), Logo und Badges in `assets/`
-- [ ] Dreifach-Test iPhone / Android / Desktop ohne Sackgasse
-- [ ] QR-Code erzeugen, Reset ausführen
+- [x] `challengeUrl` auf die Vercel-URL der Streak Challenge gesetzt
+- [x] Return-Link in der Streak Challenge deployt
+- [ ] `unlock.k3` / `unlock.k4` relativ zum Pitch-Tag prüfen (aktuell 23.09. und 27.09.2026)
+- [ ] Dreifach-Test iPhone / Android / Desktop inkl. Hin- und Rückweg zur Streak Challenge
+- [ ] QR-Code auf Produktions-URL erzeugen, Reset ausführen
 
-## Stand-ins
+## Bewusst nicht umgesetzt (Kann-Stories)
 
-Es liegen noch keine CI-Assets vor. Kupfer `#C1875A`, Barlow Condensed (Google Fonts) und die abstrakten SVG-Grafiken sind Platzhalter und zentral tauschbar.
+- S12 KI-Coach als statische Screens im Archiv

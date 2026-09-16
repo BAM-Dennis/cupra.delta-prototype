@@ -164,6 +164,58 @@ window.CTE_CONFIG = {
     ],
   },
 
+  /** Startzustand des Prototyps: 0 = Phase 0 nach Figma (Become the CUPRA 1st), 1 = Phase 1 (Digital Campaign, Konzept v2). Umschalten per /?phase=0|1 oder im Profil. */
+  phaseDefault: 0,
+
+  /** Videodateien (MP4/WebM unter /assets/video/). Leer = gemockter Screen ohne echtes Video. */
+  video: {
+    intro: "",
+    storyCapsule: "",
+    /** Dauer des Intro-Platzhalters, wenn kein Video hinterlegt ist */
+    introFallbackMs: 6000,
+  },
+
+  /** Phase 0 nach Figma CUPRA-GLT-27 (Intro, Dashboard, Kapitel ORIGIN) */
+  p0: {
+    introFixed: "The one",
+    introLines: ["who knows the roots.", "who masters the craft.", "who feels the drive.", "they follow. you."],
+    intro: { lineDelayMs: 1500, skipAfterMs: 2000 },
+    copy: {
+      eyebrow: "Training experience",
+      headline: "Be the one they follow",
+      intro: "Four chapters. One goal: Become the CUPRA 1st. Every point counts.",
+      programLabel: "Delta",
+    },
+    unlock: {
+      craftsmanship: "2026-09-21T09:00:00+02:00",
+      performance: "2026-09-25T09:00:00+02:00",
+      tribe: "2026-09-28T09:00:00+02:00",
+    },
+    chapters: [
+      { id: "origin", index: "Chapter 01", name: "Origin", claim: "The one who knows the roots.", image: "/assets/figma/card-origin.jpg", open: true },
+      { id: "craftsmanship", index: "Chapter 02", name: "Craftmanship", claim: "The one who masters the craft.", image: "/assets/figma/card-craftsmanship.jpg", teaser: "Materials, seams, the hands behind the new model." },
+      { id: "performance", index: "Chapter 03", name: "Performance", claim: "The one who feels the drive.", image: "/assets/figma/card-performance.jpg", teaser: "Numbers you feel before you read them." },
+      { id: "tribe", index: "Chapter 04", name: "Tribe", claim: "The one they follow. You.", image: "/assets/figma/card-tribe.jpg", teaser: "Where knowledge becomes trust. The Competition opens here." },
+    ],
+    nugget: {
+      title: "Story Capsule",
+      meta: "1:20 min",
+      eyebrow: "Origin · Content Nugget",
+      headline: "Where the new model comes from.",
+      body: "Ninety seconds on the roots: Barcelona, the racing spirit, the people who shaped it. Watch it once, keep the bonus.",
+      thumb: "/assets/figma/card-origin.jpg",
+    },
+    challenge: {
+      title: "Born in Barcelona",
+      meta: "~ 3 min",
+      points: "up to 300 pts",
+      thumb: "/assets/figma/thumb-born-in-barcelona.jpg",
+    },
+    points: { perStreak: 30, challengeMax: 300, fallbackScore: 240 },
+    result: { eyebrow: "Born in Barcelona · Completed", headline: "Strong start", line: "You know what CUPRA stands for." },
+    badge: { name: "Origin", state: "Complete", line: "The one who knows the roots." },
+  },
+
   copy: {
     openerLines: [
       "The one who knows the roots.",

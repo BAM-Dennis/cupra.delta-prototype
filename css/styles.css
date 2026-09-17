@@ -561,7 +561,7 @@ b, strong { font-weight: 500; }
 /* ---------- Dashboard ---------- */
 
 .screen--dashboard { padding-top: max(16px, env(safe-area-inset-top)); }
-.delta { position: relative; width: calc(100% + 2 * var(--pad)); margin: -40px calc(-1 * var(--pad)) 0; height: 240px; overflow: hidden; display: block; }
+.delta { position: relative; width: calc(100% + 2 * var(--pad)); margin: calc(-40px - max(16px, env(safe-area-inset-top))) calc(-1 * var(--pad)) 0; height: 240px; overflow: hidden; display: block; }
 .delta__triangle { position: absolute; left: 50%; top: -162px; width: 517px; height: 402px; margin-left: -258.5px; }
 .delta__triangle img { width: 100%; height: 100%; display: block; }
 .delta__emblem { position: absolute; left: 50%; top: 112px; width: 62px; transform: translateX(-50%); }

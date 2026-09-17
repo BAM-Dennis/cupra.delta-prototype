@@ -39,7 +39,7 @@ Umsetzung von `born-in-barcelona-interaktionskonzept.md` nach Figma 343:18367 ff
 Das Intro-Video liegt webtauglich unter `assets/video/intro.mp4` (H.264, 720×1280, 3,9 MB, aus dem 34-MB-Original transkodiert) mit Poster `intro-poster.jpg`. Das Original bleibt lokal in `assets/` und ist per `.gitignore` ausgeschlossen. Neu transkodieren:
 
 ```sh
-ffmpeg -i "assets/Be the one to follow-intro-tall.mp4" -vf scale=720:1280 -c:v libx264 -crf 24 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 96k assets/video/intro.mp4
+ffmpeg -i "assets/Be the one to follow-tall-no-bullring.mp4" -vf scale=720:1280 -c:v libx264 -crf 24 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 96k assets/video/intro.mp4
 ```
 
 Die Story Capsule hat noch kein Video. Datei nach `assets/video/` legen und in `js/config.js` unter `video.storyCapsule` eintragen. Ohne Eintrag läuft der Mock (Fortschrittsbalken, +40 nach 3 s). Mit Video startet es per Tap und vergibt den Bonus am Ende.

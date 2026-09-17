@@ -69,7 +69,7 @@
 
       <!-- INTRO VIDEO -->
       <section class="screen screen--introvideo" data-screen="introvideo" data-bgvariant="introvideo" hidden>
-        <video class="introvideo__video" data-intro-video playsinline muted preload="auto" poster="/assets/video/intro-poster.jpg" hidden></video>
+        <video class="introvideo__video" data-intro-video playsinline preload="auto" poster="/assets/video/intro-poster.jpg" hidden></video>
         <div class="introvideo__fallback" data-intro-fallback hidden>
           <img class="introvideo__still" src="/assets/figma/city-barcelona.png" alt="">
           <div class="introvideo__fallback-text">
@@ -78,7 +78,10 @@
             <p class="hint">Placeholder until the video is delivered.</p>
           </div>
         </div>
-        <button type="button" class="skiptext" data-action="skip-introvideo">Skip</button>
+        <div class="introvideo__bar">
+          <button type="button" class="glassbtn introvideo__unmute" data-action="unmute-intro" data-intro-unmute hidden>Sound on</button>
+          <button type="button" class="skiptext" data-action="skip-introvideo">Skip</button>
+        </div>
       </section>
 
       <!-- DASHBOARD -->

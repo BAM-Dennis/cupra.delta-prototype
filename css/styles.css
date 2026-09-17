@@ -550,7 +550,10 @@ b, strong { font-weight: 500; }
 
 /* ---------- Intro-Video ---------- */
 
-.screen--introvideo { padding: 0; justify-content: flex-end; align-items: center; }
+.screen--introvideo { padding: 0; justify-content: flex-end; align-items: center; animation-duration: .15s; }
+.introvideo__bar { position: relative; display: grid; justify-items: center; gap: 12px; margin-bottom: max(40px, env(safe-area-inset-bottom)); }
+.introvideo__bar .skiptext { margin-bottom: 0; }
+.introvideo__unmute { padding: 3px 12px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
 .introvideo__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .introvideo__fallback { position: absolute; inset: 0; overflow: hidden; display: grid; place-items: center; }
 .introvideo__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; animation: kenburns 9s ease-in-out both; }

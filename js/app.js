@@ -257,7 +257,20 @@
     later(step, delay);
   }
 
+  function prepareIntroVideo() {
+    var src = CFG.video && CFG.video.intro;
+    var video = $("[data-intro-video]");
+    if (!src || !video) return;
+    if (video.getAttribute("src") !== src) {
+      video.setAttribute("src", src);
+      if (CFG.video.introPoster) video.setAttribute("poster", CFG.video.introPoster);
+      video.preload = "auto";
+      try { video.load(); } catch (e) { /* ignore */ }
+    }
+  }
+
   enter.intro0 = function (el) {
+    prepareIntroVideo();
     var enterBtn = $(".intro0__enter", el);
     enterBtn.classList.remove("is-visible");
     later(function () { enterBtn.classList.add("is-visible"); }, (P0.intro && P0.intro.skipAfterMs) || 2000);
@@ -273,15 +286,26 @@
     var video = $("[data-intro-video]", el);
     var fallback = $("[data-intro-fallback]", el);
     var src = CFG.video && CFG.video.intro;
+    var unmute = $("[data-intro-unmute]", el);
+    unmute.hidden = true;
     if (src) {
       fallback.hidden = true;
       video.hidden = false;
-      if (video.getAttribute("src") !== src) video.setAttribute("src", src);
-      if (CFG.video.introPoster) video.setAttribute("poster", CFG.video.introPoster);
+      prepareIntroVideo();
       try { video.currentTime = 0; } catch (e) { /* ignore */ }
       video.onended = finishIntroVideo;
+      // Mit Ton starten: der Enter-Tap gilt als Nutzergeste. Wird das blockiert
+      // (z. B. Direktaufruf der URL), stumm starten und „Sound on" anbieten.
+      video.muted = false;
       var p = video.play();
-      if (p && p.catch) p.catch(function () { /* Autoplay blockiert: Skip bleibt */ });
+      if (p && p.catch) {
+        p.catch(function () {
+          video.muted = true;
+          var q = video.play();
+          if (q && q.catch) q.catch(function () { /* Skip bleibt */ });
+          unmute.hidden = false;
+        });
+      }
     } else {
       video.hidden = true;
       fallback.hidden = false;
@@ -1072,6 +1096,7 @@
       case "back": goBack(); break;
       case "enter-intro": enterIntro(); break;
       case "skip-introvideo": finishIntroVideo(); break;
+      case "unmute-intro": (function () { var v = $("[data-intro-video]"); v.muted = false; v.volume = 1; var p = v.play(); if (p && p.catch) p.catch(function () {}); $("[data-intro-unmute]").hidden = true; })(); break;
       case "nugget0-tap": nugget0Tap(); break;
       case "bib-back": bibBack(); break;
       case "bib-next": bibNext(); break;

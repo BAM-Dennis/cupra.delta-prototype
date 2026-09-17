@@ -21,19 +21,28 @@ Am Desktop erscheint der Inhalt in einem zentrierten Phone-Frame (430 px, wie di
 
 ## Journeys
 
-**Phase 0:** `/` Intro → `/intro/video` → `/` Dashboard → `/chapter/origin` → `/chapter/origin/nugget` (Story Capsule) → Born in Barcelona öffnet die Streak Challenge → Rückkehr auf `/chapter/origin/result` → `/chapter/origin/badge` → Dashboard mit ORIGIN completed. Gesperrte Kapitel zeigen einen Teaser mit Countdown.
+**Phase 0:** `/` Intro → `/intro/video` → `/` Dashboard → `/chapter/origin` → `/chapter/origin/nugget` (Story Capsule) → `/chapter/origin/challenge` (Born in Barcelona) → `/chapter/origin/result` → `/chapter/origin/badge` → Dashboard mit ORIGIN completed. Gesperrte Kapitel zeigen einen Teaser mit Countdown.
+
+## Born in Barcelona (Hotspot-Challenge)
+
+Umsetzung von `born-in-barcelona-interaktionskonzept.md` nach Figma 343:18367 ff. Vier Gebiete auf der Barcelona-Karte (Camp Nou, Casa CUPRA, El Born, El Raval), je eine Frage mit drei Antworten, 10 Sekunden pro Versuch, maximal zwei Versuche.
+
+- Erster Versuch richtig: Gebiet voll kupfer, volle Punkte (75). Zweiter Versuch richtig: Schraffur, halbe Punkte (35). Kein Treffer: Kupfer-Kontur, 0 Punkte, richtige Antwort wird gezeigt.
+- Timer-Ablauf zählt als falscher Versuch. Back während einer laufenden Frage öffnet den Exit-Dialog, geclaimte Gebiete bleiben.
+- Alle vier geclaimt: Karte pulsiert, dann Result-Screen und Badge „Origin Complete".
+- Fragen, Antworten, Auflösungen, Punkte und Timer stehen in `js/config.js` unter `p0.bib`. Die Karte ist eine Inline-SVG aus den Figma-Pfaden in `index.html`, die Gebietszustände werden per CSS-Klasse gefärbt.
 
 **Phase 1:** `/` Opener → Home → `/profile` `/k1` `/k1/nugget` `/k1/challenge` `/k1/challenge/play` `/k1/result` `/k1/badge` `/archive` `/leaderboard`. Streak-Kachel öffnet die Challenge, Rückkehr aktualisiert den Bestwert mit Toast.
 
 ## Videos
 
-Die Figma-Frames „Intro Video" und „Chapter Video" enthalten Videolayer, die sich nicht exportieren lassen. Dateien nach `assets/video/` legen und in `js/config.js` eintragen:
+Das Intro-Video liegt webtauglich unter `assets/video/intro.mp4` (H.264, 720×1280, 3,9 MB, aus dem 34-MB-Original transkodiert) mit Poster `intro-poster.jpg`. Das Original bleibt lokal in `assets/` und ist per `.gitignore` ausgeschlossen. Neu transkodieren:
 
-```js
-video: { intro: "/assets/video/intro.mp4", storyCapsule: "/assets/video/story-capsule.mp4" }
+```sh
+ffmpeg -i "assets/Be the one to follow-intro-tall.mp4" -vf scale=720:1280 -c:v libx264 -crf 24 -pix_fmt yuv420p -movflags +faststart -c:a aac -b:a 96k assets/video/intro.mp4
 ```
 
-Ohne Eintrag zeigt der Intro-Screen einen Platzhalter (Barcelona-Still, weiter nach 6 s oder Skip) und die Story Capsule den bisherigen Mock (Fortschrittsbalken, +40 nach 3 s). Mit Video: Intro startet stumm automatisch und geht am Ende weiter, Story Capsule startet per Tap und vergibt den Bonus am Ende.
+Die Story Capsule hat noch kein Video. Datei nach `assets/video/` legen und in `js/config.js` unter `video.storyCapsule` eintragen. Ohne Eintrag läuft der Mock (Fortschrittsbalken, +40 nach 3 s). Mit Video startet es per Tap und vergibt den Bonus am Ende.
 
 ## Konfiguration (`js/config.js`)
 
@@ -99,7 +108,8 @@ Vercel, statisches Projekt ohne Build (Framework Preset „Other", Build Command
 - [x] `challengeUrl` auf die Vercel-URL der Streak Challenge gesetzt
 - [x] Return-Link in der Streak Challenge deployt
 - [ ] Freischaltdaten prüfen: Phase 0 `p0.unlock` (21.09., 25.09., 28.09.2026), Phase 1 `unlock.k3/k4` (23.09., 27.09.2026)
-- [ ] Intro- und Story-Capsule-Video anfordern und in `video` eintragen
+- [x] Intro-Video eingebunden
+- [ ] Story-Capsule-Video anfordern und in `video.storyCapsule` eintragen
 - [ ] Dreifach-Test iPhone / Android / Desktop inkl. Hin- und Rückweg zur Streak Challenge
 - [ ] QR-Code auf Produktions-URL erzeugen, Reset ausführen
 

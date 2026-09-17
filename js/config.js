@@ -173,7 +173,8 @@ window.CTE_CONFIG = {
 
   /** Videodateien (MP4/WebM unter /assets/video/). Leer = gemockter Screen ohne echtes Video. */
   video: {
-    intro: "",
+    intro: "/assets/video/intro.mp4",
+    introPoster: "/assets/video/intro-poster.jpg",
     storyCapsule: "",
     /** Dauer des Intro-Platzhalters, wenn kein Video hinterlegt ist */
     introFallbackMs: 6000,
@@ -215,8 +216,60 @@ window.CTE_CONFIG = {
       points: "up to 300 pts",
       thumb: "/assets/figma/thumb-born-in-barcelona.jpg",
     },
+
+    /** Hotspot-Challenge „Born in Barcelona" (born-in-barcelona-interaktionskonzept.md) */
+    bib: {
+      eyebrow: "Origin · Challenge",
+      title: "Born in Barcelona",
+      /** Zeit pro Versuch */
+      timerMs: 10000,
+      /** Punkte: erster Versuch voll, zweiter halb, kein Treffer null (4 × 75 = 300) */
+      points: { full: 75, half: 35 },
+      copy: {
+        select: "Select a district",
+        progress: "{n}/4 districts claimed",
+        correct: "Correct!",
+        half: "Claimed.",
+        none: "Not this time.",
+        retry: "Not quite. One more try.",
+        timeout: "Time's up. One more try.",
+        next: "Next district",
+        finish: "See result",
+        allDone: "All four districts claimed.",
+        leaveTitle: "Leave the challenge?",
+        leaveText: "Claimed districts stay. The current district counts as not started.",
+        leave: "Leave",
+        stay: "Keep playing",
+      },
+      districts: [
+        {
+          id: "campnou", name: "Camp Nou",
+          question: "Which club has CUPRA partnered with as official automotive partner?",
+          answers: ["FC Barcelona", "RCD Espanyol", "Real Madrid"], correct: 0,
+          explain: "CUPRA has been FC Barcelona's official automotive partner since 2019.",
+        },
+        {
+          id: "casa", name: "Casa CUPRA",
+          question: "What is Casa CUPRA?",
+          answers: ["The brand's flagship experience space in Barcelona", "The CUPRA design studio", "The first CUPRA dealership"], correct: 0,
+          explain: "Casa CUPRA is the brand's flagship space in Barcelona: showroom, restaurant and stage in one.",
+        },
+        {
+          id: "born", name: "El Born",
+          question: "Which CUPRA model took its name from this district?",
+          answers: ["CUPRA Born", "CUPRA Leon", "CUPRA Formentor"], correct: 0,
+          explain: "The all-electric CUPRA Born carries the name of El Born, the old harbour quarter.",
+        },
+        {
+          id: "raval", name: "El Raval",
+          question: "Which CUPRA model carries the name of this district?",
+          answers: ["CUPRA Raval", "CUPRA Terramar", "CUPRA Tavascan"], correct: 0,
+          explain: "The new urban electric model is named after El Raval, Barcelona's most diverse district.",
+        },
+      ],
+    },
     points: { perStreak: 30, challengeMax: 300, fallbackScore: 240 },
-    result: { eyebrow: "Born in Barcelona · Completed", headline: "Strong start", line: "You know what CUPRA stands for." },
+    result: { eyebrow: "Born in Barcelona · Completed", headline: "Strong start", line: "You know where CUPRA comes from." },
     badge: { name: "Origin", state: "Complete", line: "The one who knows the roots." },
   },
 

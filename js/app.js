@@ -25,7 +25,7 @@
     badgeEarned: false,
     streakBest: null,
     // Phase 0
-    p0: { introSeen: false, nuggetSeen: false, challengeDone: false, challengeScore: 0, badgeEarned: false },
+    p0: { introSeen: false, nuggetSeen: false, challengeDone: false, challengeScore: 0, badgeEarned: false, bib: { claimed: {}, points: 0 } },
   };
 
   /* ---------- Helpers ---------- */
@@ -47,6 +47,7 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       var s = Object.assign({}, DEFAULT_STATE, raw ? JSON.parse(raw) : {});
       s.p0 = Object.assign({}, DEFAULT_STATE.p0, s.p0 || {});
+      s.p0.bib = Object.assign({ claimed: {}, points: 0 }, s.p0.bib || {});
       return s;
     } catch (e) { return JSON.parse(JSON.stringify(DEFAULT_STATE)); }
   }
@@ -81,6 +82,7 @@
     $$("[data-copy]").forEach(function (el) { var v = CFG.copy[el.getAttribute("data-copy")]; if (v) el.textContent = v; });
     $$("[data-k1]").forEach(function (el) { var v = get(CFG.k1, el.getAttribute("data-k1")); if (v) el.textContent = v; });
     $$("[data-p0]").forEach(function (el) { var v = get(P0, el.getAttribute("data-p0")); if (v != null) el.textContent = v; });
+    $$("[data-bib]").forEach(function (el) { var v = get(P0.bib || {}, el.getAttribute("data-bib")); if (v != null) el.textContent = v; });
     $$("[data-demo]").forEach(function (el) { var v = CFG.demo[el.getAttribute("data-demo")]; if (v != null) el.textContent = v; });
     $$("[data-fmt]").forEach(function (el) { var v = P[el.getAttribute("data-fmt")]; if (v != null) el.textContent = fmt(v); });
     var chip = $("[data-delta-chip]"); if (chip) chip.textContent = CFG.delta.k1Chip;
@@ -122,7 +124,7 @@
   /* ---------- Router ---------- */
 
   var PARENT = {
-    intro0: "/", introvideo: "/", dashboard: "/", chapter0: "/", nugget0: "/chapter/origin",
+    intro0: "/", introvideo: "/", dashboard: "/", chapter0: "/", nugget0: "/chapter/origin", bib: "/chapter/origin",
     profile: "/", k1: "/", nugget: "/k1", cintro: "/k1", cplay: "/k1/challenge", result: "/", badge: "/",
     archive: "/", leaderboard: "/", home: "/", opener: "/",
   };
@@ -142,6 +144,7 @@
         case "/intro/video": return "introvideo";
         case "/chapter/origin": return "chapter0";
         case "/chapter/origin/nugget": return "nugget0";
+        case "/chapter/origin/challenge": return "bib";
         case "/chapter/origin/result": return state.p0.challengeDone ? "result" : null;
         case "/chapter/origin/badge": return state.p0.challengeDone ? "badge" : null;
         default: return null;
@@ -182,6 +185,8 @@
 
     clearTimers();
     closeSheet();
+    closeConfirm();
+    stopBibTimer();
     setGlow(null);
     stopVideos();
 
@@ -272,7 +277,8 @@
       fallback.hidden = true;
       video.hidden = false;
       if (video.getAttribute("src") !== src) video.setAttribute("src", src);
-      video.currentTime = 0;
+      if (CFG.video.introPoster) video.setAttribute("poster", CFG.video.introPoster);
+      try { video.currentTime = 0; } catch (e) { /* ignore */ }
       video.onended = finishIntroVideo;
       var p = video.play();
       if (p && p.catch) p.catch(function () { /* Autoplay blockiert: Skip bleibt */ });
@@ -411,6 +417,207 @@
     sheet.hidden = false;
     tickCountdowns();
   }
+
+  /* ===== BORN IN BARCELONA (Hotspot-Challenge) ===== */
+
+  var B = P0.bib || { districts: [], copy: {}, points: {}, timerMs: 10000 };
+  var bib = null; // Laufzustand: { active, attempt, order, deadline, raf }
+
+  function bibClaimedCount() { return Object.keys(state.p0.bib.claimed || {}).length; }
+  function bibAllClaimed() { return bibClaimedCount() >= B.districts.length; }
+  function bibDistrict(id) { return B.districts.filter(function (d) { return d.id === id; })[0]; }
+
+  enter.bib = function (el) {
+    bib = { active: null, attempt: 1, order: [], deadline: 0, raf: null };
+    renderBibMap(el);
+    renderBibProgress(el);
+    if (bibAllClaimed()) {
+      showBibResult(el, { label: B.copy.allDone, verdict: "correct", explain: "", points: state.p0.bib.points, finish: true });
+    } else {
+      showBibState(el, "select");
+    }
+  };
+
+  function renderBibMap(el) {
+    var claimed = state.p0.bib.claimed || {};
+    $$(".bib-d", el).forEach(function (g) {
+      var id = g.getAttribute("data-district");
+      g.classList.remove("is-active", "is-full", "is-half", "is-none", "is-claimed");
+      if (claimed[id]) g.classList.add("is-" + claimed[id], "is-claimed");
+      if (bib && bib.active === id) g.classList.add("is-active");
+    });
+  }
+
+  function renderBibProgress(el) {
+    var claimed = state.p0.bib.claimed || {};
+    var n = bibClaimedCount();
+    $("[data-bib-bar]", el).style.width = (n / B.districts.length * 100) + "%";
+    $("[data-bib-progress]", el).innerHTML = (B.copy.progress || "{n}/4 districts claimed").replace("{n}", "<b>" + n + "</b>").replace("/4", "/" + B.districts.length);
+  }
+
+  function showBibState(el, name) {
+    $$("[data-bib-state]", el).forEach(function (st) { st.hidden = st.getAttribute("data-bib-state") !== name; });
+  }
+
+  function bibSelect(id) {
+    var el = screens.bib;
+    var d = bibDistrict(id);
+    if (!bib || bib.active || !d || state.p0.bib.claimed[id]) return;
+    bib.active = id;
+    bib.attempt = 1;
+    bib.order = shuffle(d.answers.map(function (a, i) { return i; }));
+    renderBibMap(el);
+    $("[data-bib-district]", el).textContent = d.name;
+    $("[data-bib-question]", el).textContent = d.question;
+    $("[data-bib-retry]", el).hidden = true;
+    $("[data-bib-answers]", el).innerHTML = bib.order.map(function (ai, k) {
+      return '<button type="button" class="ans" data-action="bib-answer" data-answer="' + ai + '">' + esc(d.answers[ai]) + "</button>";
+    }).join("");
+    showBibState(el, "question");
+    startBibTimer(el);
+  }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+    return arr;
+  }
+
+  function startBibTimer(el) {
+    stopBibTimer();
+    var total = B.timerMs || 10000;
+    bib.deadline = Date.now() + total;
+    var timerEl = $("[data-bib-timer]", el);
+    var ring = $("[data-bib-timer-ring]", el);
+    var num = $("[data-bib-timer-num]", el);
+    var CIRC = 87.96;
+    function tick() {
+      if (!bib || current !== "bib") return;
+      var remaining = Math.max(0, bib.deadline - Date.now());
+      var f = remaining / total;
+      ring.style.strokeDashoffset = String(CIRC * (1 - f));
+      num.textContent = String(Math.ceil(remaining / 1000));
+      timerEl.classList.toggle("is-warn", f <= 0.5 && f > 0.2);
+      timerEl.classList.toggle("is-critical", f <= 0.2);
+      if (remaining <= 0) { bibWrong(null, true); return; }
+      bib.raf = requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  function stopBibTimer() {
+    if (bib && bib.raf) { cancelAnimationFrame(bib.raf); bib.raf = null; }
+  }
+
+  function bibAnswer(idx) {
+    if (!bib || !bib.active) return;
+    var d = bibDistrict(bib.active);
+    var el = screens.bib;
+    stopBibTimer();
+    var btn = $('[data-bib-answers] [data-answer="' + idx + '"]', el);
+    if (idx === d.correct) {
+      if (btn) btn.classList.add("is-correct");
+      $$(".ans", el).forEach(function (a) { a.disabled = true; });
+      var kind = bib.attempt === 1 ? "full" : "half";
+      later(function () { bibClaim(kind); }, 650);
+    } else {
+      bibWrong(idx, false);
+    }
+  }
+
+  function bibWrong(idx, timeout) {
+    var el = screens.bib;
+    var d = bibDistrict(bib.active);
+    if (idx != null) {
+      var btn = $('[data-bib-answers] [data-answer="' + idx + '"]', el);
+      if (btn) btn.classList.add("is-wrong");
+    }
+    if (bib.attempt === 1) {
+      bib.attempt = 2;
+      var hint = $("[data-bib-retry]", el);
+      hint.textContent = timeout ? B.copy.timeout : B.copy.retry;
+      hint.hidden = false;
+      startBibTimer(el);
+    } else {
+      // Zweiter Versuch daneben: richtige Antwort zeigen, Gebiet ohne Kupfer claimen
+      var right = $('[data-bib-answers] [data-answer="' + d.correct + '"]', el);
+      if (right) right.classList.add("is-outline");
+      $$(".ans", el).forEach(function (a) { a.disabled = true; });
+      later(function () { bibClaim("none"); }, 900);
+    }
+  }
+
+  function bibClaim(kind) {
+    var el = screens.bib;
+    var d = bibDistrict(bib.active);
+    var pts = kind === "full" ? B.points.full : kind === "half" ? B.points.half : 0;
+    state.p0.bib.claimed[d.id] = kind;
+    state.p0.bib.points = (state.p0.bib.points || 0) + pts;
+    saveState();
+    if (kind === "full") vibrate([30, 40, 30]);
+    bib.active = null;
+    bib.lastClaimed = d.id;
+    $$(".bib-d", el).forEach(function (g) { if (g.getAttribute("data-district") === d.id) g.classList.add("is-" + kind, "is-claimed"); g.classList.remove("is-active"); });
+    renderBibProgress(el);
+    showBibResult(el, {
+      label: kind === "full" ? B.copy.correct : kind === "half" ? B.copy.half : B.copy.none,
+      verdict: kind === "none" ? "wrong" : "correct",
+      explain: d.explain,
+      points: pts,
+      finish: bibAllClaimed(),
+    });
+  }
+
+  function showBibResult(el, o) {
+    $("[data-bib-verdict-label]", el).textContent = o.label;
+    $("[data-bib-explain]", el).textContent = o.explain || "";
+    var gain = $("[data-bib-gain]", el);
+    gain.hidden = !o.points;
+    $("[data-bib-gain-value]", el).textContent = o.points;
+    $("[data-bib-next]", el).textContent = o.finish ? B.copy.finish : B.copy.next;
+    $("[data-bib-next]", el).setAttribute("data-finish", o.finish ? "1" : "0");
+    showBibState(el, "result");
+  }
+
+  function bibNext() {
+    var el = screens.bib;
+    var finish = $("[data-bib-next]", el).getAttribute("data-finish") === "1";
+    if (finish) {
+      // Alle vier geclaimt: Karte pulsiert einmal, dann Result der Microsite
+      $("[data-bib-map]", el).classList.add("is-pulse");
+      state.p0.challengeDone = true;
+      state.p0.challengeScore = Math.max(state.p0.challengeScore || 0, state.p0.bib.points || 0);
+      saveState();
+      later(function () { $("[data-bib-map]", el).classList.remove("is-pulse"); navigate("/chapter/origin/result"); }, 950);
+      return;
+    }
+    showBibState(el, "select");
+    renderBibMap(el);
+  }
+
+  function bibBack() {
+    if (bib && bib.active) {
+      openConfirm({
+        title: B.copy.leaveTitle, text: B.copy.leaveText, yes: B.copy.leave, no: B.copy.stay,
+        onYes: function () { stopBibTimer(); bib.active = null; goBack(); },
+      });
+      return;
+    }
+    goBack();
+  }
+
+  /* ---------- Bestätigungsdialog ---------- */
+
+  var confirmEl = $("[data-confirm]");
+  var confirmYes = null;
+  function openConfirm(o) {
+    $("[data-confirm-title]", confirmEl).textContent = o.title || "";
+    $("[data-confirm-text]", confirmEl).textContent = o.text || "";
+    $("[data-confirm-yes]", confirmEl).textContent = o.yes || "OK";
+    $("[data-confirm-no]", confirmEl).textContent = o.no || "Cancel";
+    confirmYes = o.onYes || null;
+    confirmEl.hidden = false;
+  }
+  function closeConfirm() { confirmEl.hidden = true; confirmYes = null; }
 
   /* ===== PHASE 1 ===== */
 
@@ -690,8 +897,10 @@
     var tileLabel = $("[data-result-tile-label]", el);
     var tileValue = $("[data-result-correct]", el);
     if (p0) {
-      tileLabel.textContent = "Streak";
-      tileValue.textContent = state.p0.lastStreak != null ? String(state.p0.lastStreak) : "–";
+      var cl = state.p0.bib.claimed || {};
+      var full = Object.keys(cl).filter(function (k) { return cl[k] === "full"; }).length;
+      tileLabel.textContent = "First try";
+      tileValue.textContent = full + " / " + (P0.bib.districts || []).length;
     } else {
       var correct = CFG.k1.challenge.cards.filter(function (c) { return c.outcome === "correct"; }).length;
       tileLabel.textContent = "Correct";
@@ -852,6 +1061,8 @@
   /* ---------- Events ---------- */
 
   document.addEventListener("click", function (ev) {
+    var district = ev.target.closest && ev.target.closest(".bib-d");
+    if (district && current === "bib") { bibSelect(district.getAttribute("data-district")); return; }
     var target = ev.target.closest("[data-nav], [data-action]");
     if (!target) return;
     var nav = target.getAttribute("data-nav");
@@ -862,6 +1073,11 @@
       case "enter-intro": enterIntro(); break;
       case "skip-introvideo": finishIntroVideo(); break;
       case "nugget0-tap": nugget0Tap(); break;
+      case "bib-back": bibBack(); break;
+      case "bib-next": bibNext(); break;
+      case "bib-answer": bibAnswer(parseInt(target.getAttribute("data-answer"), 10)); break;
+      case "confirm-no": closeConfirm(); break;
+      case "confirm-yes": var fn = confirmYes; closeConfirm(); if (fn) fn(); break;
       case "teaser0": openSheet0(target.getAttribute("data-chapter")); break;
       case "skip-opener": finishOpener(); break;
       case "opener-tap": if (screens.opener.classList.contains("phase-outro")) finishOpener(); break;
@@ -878,7 +1094,7 @@
       default: if (nav) navigate(nav);
     }
   });
-  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") closeSheet(); });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") { closeSheet(); closeConfirm(); } });
 
   /* ---------- Boot ---------- */
 
@@ -902,19 +1118,8 @@
     } else if (params.get("completed") === "streak" || params.get("completed") === "spirit") {
       var raw = params.get("streak") != null ? params.get("streak") : params.get("score");
       var n = parseInt(raw, 10);
-      if (isP0()) {
-        // Phase 0: Born in Barcelona ist erledigt, Result-Screen zeigen
-        var pts = isFinite(n) ? clamp(n * P0.points.perStreak, 0, P0.points.challengeMax) : P0.points.fallbackScore;
-        state.p0.introSeen = true;
-        state.p0.challengeDone = true;
-        state.p0.challengeScore = Math.max(state.p0.challengeScore || 0, pts);
-        state.p0.lastStreak = isFinite(n) ? n : null;
-        saveState();
-        history.replaceState({ depth: 0 }, "", "/");
-        history.pushState({ depth: 1 }, "", "/chapter/origin/result");
-        path = "/chapter/origin/result";
-      } else {
-        state.openerSeen = true;
+      {
+        if (isP0()) state.p0.introSeen = true; else state.openerSeen = true;
         if (isFinite(n)) {
           var prev = state.streakBest === null ? CFG.demo.streakBest : state.streakBest;
           state.streakBest = Math.max(prev, n);

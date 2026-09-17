@@ -4,3 +4,5 @@ node_modules/
 *.log
 .impeccable/
 .playwright-mcp/
+assets/*.mp4
+assets/*.mov

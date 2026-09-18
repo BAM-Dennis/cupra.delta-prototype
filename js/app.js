@@ -12,6 +12,9 @@
   var P = CFG.points || {};
   var P0 = CFG.p0 || {};
   var STORAGE_KEY = "cte.v3";
+  var LOCALE_KEY = "cte.locale";
+  var LOCALES = window.CTE_LOCALES || [{ id: "en", label: "English" }];
+  var I18N = window.CTE_I18N || {};
   var RING44 = 113.1;
   var RING32 = 97.4;
 
@@ -37,6 +40,51 @@
   function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function get(obj, path) { return path.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, obj); }
+
+  /* ---------- Sprache ---------- */
+
+  function hasLocale(id) { return LOCALES.some(function (l) { return l.id === id; }); }
+
+  function initialLocale() {
+    try {
+      var stored = localStorage.getItem(LOCALE_KEY);
+      if (hasLocale(stored)) return stored;
+    } catch (e) { /* ignore */ }
+    var nav = (navigator.languages || [navigator.language || ""]);
+    for (var i = 0; i < nav.length; i++) {
+      var short = String(nav[i]).slice(0, 2).toLowerCase();
+      if (hasLocale(short)) return short;
+    }
+    return hasLocale(CFG.defaultLocale) ? CFG.defaultLocale : LOCALES[0].id;
+  }
+
+  var locale = initialLocale();
+  var T = I18N[locale] || I18N.en || {};
+
+  /** Text aus der Sprachdatei. Platzhalter wie {n} werden aus `vars` ersetzt. */
+  function t(path, vars) {
+    var v = get(T, path);
+    if (v == null) v = get(I18N.en || {}, path);
+    if (v == null) return "";
+    if (typeof v === "string" && vars) {
+      v = v.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; });
+    }
+    return v;
+  }
+
+  function setLocale(id) {
+    if (!hasLocale(id) || id === locale) return;
+    locale = id;
+    T = I18N[locale] || I18N.en || {};
+    try { localStorage.setItem(LOCALE_KEY, id); } catch (e) { /* ignore */ }
+    applyStatic();
+    render(location.pathname);
+  }
+
+  /** Struktur aus config.js mit den Texten der aktiven Sprache zusammenführen. */
+  function merged(cfgItem, path) {
+    return Object.assign({}, cfgItem, get(T, path + "." + cfgItem.id) || {});
+  }
 
   /* ---------- State ---------- */
 
@@ -79,23 +127,31 @@
   var sheet = $("[data-sheet]");
   var toast = $("[data-toast]");
 
-  function fillStatic() {
-    $$("[data-copy]").forEach(function (el) { var v = CFG.copy[el.getAttribute("data-copy")]; if (v) el.textContent = v; });
-    $$("[data-k1]").forEach(function (el) { var v = get(CFG.k1, el.getAttribute("data-k1")); if (v) el.textContent = v; });
-    $$("[data-p0]").forEach(function (el) { var v = get(P0, el.getAttribute("data-p0")); if (v != null) el.textContent = v; });
-    $$("[data-bib]").forEach(function (el) { var v = get(P0.bib || {}, el.getAttribute("data-bib")); if (v != null) el.textContent = v; });
+  function applyStatic() {
+    document.documentElement.lang = locale;
+    $$("[data-t]").forEach(function (el) { var v = t(el.getAttribute("data-t")); if (v) el.textContent = v; });
+    $$("[data-t-aria]").forEach(function (el) { var v = t(el.getAttribute("data-t-aria")); if (v) el.setAttribute("aria-label", v); });
+    $$("[data-t-content]").forEach(function (el) { var v = t(el.getAttribute("data-t-content")); if (v) el.setAttribute("content", v); });
+    $$("[data-copy]").forEach(function (el) { var v = t("copy." + el.getAttribute("data-copy")); if (v) el.textContent = v; });
+    $$("[data-k1]").forEach(function (el) { var v = t("k1." + el.getAttribute("data-k1")); if (v) el.textContent = v; });
+    $$("[data-p0]").forEach(function (el) { var v = t("p0." + el.getAttribute("data-p0")); if (v) el.textContent = v; });
     $$("[data-demo]").forEach(function (el) { var v = CFG.demo[el.getAttribute("data-demo")]; if (v != null) el.textContent = v; });
     $$("[data-fmt]").forEach(function (el) { var v = P[el.getAttribute("data-fmt")]; if (v != null) el.textContent = fmt(v); });
-    var chip = $("[data-delta-chip]"); if (chip) chip.textContent = CFG.delta.k1Chip;
-    var fb = $("[data-delta-feedback]"); if (fb) fb.textContent = CFG.delta.feedback;
-    var lines = $("[data-opener-lines]");
-    if (lines) lines.innerHTML = CFG.copy.openerLines.map(function (l) { return '<p class="opener__line">' + esc(l) + "</p>"; }).join("");
+    var chip = $("[data-delta-chip]"); if (chip) chip.textContent = t("delta.k1Chip");
+    var fb = $("[data-delta-feedback]"); if (fb) fb.textContent = t("delta.feedback");
+    var sum = $("[data-archive-summary]"); if (sum) sum.textContent = t("ui.archiveSummary", { pts: fmt(P.phase0Total) });
+    var arow = $("[data-archive-meta]"); if (arow) arow.textContent = t("ui.archiveRowMeta", { pts: fmt(P.phase0Total) });
     var ob = $("[data-opener-badges]");
     if (ob) ob.innerHTML = CFG.phase0.chapters.map(function () { return '<img src="/assets/badge-copper.svg" alt="">'; }).join("");
     $$("[data-intro0-lines], [data-opener-carousel]").forEach(function (il) {
-      var arr = P0.introLines || [];
+      var arr = t("p0.introLines") || [];
       il.innerHTML = arr.concat([arr[0]]).map(function (l, i) {
         return '<p class="intro0__line' + (i === arr.length - 1 ? " intro0__line--last" : "") + '">' + esc(l) + "</p>";
+      }).join("");
+    });
+    $$("[data-lang]").forEach(function (sel) {
+      sel.innerHTML = LOCALES.map(function (l) {
+        return '<option value="' + l.id + '"' + (l.id === locale ? " selected" : "") + ">" + esc(l.label) + "</option>";
       }).join("");
     });
   }
@@ -105,6 +161,7 @@
     $$("[data-p0-points]").forEach(function (el) { el.textContent = p0Points(); });
     $$("[data-badge-count]").forEach(function (el) { el.textContent = badgeCount(); });
     $$("[data-streak-best]").forEach(function (el) { el.textContent = streakBest(); });
+    $$("[data-streak-meta]").forEach(function (el) { el.textContent = t("ui.streakMeta", { best: streakBest(), global: CFG.demo.streakGlobalBest }); });
     $$("[data-phase-toggle] button").forEach(function (b) { b.classList.toggle("is-active", parseInt(b.getAttribute("data-phase"), 10) === state.phase); });
   }
 
@@ -322,7 +379,7 @@
 
   // DASHBOARD
   enter.dashboard = function (el) {
-    $("[data-p0-chapters]", el).innerHTML = P0.chapters.map(renderP0Card).join("");
+    $("[data-p0-chapters]", el).innerHTML = P0.chapters.map(function (c) { return renderP0Card(merged(c, "p0.chapters")); }).join("");
     var ring = $("[data-ring]", el);
     if (ring) setRing(ring, p0Points() / P.chapterMax, state.p0.challengeDone, RING32);
     tickCountdowns();
@@ -335,12 +392,12 @@
     if (open) {
       left = '<div class="ring32" data-ring><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle class="ring32__track" cx="16" cy="16" r="15.5"/><circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/></svg>' +
         (done ? '<span class="ring32__check" aria-hidden="true">✓</span>' : "") + "</div>";
-      stateHtml = (done ? "Completed" : "Open") + " &nbsp;·&nbsp; <b>" + p0Points() + " / " + P.chapterMax + " pts</b>";
+      stateHtml = t(done ? "ui.completed" : "ui.open") + " &nbsp;·&nbsp; <b>" + p0Points() + " / " + P.chapterMax + " " + t("ui.pts") + "</b>";
       attrs = 'data-nav="/chapter/origin"';
       cls = "";
     } else {
       left = '<div class="ring32 ring32--locked"><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle class="ring32__track" cx="16" cy="16" r="15.5"/></svg><img class="ring32__lock" src="/assets/figma/icon-lock.svg" alt=""></div>';
-      stateHtml = 'Unlocks in &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '" data-countdown-source="p0"></b>';
+      stateHtml = t("ui.unlocksIn") + ' &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '" data-countdown-source="p0"></b>';
       attrs = 'data-action="teaser0" data-chapter="' + c.id + '"';
       cls = " ccard--locked";
     }
@@ -357,7 +414,7 @@
   // CHAPTER ORIGIN
   enter.chapter0 = function (el) {
     var done = state.p0.challengeDone;
-    $("[data-p0-chapter-state]", el).textContent = P0.chapters[0].index + "  ·  " + (done ? "Completed" : "Open");
+    $("[data-p0-chapter-state]", el).textContent = t("p0.chapters.origin.index") + "  ·  " + t(done ? "ui.completed" : "ui.open");
     setRing($("[data-ring]", el), p0Points() / P.chapterMax, done, RING32);
 
     var nug = $('[data-card="nugget0"]', el);
@@ -365,11 +422,11 @@
     nug.classList.toggle("ccrow--hi", !state.p0.nuggetSeen);
     ch.classList.toggle("ccrow--hi", state.p0.nuggetSeen && !done);
     $("[data-card-state]", nug).innerHTML = state.p0.nuggetSeen
-      ? '<img src="/assets/figma/icon-check-circle.svg" alt="Watched">'
-      : "Watch";
+      ? '<img src="/assets/figma/icon-check-circle.svg" alt="' + esc(t("ui.done")) + '">'
+      : esc(t("ui.watch"));
     $("[data-card-state]", ch).innerHTML = done
-      ? '<img src="/assets/figma/icon-check-circle.svg" alt="Completed">'
-      : "Play";
+      ? '<img src="/assets/figma/icon-check-circle.svg" alt="' + esc(t("ui.done")) + '">'
+      : esc(t("ui.play"));
   };
 
   // STORY CAPSULE (Kapitel-Video)
@@ -426,15 +483,16 @@
 
   // Teaser für gesperrte Phase-0-Kapitel
   function openSheet0(chapterId) {
-    var c = P0.chapters.filter(function (ch) { return ch.id === chapterId; })[0];
-    if (!c) return;
-    $("[data-sheet-eyebrow]", sheet).textContent = c.index + " · Locked";
+    var raw = P0.chapters.filter(function (ch) { return ch.id === chapterId; })[0];
+    if (!raw) return;
+    var c = merged(raw, "p0.chapters");
+    $("[data-sheet-eyebrow]", sheet).textContent = c.index + " · " + t("ui.locked");
     $("[data-sheet-title]", sheet).textContent = c.name;
     $("[data-sheet-teaser]", sheet).textContent = c.teaser || c.claim;
     var lock = $("[data-sheet-lock]", sheet);
     lock.setAttribute("data-countdown", c.id);
     lock.setAttribute("data-countdown-source", "p0");
-    lock.setAttribute("data-countdown-prefix", "Unlocks in ");
+    lock.setAttribute("data-countdown-prefix", t("ui.unlocksIn") + " ");
     lock.setAttribute("data-countdown-seconds", "");
     sheet.hidden = false;
     tickCountdowns();
@@ -442,7 +500,9 @@
 
   /* ===== BORN IN BARCELONA (Hotspot-Challenge) ===== */
 
-  var B = P0.bib || { districts: [], copy: {}, points: {}, timerMs: 10000 };
+  var B = P0.bib || { districts: [], points: {}, timerMs: 10000 };
+  /** Gebiet mit Texten der aktiven Sprache */
+  function bibText(id) { return get(T, "p0.bib.districts." + id) || get(I18N.en, "p0.bib.districts." + id) || {}; }
   var bib = null; // Laufzustand: { active, attempt, order, deadline, raf }
 
   function bibClaimedCount() { return Object.keys(state.p0.bib.claimed || {}).length; }
@@ -454,7 +514,7 @@
     renderBibMap(el);
     renderBibProgress(el);
     if (bibAllClaimed()) {
-      showBibResult(el, { label: B.copy.allDone, verdict: "correct", explain: "", points: state.p0.bib.points, finish: true });
+      showBibResult(el, { label: t("p0.bib.allDone"), verdict: "correct", explain: "", points: state.p0.bib.points, finish: true });
     } else {
       showBibState(el, "select");
     }
@@ -474,7 +534,7 @@
     var claimed = state.p0.bib.claimed || {};
     var n = bibClaimedCount();
     $("[data-bib-bar]", el).style.width = (n / B.districts.length * 100) + "%";
-    $("[data-bib-progress]", el).innerHTML = (B.copy.progress || "{n}/4 districts claimed").replace("{n}", "<b>" + n + "</b>").replace("/4", "/" + B.districts.length);
+    $("[data-bib-progress]", el).innerHTML = t("p0.bib.progress", { n: "<b>" + n + "</b>", total: B.districts.length });
   }
 
   function showBibState(el, name) {
@@ -485,15 +545,16 @@
     var el = screens.bib;
     var d = bibDistrict(id);
     if (!bib || bib.active || !d || state.p0.bib.claimed[id]) return;
+    var tx = bibText(id);
     bib.active = id;
     bib.attempt = 1;
-    bib.order = shuffle(d.answers.map(function (a, i) { return i; }));
+    bib.order = shuffle(tx.answers.map(function (a, i) { return i; }));
     renderBibMap(el);
-    $("[data-bib-district]", el).textContent = d.name;
-    $("[data-bib-question]", el).textContent = d.question;
+    $("[data-bib-district]", el).textContent = tx.name;
+    $("[data-bib-question]", el).textContent = tx.question;
     $("[data-bib-retry]", el).hidden = true;
-    $("[data-bib-answers]", el).innerHTML = bib.order.map(function (ai, k) {
-      return '<button type="button" class="ans" data-action="bib-answer" data-answer="' + ai + '">' + esc(d.answers[ai]) + "</button>";
+    $("[data-bib-answers]", el).innerHTML = bib.order.map(function (ai) {
+      return '<button type="button" class="ans" data-action="bib-answer" data-answer="' + ai + '">' + esc(tx.answers[ai]) + "</button>";
     }).join("");
     showBibState(el, "question");
     startBibTimer(el);
@@ -556,7 +617,7 @@
     if (bib.attempt === 1) {
       bib.attempt = 2;
       var hint = $("[data-bib-retry]", el);
-      hint.textContent = timeout ? B.copy.timeout : B.copy.retry;
+      hint.textContent = t(timeout ? "p0.bib.timeout" : "p0.bib.retry");
       hint.hidden = false;
       startBibTimer(el);
     } else {
@@ -581,9 +642,9 @@
     $$(".bib-d", el).forEach(function (g) { if (g.getAttribute("data-district") === d.id) g.classList.add("is-" + kind, "is-claimed"); g.classList.remove("is-active"); });
     renderBibProgress(el);
     showBibResult(el, {
-      label: kind === "full" ? B.copy.correct : kind === "half" ? B.copy.half : B.copy.none,
+      label: t(kind === "full" ? "p0.bib.correct" : kind === "half" ? "p0.bib.half" : "p0.bib.none"),
       verdict: kind === "none" ? "wrong" : "correct",
-      explain: d.explain,
+      explain: bibText(d.id).explain,
       points: pts,
       finish: bibAllClaimed(),
     });
@@ -595,7 +656,7 @@
     var gain = $("[data-bib-gain]", el);
     gain.hidden = !o.points;
     $("[data-bib-gain-value]", el).textContent = o.points;
-    $("[data-bib-next]", el).textContent = o.finish ? B.copy.finish : B.copy.next;
+    $("[data-bib-next]", el).textContent = t(o.finish ? "p0.bib.finish" : "p0.bib.next");
     $("[data-bib-next]", el).setAttribute("data-finish", o.finish ? "1" : "0");
     showBibState(el, "result");
   }
@@ -619,7 +680,7 @@
   function bibBack() {
     if (bib && bib.active) {
       openConfirm({
-        title: B.copy.leaveTitle, text: B.copy.leaveText, yes: B.copy.leave, no: B.copy.stay,
+        title: t("p0.bib.leaveTitle"), text: t("p0.bib.leaveText"), yes: t("p0.bib.leave"), no: t("p0.bib.stay"),
         onYes: function () { stopBibTimer(); bib.active = null; goBack(); },
       });
       return;
@@ -676,18 +737,18 @@
     cta.removeAttribute("data-action");
     cta.removeAttribute("data-chapter");
     if (state.k1Done && !state.badgeEarned) {
-      cta.textContent = "Claim your badge";
+      cta.textContent = t("ui.claimBadge");
       cta.setAttribute("data-nav", "/chapter/refresher/badge");
     } else if (state.k1Done) {
-      cta.textContent = "Continue: Chapter 02";
+      cta.textContent = t("ui.continueWith", { name: t("chapters.k2.index") });
       cta.setAttribute("data-nav", "");
       cta.setAttribute("data-action", "teaser");
       cta.setAttribute("data-chapter", "k2");
     } else {
-      cta.textContent = "Continue: Refresher";
+      cta.textContent = t("ui.continueWith", { name: t("chapters.k1.name") });
       cta.setAttribute("data-nav", "/chapter/refresher");
     }
-    $("[data-chapters]", el).innerHTML = CFG.chapters.map(renderP1Card).join("");
+    $("[data-chapters]", el).innerHTML = CFG.chapters.map(function (c) { return renderP1Card(merged(c, "chapters")); }).join("");
     setRing($(".dash-status [data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
     var k1ring = $('[data-chapters] [data-ring]', el);
     if (k1ring) setRing(k1ring, phasePoints() / P.chapterMax, state.k1Done, RING32);
@@ -717,23 +778,23 @@
     var st = chapterState(c);
     var o = { index: c.index, name: c.name, image: c.image, state: st };
     if (c.kind === "scan") {
-      o.claim = "Where you stand across five dimensions.";
-      o.stateHtml = "Completed &nbsp;·&nbsp; <b>5 dimensions</b>";
+      o.claim = c.claim;
+      o.stateHtml = t("ui.completed") + " &nbsp;·&nbsp; <b>5 " + t("ui.dimensions") + "</b>";
       o.attrs = 'data-nav="' + c.nav + '"';
       o.full = true; o.ring = true;
     } else if (c.id === "k1") {
       o.claim = c.sub;
       o.ring = true;
-      o.stateHtml = (state.k1Done ? "Completed" : "Open") + " &nbsp;·&nbsp; <b>" + phasePoints() + " / " + P.chapterMax + " pts</b>";
+      o.stateHtml = t(state.k1Done ? "ui.completed" : "ui.open") + " &nbsp;·&nbsp; <b>" + phasePoints() + " / " + P.chapterMax + " " + t("ui.pts") + "</b>";
       o.attrs = 'data-nav="' + c.nav + '"';
     } else if (st === "open") {
       o.claim = c.teaser;
-      o.stateHtml = "Open &nbsp;·&nbsp; <b>0 / " + P.chapterMax + " pts</b>";
+      o.stateHtml = t("ui.open") + " &nbsp;·&nbsp; <b>0 / " + P.chapterMax + " " + t("ui.pts") + "</b>";
       o.attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
     } else {
       o.claim = c.teaser;
       o.stateHtml = c.lock === "countdown"
-        ? 'Unlocks in &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '"></b>'
+        ? t("ui.unlocksIn") + ' &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '"></b>'
         : "<b>" + esc(c.lockText) + "</b>";
       o.attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
     }
@@ -747,62 +808,27 @@
     return "locked";
   }
 
-  function renderChapterRow(c) {
-    var st = chapterState(c);
-    var left, meta, cls, attrs;
-    if (c.kind === "scan") {
-      left = '<div class="minibars" aria-hidden="true">' + CFG.delta.dimensions.map(function (d) { return '<i class="b-' + d.band + '"></i>'; }).join("") + "</div>";
-      meta = c.hint;
-      cls = "row--done";
-      attrs = 'data-nav="' + c.nav + '"';
-    } else if (c.id === "k1") {
-      left = '<div class="ring" data-ring><svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><circle class="ring__track" cx="22" cy="22" r="18"/><circle class="ring__fill" cx="22" cy="22" r="18" data-ring-fill/></svg><span class="ring__check" data-ring-check hidden>✓</span></div>';
-      meta = (state.k1Done ? "Completed · " : "Open · ") + phasePoints() + " / " + P.chapterMax + " pts";
-      cls = state.k1Done ? "row--done" : "row--open";
-      attrs = 'data-nav="' + c.nav + '"';
-    } else if (st === "open") {
-      left = '<div class="ring"><svg viewBox="0 0 44 44" width="44" height="44" aria-hidden="true"><circle class="ring__track" cx="22" cy="22" r="18"/></svg></div>';
-      meta = "Open · 0 / " + P.chapterMax + " pts";
-      cls = "row--open";
-      attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
-    } else {
-      left = '<div class="lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>';
-      meta = c.lock === "countdown"
-        ? '<span class="countdown" data-countdown="' + c.id + '" data-countdown-prefix="Unlocks in "></span>'
-        : c.lockText;
-      cls = "row--locked";
-      attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
-    }
-    return (
-      '<li><button type="button" class="row row--tap ' + cls + '" ' + attrs + ">" +
-        left +
-        '<div class="row__body"><p class="row__index">' + esc(c.index) + '</p><p class="row__title">' + esc(c.name) + '</p><p class="row__meta">' + meta + "</p></div>" +
-        (c.kind === "scan" ? '<span class="row__state row__state--done">✓</span>' : st === "locked" ? "" : '<span class="row__chev">›</span>') +
-      "</button></li>"
-    );
-  }
-
   // PROFILE (beide Phasen)
   enter.profile = function (el) {
     $("[data-dims]", el).innerHTML = CFG.delta.dimensions.map(function (d) {
-      return '<li class="dim dim--' + d.band + '"><div class="dim__head"><span class="dim__name">' + esc(d.name) + '</span><span class="dim__band">' + d.band + '</span></div><div class="dim__bar"><i></i><i></i><i></i></div></li>';
+      return '<li class="dim dim--' + d.band + '"><div class="dim__head"><span class="dim__name">' + esc(t("delta.dimensions." + d.id)) + '</span><span class="dim__band">' + esc(t("delta.bands." + d.band)) + '</span></div><div class="dim__bar"><i></i><i></i><i></i></div></li>';
     }).join("");
     $$("[data-phase-points]", el).forEach(function (n) { n.textContent = isP0() ? p0Points() : phasePoints(); });
   };
 
   // K1
   enter.k1 = function (el) {
-    $("[data-k1-state]", el).textContent = "Chapter 01  ·  " + (state.k1Done ? "Completed" : "Open");
+    $("[data-k1-state]", el).textContent = t("k1.state") + "  ·  " + t(state.k1Done ? "ui.completed" : "ui.open");
     setRing($("[data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
-    setRowState($('[data-card="nugget"]', el), state.nuggetSeen, !state.nuggetSeen, "Watch");
-    setRowState($('[data-card="challenge"]', el), state.k1Done, state.nuggetSeen && !state.k1Done, "Play");
+    setRowState($('[data-card="nugget"]', el), state.nuggetSeen, !state.nuggetSeen, t("ui.watch"));
+    setRowState($('[data-card="challenge"]', el), state.k1Done, state.nuggetSeen && !state.k1Done, t("ui.play"));
   };
 
   function setRowState(row, done, highlight, openText) {
     row.classList.toggle("ccrow--hi", !!highlight);
     $("[data-card-state]", row).innerHTML = done
-      ? '<img src="/assets/figma/icon-check-circle.svg" alt="Done">'
-      : openText;
+      ? '<img src="/assets/figma/icon-check-circle.svg" alt="' + esc(t("ui.done")) + '">'
+      : esc(openText);
   }
 
   // NUGGET (Phase 1)
@@ -839,9 +865,12 @@
     renderPlay(el);
   };
 
+  function cardText(id) { return get(T, "k1.challenge.cards." + id) || get(I18N.en, "k1.challenge.cards." + id) || {}; }
+
   function renderPlay(el) {
     var cards = CFG.k1.challenge.cards;
     var c = cards[play.index];
+    var cx = cardText(c.id);
     $("[data-play-points]", el).textContent = play.points;
     $("[data-play-index]", el).textContent = play.index + 1;
     $("[data-play-steps]", el).innerHTML = cards.map(function (card, i) {
@@ -856,18 +885,18 @@
     if (play.phase === "card") {
       setGlow(null);
       $("[data-play-feature-no]", el).textContent = pad2(play.index + 1);
-      $("[data-play-feature]", el).textContent = c.feature;
-      $("[data-play-detail]", el).textContent = c.detail;
+      $("[data-play-feature]", el).textContent = cx.feature;
+      $("[data-play-detail]", el).textContent = cx.detail;
       cardEl.hidden = false; fbEl.hidden = true;
     } else {
       var ok = c.outcome === "correct";
       setGlow(ok ? "correct" : "wrong");
       var v = $("[data-play-verdict]", el);
       v.className = "verdict " + (ok ? "verdict--correct" : "verdict--wrong");
-      $("[data-play-verdict-label]", el).textContent = ok ? "Correct · " + c.verdict : "Not quite · " + c.verdict;
-      $("[data-play-feature-2]", el).textContent = c.feature;
-      $("[data-play-explain]", el).textContent = c.explain;
-      $("[data-action='play-next']", el).textContent = play.index === cards.length - 1 ? "See result" : "Next";
+      $("[data-play-verdict-label]", el).textContent = t(ok ? "k1.challenge.correctPrefix" : "k1.challenge.wrongPrefix") + " · " + cx.verdict;
+      $("[data-play-feature-2]", el).textContent = cx.feature;
+      $("[data-play-explain]", el).textContent = cx.explain;
+      $("[data-action='play-next']", el).textContent = t(play.index === cards.length - 1 ? "ui.seeResult" : "ui.next");
       cardEl.hidden = true; fbEl.hidden = false;
       if (ok) showGain(el, P.perCard);
     }
@@ -908,21 +937,21 @@
 
   enter.result = function (el) {
     var p0 = isP0();
-    var ctx = p0 ? P0.result : CFG.k1.result;
+    var base = p0 ? "p0.result." : "k1.result.";
     var score = p0 ? state.p0.challengeScore : state.k1Score;
-    $("[data-result-eyebrow]", el).textContent = p0 ? ctx.eyebrow : "Challenge complete";
-    $("[data-result-headline]", el).textContent = ctx.headline;
-    $("[data-result-line]", el).textContent = ctx.line;
+    $("[data-result-eyebrow]", el).textContent = p0 ? t("p0.result.eyebrow") : t("ui.challengeComplete");
+    $("[data-result-headline]", el).textContent = t(base + "headline");
+    $("[data-result-line]", el).textContent = t(base + "line");
     var tileLabel = $("[data-result-tile-label]", el);
     var tileValue = $("[data-result-correct]", el);
     if (p0) {
       var cl = state.p0.bib.claimed || {};
       var full = Object.keys(cl).filter(function (k) { return cl[k] === "full"; }).length;
-      tileLabel.textContent = "First try";
+      tileLabel.textContent = t("ui.firstTry");
       tileValue.textContent = full + " / " + (P0.bib.districts || []).length;
     } else {
       var correct = CFG.k1.challenge.cards.filter(function (c) { return c.outcome === "correct"; }).length;
-      tileLabel.textContent = "Correct";
+      tileLabel.textContent = t("ui.correct");
       tileValue.textContent = correct + " / " + CFG.k1.challenge.cards.length;
     }
     $("[data-result-cta]", el).setAttribute("data-nav", p0 ? "/chapter/origin/badge" : "/chapter/refresher/badge");
@@ -942,10 +971,10 @@
   }
 
   enter.badge = function (el) {
-    var ctx = isP0() ? P0.badge : CFG.k1.badge;
-    $("[data-badge-name]", el).textContent = ctx.name;
-    $("[data-badge-state]", el).textContent = ctx.state;
-    $("[data-badge-line]", el).textContent = ctx.line;
+    var bb = isP0() ? "p0.badge." : "k1.badge.";
+    $("[data-badge-name]", el).textContent = t(bb + "name");
+    $("[data-badge-state]", el).textContent = t(bb + "state");
+    $("[data-badge-line]", el).textContent = t(bb + "line");
     if (isP0()) { if (!state.p0.badgeEarned) { state.p0.badgeEarned = true; saveState(); } }
     else if (!state.badgeEarned) { state.badgeEarned = true; saveState(); }
     later(function () { vibrate([40, 60, 40]); }, 500);
@@ -954,13 +983,13 @@
   /* ===== ARCHIVE / LEADERBOARD (Phase 1) ===== */
 
   enter.archive = function (el) {
-    var ch = CFG.phase0.chapters;
+    var ch = CFG.phase0.chapters.map(function (c) { return merged(c, "phase0.chapters"); });
     $("[data-phase0-badges]", el).innerHTML = ch.map(function (c) {
       return '<figure><img src="/assets/badge-copper.svg" alt=""><figcaption>' + esc(c.name) + "</figcaption></figure>";
     }).join("");
     $("[data-phase0-chapters]", el).innerHTML = ch.map(function (c, i) {
-      return imageCard({ index: "Chapter " + pad2(i + 1), name: c.name, claim: c.claim, image: c.image, state: "completed", ring: true, full: true,
-        stateHtml: "Completed &nbsp;·&nbsp; <b>Badge earned</b>", attrs: "disabled" });
+      return imageCard({ index: t("p0.chapters." + c.id + ".index") || pad2(i + 1), name: c.name, claim: c.claim, image: c.image, state: "completed", ring: true, full: true,
+        stateHtml: t("ui.completed") + " &nbsp;·&nbsp; <b>" + t("ui.archiveCardState") + "</b>", attrs: "disabled" });
     }).join("");
   };
 
@@ -968,7 +997,7 @@
   enter.leaderboard = function (el) {
     var views = CFG.leaderboard.views;
     $("[data-board-views]", el).innerHTML = views.map(function (v, i) {
-      return '<button type="button" data-action="board-view" data-view="' + i + '" class="' + (i === boardView ? "is-active" : "") + '">' + esc(v.label) + "</button>";
+      return '<button type="button" data-action="board-view" data-view="' + i + '" class="' + (i === boardView ? "is-active" : "") + '">' + esc(t("leaderboard." + v.id)) + "</button>";
     }).join("");
     revealBoard(el);
   };
@@ -979,18 +1008,18 @@
     var me = $("[data-board-me]", el);
     var n = v.rows.length;
     rows.innerHTML = v.rows.map(function (r, i) {
-      return '<li class="brow" style="animation-delay:' + ((n - 1 - i) * 180 + 200) + 'ms"><span class="brow__rank">' + (i + 1) + '</span><span class="brow__name">' + esc(r[0]) + '</span><span class="brow__pts">' + fmt(r[1]) + '</span><span class="brow__unit">pts</span></li>';
+      return '<li class="brow" style="animation-delay:' + ((n - 1 - i) * 180 + 200) + 'ms"><span class="brow__rank">' + (i + 1) + '</span><span class="brow__name">' + esc(r[0]) + '</span><span class="brow__pts">' + fmt(r[1]) + '</span><span class="brow__unit">' + esc(t("ui.pts")) + '</span></li>';
     }).join("");
     me.innerHTML = "";
     later(function () {
-      me.innerHTML = '<div class="board__gap">···</div><div class="brow brow--me"><span class="brow__rank">' + v.me[0] + '</span><span class="brow__name">You</span><span class="brow__pts">' + fmt(v.me[1]) + '</span><span class="brow__unit">pts</span></div>';
+      me.innerHTML = '<div class="board__gap">···</div><div class="brow brow--me"><span class="brow__rank">' + v.me[0] + '</span><span class="brow__name">' + esc(t("ui.you")) + '</span><span class="brow__pts">' + fmt(v.me[1]) + '</span><span class="brow__unit">' + esc(t("ui.pts")) + '</span></div>';
     }, n * 180 + 400);
   }
 
   /* ---------- Countdown ---------- */
 
   function formatCountdown(ms, withSeconds) {
-    if (ms <= 0) return "Unlocks soon";
+    if (ms <= 0) return t("ui.unlocksSoon");
     var s = Math.floor(ms / 1000), d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
     if (d > 0) return d + "d " + pad2(h) + "h " + pad2(m) + "m" + (withSeconds ? " " + pad2(sec) + "s" : "");
     if (h > 0) return h + "h " + pad2(m) + "m" + (withSeconds ? " " + pad2(sec) + "s" : "");
@@ -998,8 +1027,8 @@
   }
   function unlockTime(id, source) {
     var table = source === "p0" ? P0.unlock : CFG.unlock;
-    var t = table && table[id] ? Date.parse(table[id]) : NaN;
-    return isFinite(t) ? t : 0;
+    var ms = table && table[id] ? Date.parse(table[id]) : NaN;
+    return isFinite(ms) ? ms : 0;
   }
   function tickCountdowns() {
     var now = Date.now();
@@ -1014,19 +1043,20 @@
   /* ---------- Sheet (Phase 1) ---------- */
 
   function openSheet(chapterId) {
-    var c = CFG.chapters.filter(function (ch) { return ch.id === chapterId; })[0];
-    if (!c) return;
+    var raw = CFG.chapters.filter(function (ch) { return ch.id === chapterId; })[0];
+    if (!raw) return;
+    var c = merged(raw, "chapters");
     var st = chapterState(c);
-    $("[data-sheet-eyebrow]", sheet).textContent = c.index + (st === "open" ? " · Open" : " · Locked");
+    $("[data-sheet-eyebrow]", sheet).textContent = c.index + " · " + t(st === "open" ? "ui.open" : "ui.locked");
     $("[data-sheet-title]", sheet).textContent = c.name;
     $("[data-sheet-teaser]", sheet).textContent = st === "open"
-      ? (c.teaser || "") + " Content of this chapter is not part of the prototype."
+      ? (c.teaser || "") + " " + t("ui.notInPrototype")
       : (c.teaser || "");
     var lock = $("[data-sheet-lock]", sheet);
     lock.removeAttribute("data-countdown");
     lock.removeAttribute("data-countdown-source");
-    if (st === "open") lock.textContent = "Open · 0 / " + P.chapterMax + " pts";
-    else if (c.lock === "countdown") { lock.setAttribute("data-countdown", c.id); lock.setAttribute("data-countdown-prefix", "Unlocks in "); lock.setAttribute("data-countdown-seconds", ""); }
+    if (st === "open") lock.textContent = t("ui.open") + " · 0 / " + P.chapterMax + " " + t("ui.pts");
+    else if (c.lock === "countdown") { lock.setAttribute("data-countdown", c.id); lock.setAttribute("data-countdown-prefix", t("ui.unlocksIn") + " "); lock.setAttribute("data-countdown-seconds", ""); }
     else lock.textContent = c.lockText;
     sheet.hidden = false;
     tickCountdowns();
@@ -1118,8 +1148,12 @@
 
   /* ---------- Boot ---------- */
 
+  document.addEventListener("change", function (ev) {
+    if (ev.target && ev.target.hasAttribute && ev.target.hasAttribute("data-lang")) setLocale(ev.target.value);
+  });
+
   function boot() {
-    fillStatic();
+    applyStatic();
     var params = new URLSearchParams(location.search);
     var showDev = (CFG.dev && CFG.dev.showReplay) || params.get("dev") === "1";
     $$("[data-dev-replay]").forEach(function (el) { el.hidden = !showDev; });
@@ -1145,7 +1179,7 @@
         if (isFinite(n)) {
           var prev = state.streakBest === null ? CFG.demo.streakBest : state.streakBest;
           state.streakBest = Math.max(prev, n);
-          toastText = n >= prev && n > 0 ? "Streak · New best: " + n : "Streak · " + n + " pts · Best stays " + prev;
+          toastText = n >= prev && n > 0 ? t("ui.streakNewBest", { n: n }) : t("ui.streakKept", { n: n, best: prev });
         }
         saveState();
         history.replaceState({ depth: 0 }, "", "/");

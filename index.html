@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1b1a23">
   <meta name="robots" content="noindex">
-  <title>CUPRA Training Experience</title>
-  <meta name="description" content="Be the one they follow.">
+  <title data-t="meta.title">CUPRA Training Experience</title>
+  <meta name="description" content="Be the one they follow." data-t-content="meta.description">
   <link rel="icon" href="/assets/design/emblem.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -55,6 +55,10 @@
 
       <!-- INTRO: THE ONE + Textkarussell -->
       <section class="screen screen--intro0" data-screen="intro0" data-bgvariant="intro" hidden>
+        <div class="meta meta--abs">
+          <span></span>
+          <select class="langsel" data-lang aria-label="Language" data-t-aria="ui.language"></select>
+        </div>
         <img class="intro0__emblem" src="/assets/design/emblem.svg" alt="CUPRA">
         <div class="intro0__text">
           <span class="intro0__fixed" data-p0="introFixed"></span>
@@ -63,7 +67,7 @@
           </div>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary intro0__enter" data-action="enter-intro">Enter</button>
+          <button type="button" class="btn btn--primary intro0__enter" data-action="enter-intro" data-t="ui.enter">Enter</button>
         </div>
       </section>
 
@@ -74,13 +78,13 @@
           <img class="introvideo__still" src="/assets/figma/city-barcelona.png" alt="">
           <div class="introvideo__fallback-text">
             <img src="/assets/design/emblem.svg" alt="" width="66" height="51">
-            <p class="overline tr15">Intro video</p>
-            <p class="hint">Placeholder until the video is delivered.</p>
+            <p class="overline tr15" data-t="ui.introVideoTitle">Intro video</p>
+            <p class="hint" data-t="ui.introVideoNote">Placeholder until the video is delivered.</p>
           </div>
         </div>
         <div class="introvideo__bar">
-          <button type="button" class="glassbtn introvideo__unmute" data-action="unmute-intro" data-intro-unmute hidden>Sound on</button>
-          <button type="button" class="skiptext" data-action="skip-introvideo">Skip</button>
+          <button type="button" class="glassbtn introvideo__unmute" data-action="unmute-intro" data-intro-unmute hidden data-t="ui.soundOn">Sound on</button>
+          <button type="button" class="skiptext" data-action="skip-introvideo" data-t="ui.skip">Skip</button>
         </div>
       </section>
 
@@ -88,7 +92,7 @@
       <section class="screen screen--dashboard" data-screen="dashboard" data-bgvariant="dashboard" hidden>
         <div class="meta">
           <span></span>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <button type="button" class="delta" data-action="logo-tap" aria-label="CUPRA">
           <div class="delta__triangle"><img src="/assets/figma/gradient-shape-dashboard.png" alt=""></div>
@@ -106,13 +110,13 @@
       <!-- CHAPTER ORIGIN -->
       <section class="screen screen--chapter0" data-screen="chapter0" data-bgvariant="chapter" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <div class="ch-intro">
           <p class="overline tr15" data-p0-chapter-state>Chapter 01 · Open</p>
-          <h1 class="ch-title" data-p0="chapters.0.name"></h1>
-          <p class="ch-claim" data-p0="chapters.0.claim"></p>
+          <h1 class="ch-title" data-p0="chapters.origin.name"></h1>
+          <p class="ch-claim" data-p0="chapters.origin.claim"></p>
           <div class="score32">
             <div class="ring32" data-ring>
               <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">
@@ -120,11 +124,11 @@
                 <circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/>
               </svg>
             </div>
-            <p class="score32__text"><b data-p0-points>0</b> / <span data-fmt="chapterMax"></span> pts</p>
+            <p class="score32__text"><b data-p0-points>0</b> / <span data-fmt="chapterMax"></span> <span data-t="ui.pts">pts</span></p>
           </div>
         </div>
         <div class="clist">
-          <p class="overline tr15">Content Nugget</p>
+          <p class="overline tr15" data-t="ui.contentNugget">Content Nugget</p>
           <button type="button" class="ccrow" data-nav="/chapter/origin/nugget" data-card="nugget0">
             <div class="ccrow__thumb"><img src="/assets/figma/card-origin.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-play-24.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
@@ -133,7 +137,7 @@
             </div>
             <span class="ccrow__right" data-card-state></span>
           </button>
-          <p class="overline tr15 pt20">Challenges</p>
+          <p class="overline tr15 pt20" data-t="ui.challenges">Challenges</p>
           <button type="button" class="ccrow" data-nav="/chapter/origin/challenge" data-card="challenge0">
             <div class="ccrow__thumb"><img src="/assets/figma/thumb-born-in-barcelona.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-challenge.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
@@ -148,10 +152,10 @@
       <!-- CHAPTER VIDEO (Story Capsule) -->
       <section class="screen screen--nugget0" data-screen="nugget0" data-bgvariant="chapter" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
-        <button type="button" class="vthumb" data-action="nugget0-tap" aria-label="Play Story Capsule">
+        <button type="button" class="vthumb" data-action="nugget0-tap" aria-label="Play">
           <img class="vthumb__img" src="/assets/figma/card-origin.jpg" alt="">
           <div class="vthumb__overlay"></div>
           <video class="vthumb__video" data-nugget-video playsinline preload="metadata" hidden></video>
@@ -164,19 +168,19 @@
           <p class="vbody" data-p0="nugget.body"></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/chapter/origin">Continue</button>
+          <button type="button" class="btn btn--primary" data-nav="/chapter/origin" data-t="ui.continue">Continue</button>
         </div>
       </section>
 
       <!-- BORN IN BARCELONA (Hotspot-Challenge, Figma 343:18367 ff.) -->
       <section class="screen screen--bib" data-screen="bib" data-bgvariant="challenge" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="bib-back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn" data-action="bib-back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <div class="bib-head">
-          <p class="overline tr15">Origin</p>
-          <h1 class="bib-title"><span class="light">Born in</span> Barcelona</h1>
+          <p class="overline tr15" data-t="p0.bib.kicker">Origin</p>
+          <h1 class="bib-title"><span class="light" data-t="p0.bib.titleLight">Born in</span> <span data-t="p0.bib.titleBold">Barcelona</span></h1>
         </div>
         <div class="bib-progress">
           <p class="bib-progress__text" data-bib-progress></p>
@@ -211,7 +215,7 @@
 
         <div class="bib-panel" data-bib-panel>
           <div class="bib-state bib-state--select" data-bib-state="select">
-            <p class="bib-prompt" data-bib="copy.select"></p>
+            <p class="bib-prompt" data-t="p0.bib.select"></p>
           </div>
           <div class="bib-state" data-bib-state="question" hidden>
             <div class="bib-qhead">
@@ -230,7 +234,7 @@
           <div class="bib-state bib-state--result" data-bib-state="result" hidden>
             <p class="bib-result__title" data-bib-verdict-label></p>
             <p class="bib-result__text" data-bib-explain></p>
-            <div class="bib-gainrow"><span class="ptpill" data-bib-gain><img src="/assets/figma/icon-plus-16.svg" alt="" width="16" height="16"><span><span data-bib-gain-value>0</span> points</span></span></div>
+            <div class="bib-gainrow"><span class="ptpill" data-bib-gain><img src="/assets/figma/icon-plus-16.svg" alt="" width="16" height="16"><span><span data-bib-gain-value>0</span> <span data-t="p0.bib.pointsSuffix">points</span></span></span></div>
             <button type="button" class="btn btn--primary" data-action="bib-next" data-bib-next></button>
           </div>
         </div>
@@ -241,8 +245,8 @@
       <!-- OPENER -->
       <section class="screen screen--opener" data-screen="opener" data-bgvariant="intro" hidden>
         <div class="meta meta--abs">
-          <span></span>
-          <button type="button" class="glassbtn skip skip--glass" data-action="skip-opener">Skip</button>
+          <select class="langsel" data-lang aria-label="Language" data-t-aria="ui.language"></select>
+          <button type="button" class="glassbtn skip skip--glass" data-action="skip-opener" data-t="ui.skip">Skip</button>
         </div>
         <img class="intro0__emblem" src="/assets/design/emblem.svg" alt="CUPRA">
         <div class="opener__stage">
@@ -250,20 +254,20 @@
             <span class="intro0__fixed" data-p0="introFixed"></span>
             <div class="intro0__mask"><div class="intro0__lines" data-opener-carousel></div></div>
           </div>
-          <h1 class="opener__claim"><span>Be the one</span><span>they follow.</span></h1>
+          <h1 class="opener__claim"><span data-t="copy.openerClaim1">Be the one</span><span data-t="copy.openerClaim2">they follow.</span></h1>
           <div class="opener__badges" data-opener-badges></div>
           <p class="opener__outro"><span data-copy="openerOutro1"></span><strong data-copy="openerOutro2"></strong></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary intro0__enter" data-opener-enter data-action="skip-opener">Enter</button>
+          <button type="button" class="btn btn--primary intro0__enter" data-opener-enter data-action="skip-opener" data-t="ui.enter">Enter</button>
         </div>
       </section>
 
       <!-- HOME -->
       <section class="screen screen--dashboard" data-screen="home" data-bgvariant="dashboard" data-tab="home" hidden>
         <div class="meta">
-          <span class="chip">Phase 1</span>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <span class="chip" data-t="ui.phaseChip">Phase 1</span>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <button type="button" class="delta" data-action="logo-tap" aria-label="CUPRA">
           <div class="delta__triangle"><img src="/assets/figma/gradient-shape-dashboard.png" alt=""></div>
@@ -283,92 +287,95 @@
                 <circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/>
               </svg>
             </div>
-            <p class="score32__text"><b data-phase-points>0</b> pts &nbsp;·&nbsp; Rank <b data-demo="rank"></b> &nbsp;·&nbsp; <b data-badge-count></b> badges</p>
+            <p class="score32__text"><b data-phase-points>0</b> <span data-t="ui.pts">pts</span> &nbsp;·&nbsp; <span data-t="ui.rank">Rank</span> <b data-demo="rank"></b> &nbsp;·&nbsp; <b data-badge-count></b> <span data-t="ui.badges">badges</span></p>
           </div>
         </div>
         <button type="button" class="btn btn--primary" data-home-cta data-nav="/chapter/refresher">Continue: Refresher</button>
 
         <ol class="ccards ccards--top" data-chapters></ol>
 
-        <p class="overline tr15 section">Play anytime</p>
+        <p class="overline tr15 section" data-t="ui.playAnytime">Play anytime</p>
         <button type="button" class="ccrow ccrow--hi" data-action="open-streak">
           <div class="ccrow__thumb"><img src="/assets/figma/thumb-born-in-barcelona.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/design/logo-decorations.svg" alt="" style="width:24px;height:24px;object-fit:contain"></span></div>
           <div class="ccrow__text">
-            <p class="ccrow__title">Streak</p>
-            <p class="ccrow__meta">Your best: <b data-streak-best></b> · Global best: <b data-demo="streakGlobalBest"></b></p>
+            <p class="ccrow__title" data-t="ui.streakTitle">Streak</p>
+            <p class="ccrow__meta" data-streak-meta></p>
           </div>
-          <span class="ccrow__right">Play</span>
+          <span class="ccrow__right" data-t="ui.play">Play</span>
         </button>
 
-        <p class="overline tr15 section">Archive</p>
+        <p class="overline tr15 section" data-t="ui.archive">Archive</p>
         <button type="button" class="ccrow" data-nav="/archive">
           <div class="ccrow__thumb"><img src="/assets/figma/card-origin.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-check-circle.svg" alt="" width="24" height="24"></span></div>
           <div class="ccrow__text">
-            <p class="ccrow__title">The Brand Chapters</p>
-            <p class="ccrow__meta">Phase 0 · Completed · <b class="copper"><span data-fmt="phase0Total"></span> pts</b></p>
+            <p class="ccrow__title" data-t="phase0.title">The Brand Chapters</p>
+            <p class="ccrow__meta copper" data-archive-meta></p>
           </div>
-          <span class="ccrow__right">Open</span>
+          <span class="ccrow__right" data-t="ui.open">Open</span>
         </button>
       </section>
 
       <!-- DELTA PROFILE (beide Phasen) -->
       <section class="screen" data-screen="profile" data-bgvariant="chapter" data-tab="profile" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
           <span></span>
         </div>
         <div class="ch-intro">
-          <p class="overline tr15">Delta Scan &nbsp;·&nbsp; Completed</p>
-          <h1 class="ch-title ch-title--md">Your starting point</h1>
-          <p class="ch-claim">Where you stand across five dimensions. The campaign sharpens what you need most.</p>
+          <p class="overline tr15" data-t="ui.profileEyebrow">Delta Scan · Completed</p>
+          <h1 class="ch-title ch-title--md" data-t="ui.profileTitle">Your starting point</h1>
+          <p class="ch-claim" data-t="ui.profileSub">Where you stand across five dimensions.</p>
         </div>
 
         <section class="panel">
           <ul class="dims" data-dims></ul>
           <ul class="legend">
-            <li><i class="dot dot--solid"></i>Solid</li>
-            <li><i class="dot dot--sharpen"></i>Sharpen</li>
-            <li><i class="dot dot--train"></i>Train</li>
+            <li><i class="dot dot--solid"></i><span data-t="delta.bands.solid">Solid</span></li>
+            <li><i class="dot dot--sharpen"></i><span data-t="delta.bands.sharpen">Sharpen</span></li>
+            <li><i class="dot dot--train"></i><span data-t="delta.bands.train">Train</span></li>
           </ul>
         </section>
 
         <div class="tile tile--you tile--text">
-          <p class="tile__label">Your lever</p>
+          <p class="tile__label" data-t="ui.yourLever">Your lever</p>
           <p class="tile__text" data-delta-feedback></p>
         </div>
 
         <div class="tiles">
           <div class="tile">
-            <p class="tile__label">Points</p>
+            <p class="tile__label" data-t="ui.points">Points</p>
             <div class="tile__value"><span data-phase-points>0</span></div>
           </div>
           <div class="tile">
-            <p class="tile__label">Badges</p>
+            <p class="tile__label" data-t="ui.badges">Badges</p>
             <div class="tile__value"><span data-badge-count></span></div>
           </div>
           <div class="tile">
-            <p class="tile__label">Rank</p>
+            <p class="tile__label" data-t="ui.rank">Rank</p>
             <div class="tile__value"><img src="/assets/design/icon-position.svg" alt="" class="icon16"><span data-demo="rank"></span></div>
           </div>
         </div>
 
-        <p class="overline tr15 section">Prototype view</p>
+        <p class="overline tr15 section" data-t="ui.language">Language</p>
+        <select class="langsel langsel--block" data-lang aria-label="Language" data-t-aria="ui.language"></select>
+
+        <p class="overline tr15 section" data-t="ui.prototypeView">Prototype view</p>
         <div class="segmented" data-phase-toggle>
-          <button type="button" data-action="set-phase" data-phase="0">Phase 0 · Brand Chapters</button>
-          <button type="button" data-action="set-phase" data-phase="1">Phase 1 · Campaign</button>
+          <button type="button" data-action="set-phase" data-phase="0" data-t="ui.phase0Label">Phase 0 · Brand Chapters</button>
+          <button type="button" data-action="set-phase" data-phase="1" data-t="ui.phase1Label">Phase 1 · Campaign</button>
         </div>
       </section>
 
       <!-- K1 DETAIL -->
       <section class="screen" data-screen="k1" data-bgvariant="chapter" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <div class="ch-intro">
           <p class="overline tr15" data-k1-state>Chapter 01 · Open</p>
-          <h1 class="ch-title">Refresher</h1>
-          <p class="ch-claim">Know what is new before you sell it.</p>
+          <h1 class="ch-title" data-t="chapters.k1.name">Refresher</h1>
+          <p class="ch-claim" data-t="chapters.k1.sub">Know what is new before you sell it.</p>
           <span class="chip chip--copper" data-delta-chip></span>
           <div class="score32">
             <div class="ring32" data-ring>
@@ -377,11 +384,11 @@
                 <circle class="ring32__fill" cx="16" cy="16" r="15.5" data-ring-fill/>
               </svg>
             </div>
-            <p class="score32__text"><b data-phase-points>0</b> / <span data-fmt="chapterMax"></span> pts</p>
+            <p class="score32__text"><b data-phase-points>0</b> / <span data-fmt="chapterMax"></span> <span data-t="ui.pts">pts</span></p>
           </div>
         </div>
         <div class="clist">
-          <p class="overline tr15">Content Nugget</p>
+          <p class="overline tr15" data-t="ui.contentNugget">Content Nugget</p>
           <button type="button" class="ccrow" data-nav="/chapter/refresher/nugget" data-card="nugget">
             <div class="ccrow__thumb"><img src="/assets/figma/card-performance.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-play-24.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
@@ -390,7 +397,7 @@
             </div>
             <span class="ccrow__right" data-card-state></span>
           </button>
-          <p class="overline tr15 pt20">Challenges</p>
+          <p class="overline tr15 pt20" data-t="ui.challenges">Challenges</p>
           <button type="button" class="ccrow" data-nav="/chapter/refresher/challenge" data-card="challenge">
             <div class="ccrow__thumb"><img src="/assets/figma/card-craftsmanship.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-challenge.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
@@ -405,8 +412,8 @@
       <!-- NUGGET (Phase 1) -->
       <section class="screen screen--nugget0" data-screen="nugget" data-bgvariant="chapter" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <button type="button" class="vthumb" data-action="nugget-tap" aria-label="Play nugget">
           <img class="vthumb__img" src="/assets/figma/card-performance.jpg" alt="">
@@ -420,29 +427,29 @@
           <p class="vbody" data-k1="nugget.body"></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge">Continue to challenge</button>
+          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge" data-t="ui.continueToChallenge">Continue to challenge</button>
         </div>
       </section>
 
       <!-- CHALLENGE INTRO -->
       <section class="screen" data-screen="cintro" data-bgvariant="chapter" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
           <span></span>
         </div>
         <div class="center grow">
-          <p class="overline tr15">Refresher &nbsp;·&nbsp; Challenge</p>
+          <p class="overline tr15" data-t="k1.challenge.eyebrow">Refresher · Challenge</p>
           <h1 class="ch-title ch-title--md" data-k1="challenge.title"></h1>
           <p class="ch-claim" data-k1="challenge.rule"></p>
           <div class="tiles tiles--wide">
-            <div class="tile"><p class="tile__label">Format</p><div class="tile__value">Swipe</div></div>
-            <div class="tile"><p class="tile__label">Time</p><div class="tile__value"><img src="/assets/design/icon-clock.svg" alt="" class="icon16">~3 min</div></div>
-            <div class="tile"><p class="tile__label">Points</p><div class="tile__value copper">up to 300</div></div>
+            <div class="tile"><p class="tile__label" data-t="k1.challenge.format">Format</p><div class="tile__value" data-t="k1.challenge.formatValue">Swipe</div></div>
+            <div class="tile"><p class="tile__label" data-t="k1.challenge.time">Time</p><div class="tile__value"><img src="/assets/design/icon-clock.svg" alt="" class="icon16"><span data-t="k1.challenge.timeValue">~3 min</span></div></div>
+            <div class="tile"><p class="tile__label" data-t="k1.challenge.pointsLabel">Points</p><div class="tile__value copper" data-t="k1.challenge.pointsValue">up to 300</div></div>
           </div>
-          <p class="hint" data-challenge-done hidden>Already completed. Play again anytime, your points stay.</p>
+          <p class="hint" data-challenge-done hidden data-t="ui.alreadyCompleted">Already completed.</p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge/play">Start</button>
+          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge/play" data-t="ui.start">Start</button>
         </div>
       </section>
 
@@ -451,12 +458,12 @@
         <div class="gamehead">
           <div class="gamehead__row">
             <div>
-              <p class="overline overline--75">Points</p>
-              <div class="bignum"><span data-play-points>0</span><span class="bignum__unit">pts</span></div>
+              <p class="overline overline--75" data-t="ui.points">Points</p>
+              <div class="bignum"><span data-play-points>0</span><span class="bignum__unit" data-t="ui.pts">pts</span></div>
               <span class="gain gain--float" data-play-gain hidden><img src="/assets/design/icon-plus.svg" alt="" class="icon24"><span data-play-gain-value></span></span>
             </div>
             <div class="right">
-              <p class="overline overline--75">Card</p>
+              <p class="overline overline--75" data-t="ui.card">Card</p>
               <div class="bignum"><span data-play-index>1</span><span class="bignum__unit">/ 3</span></div>
             </div>
           </div>
@@ -465,15 +472,15 @@
 
         <div class="stage grow" data-play-stage>
           <div class="play__card" data-play-card>
-            <p class="overline tr15">Feature <span data-play-feature-no>01</span></p>
+            <p class="overline tr15"><span data-t="ui.feature">Feature</span> <span data-play-feature-no>01</span></p>
             <div class="feature">
               <p class="feature__name" data-play-feature></p>
               <p class="feature__detail" data-play-detail></p>
             </div>
-            <p class="hint">Known from the previous model, or new?</p>
+            <p class="hint" data-t="k1.challenge.prompt">Known from the previous model, or new?</p>
             <div class="zones">
-              <button type="button" class="zone" data-action="play-answer" data-answer="known"><span class="zone__arrow">‹</span><span class="zone__label">Known</span></button>
-              <button type="button" class="zone" data-action="play-answer" data-answer="new"><span class="zone__label">New</span><span class="zone__arrow">›</span></button>
+              <button type="button" class="zone" data-action="play-answer" data-answer="known"><span class="zone__arrow">‹</span><span class="zone__label" data-t="k1.challenge.known">Known</span></button>
+              <button type="button" class="zone" data-action="play-answer" data-answer="new"><span class="zone__label" data-t="k1.challenge.isNew">New</span><span class="zone__arrow">›</span></button>
             </div>
           </div>
           <div class="play__feedback" data-play-feedback hidden>
@@ -484,7 +491,7 @@
             <p class="feature__name" data-play-feature-2></p>
             <p class="body" data-play-explain></p>
             <div class="footer footer--inline">
-              <button type="button" class="btn btn--primary" data-action="play-next">Next</button>
+              <button type="button" class="btn btn--primary" data-action="play-next" data-t="ui.next">Next</button>
             </div>
           </div>
         </div>
@@ -493,22 +500,22 @@
       <!-- RESULT (beide Phasen) -->
       <section class="screen screen--result" data-screen="result" data-bgvariant="chapter" hidden>
         <div class="center grow">
-          <p class="overline tr15" data-result-eyebrow>Challenge complete</p>
+          <p class="overline tr15" data-result-eyebrow></p>
           <h1 class="ch-title ch-title--md" data-result-headline></h1>
           <section class="panel panel--result">
             <div class="score score--xl">
               <span class="score__num" data-result-score>0</span>
-              <span class="score__unit">pts</span>
+              <span class="score__unit" data-t="ui.pts">pts</span>
             </div>
             <div class="tiles">
               <div class="tile"><p class="tile__label" data-result-tile-label>Correct</p><div class="tile__value" data-result-correct></div></div>
-              <div class="tile"><p class="tile__label">Avg. time</p><div class="tile__value"><img src="/assets/design/icon-clock.svg" alt="" class="icon16"><span data-demo="avgTime"></span></div></div>
+              <div class="tile"><p class="tile__label" data-t="ui.avgTime">Avg. time</p><div class="tile__value"><img src="/assets/design/icon-clock.svg" alt="" class="icon16"><span data-demo="avgTime"></span></div></div>
             </div>
           </section>
           <p class="body result__line" data-result-line></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-result-cta data-nav="/chapter/refresher/badge">Claim your badge</button>
+          <button type="button" class="btn btn--primary" data-result-cta data-nav="/chapter/refresher/badge" data-t="ui.claimBadge">Claim your badge</button>
         </div>
       </section>
 
@@ -517,30 +524,30 @@
         <div class="center grow badge-stage">
           <div class="badge-stage__glow"></div>
           <img class="badge-stage__img" src="/assets/badge-copper.svg" alt="Badge" width="180" height="180">
-          <p class="overline badge-eyebrow">Badge earned</p>
+          <p class="overline badge-eyebrow" data-t="ui.badgeEarned">Badge earned</p>
           <h1 class="badge-title"><span data-badge-name></span> <span data-badge-state></span></h1>
           <p class="badge-line" data-badge-line></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/">Back to home</button>
+          <button type="button" class="btn btn--primary" data-nav="/" data-t="ui.backToHome">Back to home</button>
         </div>
       </section>
 
       <!-- ARCHIVE (Phase 1) -->
       <section class="screen" data-screen="archive" data-bgvariant="chapter" data-tab="home" hidden>
         <div class="meta">
-          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span>Back</span></button>
+          <button type="button" class="glassbtn" data-action="back"><img src="/assets/figma/icon-chevron-back.svg" alt="" width="20" height="20"><span data-t="ui.back">Back</span></button>
           <span></span>
         </div>
         <div class="ch-intro">
-          <p class="overline tr15">Phase 0 &nbsp;·&nbsp; Completed</p>
-          <h1 class="ch-title ch-title--md">The Brand Chapters</h1>
-          <p class="ch-claim">Four chapters, four badges, <b data-fmt="phase0Total"></b> pts.</p>
+          <p class="overline tr15" data-t="ui.archiveEyebrow">Phase 0 · Completed</p>
+          <h1 class="ch-title ch-title--md" data-t="phase0.title">The Brand Chapters</h1>
+          <p class="ch-claim" data-archive-summary></p>
         </div>
         <section class="panel">
           <div class="badges" data-phase0-badges></div>
         </section>
-        <p class="overline tr15 section">Chapters</p>
+        <p class="overline tr15 section" data-t="ui.chapters">Chapters</p>
         <ol class="ccards" data-phase0-chapters></ol>
       </section>
 
@@ -548,11 +555,11 @@
       <section class="screen screen--board" data-screen="leaderboard" data-bgvariant="chapter" data-tab="leaderboard" hidden>
         <div class="meta">
           <span></span>
-          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
+          <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile" data-t-aria="ui.profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <div class="ch-intro">
-          <p class="overline tr15">The Competition</p>
-          <h1 class="ch-title ch-title--md">Leaderboard</h1>
+          <p class="overline tr15" data-t="ui.theCompetition">The Competition</p>
+          <h1 class="ch-title ch-title--md" data-t="ui.leaderboard">Leaderboard</h1>
           <p class="ch-claim" data-copy="noLeaderboard"></p>
         </div>
 
@@ -561,7 +568,7 @@
         <ol class="board" data-board-rows></ol>
 
         <div class="board__me" data-board-me></div>
-        <button type="button" class="linkbtn" data-action="board-replay" data-dev-replay hidden>Replay reveal</button>
+        <button type="button" class="linkbtn" data-action="board-replay" data-dev-replay hidden data-t="ui.replayReveal">Replay reveal</button>
       </section>
 
     </main>
@@ -571,19 +578,19 @@
   <nav class="tabbar" data-tabbar hidden aria-label="Main">
     <button type="button" class="tab" data-tab-id="home" data-nav="/">
       <svg viewBox="0 0 24 24" class="tab__icon"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>
-      <span>Home</span>
+      <span data-t="ui.tabHome">Home</span>
     </button>
     <button type="button" class="tab" data-tab-id="streak" data-action="open-streak">
       <svg viewBox="0 0 24 24" class="tab__icon"><path d="M13 2L5 14h6l-1 8 9-13h-6z"/></svg>
-      <span>Streak</span>
+      <span data-t="ui.tabStreak">Streak</span>
     </button>
     <button type="button" class="tab" data-tab-id="leaderboard" data-nav="/leaderboard">
       <svg viewBox="0 0 24 24" class="tab__icon"><path d="M12 14a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm-3 1.5L7.5 22l4.5-2.7 4.5 2.7-1.5-6.5"/></svg>
-      <span>Leaderboard</span>
+      <span data-t="ui.tabLeaderboard">Leaderboard</span>
     </button>
     <button type="button" class="tab" data-tab-id="profile" data-nav="/profile">
       <svg viewBox="0 0 24 24" class="tab__icon"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      <span>Profile</span>
+      <span data-t="ui.tabProfile">Profile</span>
     </button>
   </nav>
 
@@ -591,7 +598,7 @@
   <div class="sheet" data-sheet hidden>
     <div class="sheet__backdrop" data-action="close-sheet"></div>
     <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
-      <button type="button" class="sheet__close" data-action="close-sheet" aria-label="Close">×</button>
+      <button type="button" class="sheet__close" data-action="close-sheet" aria-label="Close" data-t-aria="ui.close">×</button>
       <p class="overline overline--75" data-sheet-eyebrow></p>
       <h2 class="h1" id="sheet-title" data-sheet-title></h2>
       <p class="body body--75" data-sheet-teaser></p>
@@ -614,6 +621,7 @@
   <div class="toast" data-toast hidden></div>
 </div>
 
+<script src="/js/i18n.js"></script>
 <script src="/js/config.js"></script>
 <script src="/js/app.js"></script>
 </body>

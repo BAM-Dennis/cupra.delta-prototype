@@ -7,7 +7,7 @@ Mobiler Klick-Prototyp für den Tender-Pitch mit **zwei umschaltbaren Zuständen
 
 Umschalten per URL `/?phase=0` bzw. `/?phase=1` oder im Profil-Screen unter „Prototype view". Beide Phasen teilen sich das Delta-Profil.
 
-Statische Web-App ohne Build-Schritt: `index.html`, `css/styles.css`, `js/config.js`, `js/app.js`.
+Statische Web-App ohne Build-Schritt: `index.html`, `css/styles.css`, `js/i18n.js`, `js/config.js`, `js/app.js`.
 Design nach Figma CUPRA-GLT-27, Referenz ist das Repo `cupra.streak-challenge` (Cupra-Font, Tokens, Hintergründe, Glas-Zeilen, Kupfer-Verlaufsbuttons).
 
 ## Lokal starten
@@ -43,6 +43,14 @@ ffmpeg -i "assets/Be the one to follow-tall-no-bullring.mp4" -vf scale=720:1280 
 ```
 
 Die Story Capsule hat noch kein Video. Datei nach `assets/video/` legen und in `js/config.js` unter `video.storyCapsule` eintragen. Ohne Eintrag läuft der Mock (Fortschrittsbalken, +40 nach 3 s). Mit Video startet es per Tap und vergibt den Bonus am Ende.
+
+## Sprachen
+
+Die Anwendung liegt vollständig auf Englisch, Deutsch und Spanisch vor. Alle Teilnehmertexte stehen in `js/i18n.js`, `js/config.js` enthält nur noch Struktur, Zahlen, Bilder und Zeitpunkte. Die Verbindung läuft über ids, zum Beispiel liefert `chapters.k3.name` den Namen zur Karte mit `id: "k3"`.
+
+Der Sprachwähler sitzt wie in der Streak Challenge als Glas-Chip oben rechts auf dem Intro und im Profil unter „Sprache". Die Wahl liegt in `localStorage` unter `cte.locale` und überlebt `/?reset=1`. Ohne gespeicherte Wahl entscheidet die Browsersprache, sonst greift `defaultLocale` aus der Config.
+
+Eine Sprache ergänzen: Block in `js/i18n.js` kopieren, übersetzen und das Kürzel in `window.CTE_LOCALES` eintragen. Im HTML markiert `data-t="pfad"` einen Text, `data-t-aria` ein Vorlesefeld und `data-t-content` ein Meta-Attribut.
 
 ## Konfiguration (`js/config.js`)
 

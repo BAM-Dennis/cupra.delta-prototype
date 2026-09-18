@@ -750,3 +750,15 @@ b, strong { font-weight: 500; }
 .badge-stage .badge-eyebrow, .badge-stage .badge-title, .badge-stage .badge-line { animation: fade-up .7s var(--ease) .4s both; }
 
 .confirm__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+/* ---------- Sprachwahl (wie in der Streak Challenge) ---------- */
+
+.langsel {
+  height: 36px; padding: 0 10px; border-radius: 6px; appearance: none; -webkit-appearance: none;
+  border: 1px solid var(--w15); background: var(--w10); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font); font-size: 12px; font-weight: 350; letter-spacing: .48px; text-transform: uppercase;
+  color: rgba(255,255,255,.8); outline: none; cursor: pointer;
+}
+.langsel:focus { border-color: var(--w40); }
+.langsel option { background: var(--night); color: #fff; text-transform: none; }
+.langsel--block { width: 100%; height: 48px; font-size: 14px; letter-spacing: 1px; }

@@ -1,6 +1,7 @@
 /*
- * CUPRA Training Experience – Pitch-Prototyp (Konzept v2.0)
- * Zentrale Konfiguration. Alles, was vor dem Pitch angepasst werden muss, steht hier.
+ * CUPRA Training Experience – Pitch-Prototyp
+ * Struktur, Zahlen, Bilder und Zeitpunkte. Alle Teilnehmertexte stehen in js/i18n.js.
+ * Die ids hier sind die Schlüssel, unter denen i18n.js die Texte liefert.
  */
 window.CTE_CONFIG = {
   /** Deploy-URL der Streak Challenge (ohne Slash am Ende). */
@@ -8,6 +9,9 @@ window.CTE_CONFIG = {
 
   /** Basis für den Rückweg. null = window.location.origin (Standard). */
   returnBase: null,
+
+  /** Startsprache, wenn der Browser keine der angebotenen Sprachen meldet. */
+  defaultLocale: "en",
 
   /** Pitch-Tag, nur zur Orientierung. Die Countdowns laufen auf die Werte unter `unlock`. */
   pitchDate: "2026-09-18T09:00:00+02:00",
@@ -63,109 +67,63 @@ window.CTE_CONFIG = {
   /** Delta Scan, feste Demo-Werte. band: solid | sharpen | train */
   delta: {
     dimensions: [
-      { id: "product", name: "Product knowledge", band: "sharpen" },
-      { id: "segment", name: "Segment & customer", band: "train" },
-      { id: "competitors", name: "Competitors", band: "sharpen" },
-      { id: "brand", name: "Brand & conviction", band: "solid" },
-      { id: "sales", name: "Sales", band: "train" },
+      { id: "product", band: "sharpen" },
+      { id: "segment", band: "train" },
+      { id: "competitors", band: "sharpen" },
+      { id: "brand", band: "solid" },
+      { id: "sales", band: "train" },
     ],
-    feedback: "Your biggest lever right now: Segment & customer. Chapter 02 is built for exactly that.",
-    k1Chip: "Focus: Product knowledge · Sharpen",
   },
 
   /** Home-Karten der Phase 1 */
   chapters: [
-    { id: "delta", kind: "scan", index: "Delta Scan", name: "Your starting point", hint: "Completed · 5 dimensions", nav: "/profile", image: "/assets/figma/thumb-born-in-barcelona.jpg" },
-    { id: "k1", index: "Chapter 01", name: "Refresher", sub: "Know what is new before you sell it.", nav: "/chapter/refresher", image: "/assets/figma/card-origin.jpg" },
-    {
-      id: "k2", index: "Chapter 02", name: "Segment & Target Customer", lock: "after-k1", lockText: "Unlocks after Chapter 01", image: "/assets/figma/card-craftsmanship.jpg",
-      teaser: "Who buys the new model, and why.",
-    },
-    {
-      id: "k3", index: "Chapter 03", name: "Competitors", lock: "countdown", image: "/assets/figma/card-performance.jpg",
-      teaser: "The four cars your customers compare against, and the one argument that wins.",
-    },
-    {
-      id: "k4", index: "Chapter 04", name: "Brand & Conviction", lock: "countdown", image: "/assets/figma/card-tribe.jpg",
-      teaser: "What CUPRA stands for when nobody is reading the spec sheet.",
-    },
-    {
-      id: "pc", index: "Final", name: "Performance Check", lock: "after-k4", lockText: "Unlocks after Chapter 04", image: "/assets/figma/thumb-born-in-barcelona.jpg",
-      teaser: "The same scan again. See how far you moved.",
-    },
+    { id: "delta", kind: "scan", nav: "/profile", image: "/assets/figma/thumb-born-in-barcelona.jpg" },
+    { id: "k1", nav: "/chapter/refresher", image: "/assets/figma/card-origin.jpg" },
+    { id: "k2", lock: "after-k1", image: "/assets/figma/card-craftsmanship.jpg" },
+    { id: "k3", lock: "countdown", image: "/assets/figma/card-performance.jpg" },
+    { id: "k4", lock: "countdown", image: "/assets/figma/card-tribe.jpg" },
+    { id: "pc", lock: "after-k4", image: "/assets/figma/thumb-born-in-barcelona.jpg" },
   ],
 
-  /** K1-Challenge „Known or New?", gemockt als Screen-Sequenz */
+  /** Refresher-Challenge „Known or New?", gemockt als Screen-Sequenz */
   k1: {
-    nugget: {
-      title: "Tech Overview",
-      meta: "1:30 min",
-      note: "Worth watching before you play",
-      eyebrow: "Refresher · Content Nugget",
-      thumb: "/assets/figma/card-performance.jpg",
-      headline: "What changed under the skin.",
-      body: "Ninety seconds on the new model's platform, battery and cockpit. Watch it once, then play.",
-    },
+    nugget: { thumb: "/assets/figma/card-performance.jpg" },
     challenge: {
-      title: "Known or New?",
-      meta: "Swipe · ~3 min",
-      points: "up to 300 pts",
       thumb: "/assets/figma/card-craftsmanship.jpg",
-      rule: "Three features of the new model. Decide for each: known from the previous model, or new? One tap per card.",
+      /** outcome steuert den Spielverlauf, die Texte liefert i18n.js */
       cards: [
-        {
-          feature: "Coast-to-coast light bar",
-          detail: "A single light signature running the full width of the rear.",
-          outcome: "correct",
-          verdict: "New",
-          explain: "Correct. The previous model had separate tail lights.",
-        },
-        {
-          feature: "Digital cockpit 12.3''",
-          detail: "Fully digital instrument display behind the wheel.",
-          outcome: "wrong",
-          verdict: "Known",
-          explain: "Known from the previous model. The 12.3'' cockpit was already on board.",
-        },
-        {
-          feature: "Bidirectional charging",
-          detail: "The car feeds energy back into the home or the grid.",
-          outcome: "correct",
-          verdict: "New",
-          explain: "Correct. Vehicle-to-home arrives with the new model.",
-        },
+        { id: "lightbar", outcome: "correct" },
+        { id: "cockpit", outcome: "wrong" },
+        { id: "v2h", outcome: "correct" },
       ],
     },
-    result: { headline: "Strong recall", line: "You know more than you think." },
-    badge: { name: "Refresher", state: "Complete", line: "You're ready for the workshops." },
   },
 
   /** Phase 0 im Archiv */
   phase0: {
-    title: "The Brand Chapters",
     chapters: [
-      { name: "Origin", claim: "The one who knows the roots.", image: "/assets/figma/card-origin.jpg" },
-      { name: "Craftsmanship", claim: "The one who masters the craft.", image: "/assets/figma/card-craftsmanship.jpg" },
-      { name: "Performance", claim: "The one who feels the drive.", image: "/assets/figma/card-performance.jpg" },
-      { name: "Tribe", claim: "The one they follow. You.", image: "/assets/figma/card-tribe.jpg" },
+      { id: "origin", image: "/assets/figma/card-origin.jpg" },
+      { id: "craftsmanship", image: "/assets/figma/card-craftsmanship.jpg" },
+      { id: "performance", image: "/assets/figma/card-performance.jpg" },
+      { id: "tribe", image: "/assets/figma/card-tribe.jpg" },
     ],
   },
 
-  /** Leaderboard-Demo (Kann): 8 fiktive Zeilen pro Sicht, eigene Position 47 */
+  /** Leaderboard-Demo: 8 fiktive Zeilen pro Sicht, eigene Position 47 */
   leaderboard: {
     views: [
       {
-        id: "global", label: "Global",
+        id: "global",
         rows: [["Marta L.", 2860], ["Jonas K.", 2795], ["Aitor E.", 2740], ["Sophie R.", 2690], ["Luca B.", 2655], ["Nina P.", 2610], ["Diego M.", 2580], ["Emma S.", 2545]],
         me: [47, 1520],
       },
       {
-        id: "market", label: "Market",
+        id: "market",
         rows: [["Jonas K.", 2795], ["Sophie R.", 2690], ["Nina P.", 2610], ["Emma S.", 2545], ["Felix W.", 2490], ["Lea H.", 2430], ["Tim B.", 2380], ["Mara V.", 2340]],
         me: [12, 1520],
       },
       {
-        id: "role", label: "Role",
+        id: "role",
         rows: [["Marta L.", 2860], ["Aitor E.", 2740], ["Luca B.", 2655], ["Diego M.", 2580], ["Felix W.", 2490], ["Ines C.", 2455], ["Tim B.", 2380], ["Paul N.", 2310]],
         me: [31, 1520],
       },
@@ -186,112 +144,35 @@ window.CTE_CONFIG = {
 
   /** Phase 0 nach Figma CUPRA-GLT-27 (Intro, Dashboard, Kapitel ORIGIN) */
   p0: {
-    introFixed: "The one",
-    introLines: ["who knows the roots.", "who masters the craft.", "who feels the drive.", "they follow. you."],
     intro: { lineDelayMs: 1500, skipAfterMs: 2000 },
-    copy: {
-      eyebrow: "CUPRA Training Experience",
-      headline: "Be the one they follow",
-      intro: "Four chapters. Every one of them has to be earned.",
-      programLabel: "Delta",
-    },
     unlock: {
       craftsmanship: "2026-09-21T09:00:00+02:00",
       performance: "2026-09-25T09:00:00+02:00",
       tribe: "2026-09-28T09:00:00+02:00",
     },
     chapters: [
-      { id: "origin", index: "Chapter 01", name: "Origin", claim: "The one who knows the roots.", image: "/assets/figma/card-origin.jpg", open: true },
-      { id: "craftsmanship", index: "Chapter 02", name: "Craftsmanship", claim: "The one who masters the craft.", image: "/assets/figma/card-craftsmanship.jpg", teaser: "Materials, seams, the hands behind the new model." },
-      { id: "performance", index: "Chapter 03", name: "Performance", claim: "The one who feels the drive.", image: "/assets/figma/card-performance.jpg", teaser: "Numbers you feel before you read them." },
-      { id: "tribe", index: "Chapter 04", name: "Tribe", claim: "The one they follow. You.", image: "/assets/figma/card-tribe.jpg", teaser: "Where knowledge becomes trust. The Competition opens here." },
+      { id: "origin", image: "/assets/figma/card-origin.jpg", open: true },
+      { id: "craftsmanship", image: "/assets/figma/card-craftsmanship.jpg" },
+      { id: "performance", image: "/assets/figma/card-performance.jpg" },
+      { id: "tribe", image: "/assets/figma/card-tribe.jpg" },
     ],
-    nugget: {
-      title: "Origin Story",
-      meta: "1:20 min",
-      note: "Worth watching before you play",
-      eyebrow: "Origin · Content Nugget",
-      headline: "Where the new model comes from.",
-      body: "Ninety seconds on the roots: Barcelona, the racing spirit, the people who shaped it. Watch it once, then play.",
-      thumb: "/assets/figma/card-origin.jpg",
-    },
-    challenge: {
-      title: "Born in Barcelona",
-      meta: "~ 3 min",
-      points: "up to 300 pts",
-      thumb: "/assets/figma/thumb-born-in-barcelona.jpg",
-    },
+    nugget: { thumb: "/assets/figma/card-origin.jpg" },
+    challenge: { thumb: "/assets/figma/thumb-born-in-barcelona.jpg" },
 
     /** Hotspot-Challenge „Born in Barcelona" (born-in-barcelona-interaktionskonzept.md) */
     bib: {
-      eyebrow: "Origin · Challenge",
-      title: "Born in Barcelona",
       /** Zeit pro Versuch */
       timerMs: 10000,
       /** Punkte: erster Versuch voll, zweiter halb, kein Treffer null (4 × 75 = 300) */
       points: { full: 75, half: 35 },
-      copy: {
-        select: "Select a district",
-        progress: "{n}/4 districts claimed",
-        correct: "Correct!",
-        half: "Claimed.",
-        none: "Not this time.",
-        retry: "Not quite. One more try.",
-        timeout: "Time's up. One more try.",
-        next: "Next district",
-        finish: "See result",
-        allDone: "All four districts claimed.",
-        leaveTitle: "Leave the challenge?",
-        leaveText: "Claimed districts stay. The current district counts as not started.",
-        leave: "Leave",
-        stay: "Keep playing",
-      },
+      /** correct ist der Index in der Antwortliste aus i18n.js, dort steht die richtige Antwort immer zuerst */
       districts: [
-        {
-          id: "campnou", name: "Camp Nou",
-          question: "Which club has CUPRA partnered with as official automotive partner?",
-          answers: ["FC Barcelona", "RCD Espanyol", "Real Madrid"], correct: 0,
-          explain: "CUPRA has been FC Barcelona's official automotive partner since 2019.",
-        },
-        {
-          id: "casa", name: "Casa CUPRA",
-          question: "What is Casa CUPRA?",
-          answers: ["The brand's flagship experience space in Barcelona", "The CUPRA design studio", "The first CUPRA dealership"], correct: 0,
-          explain: "Casa CUPRA is the brand's flagship space in Barcelona: showroom, restaurant and stage in one.",
-        },
-        {
-          id: "born", name: "El Born",
-          question: "Which CUPRA model took its name from this district?",
-          answers: ["CUPRA Born", "CUPRA Leon", "CUPRA Formentor"], correct: 0,
-          explain: "The all-electric CUPRA Born carries the name of El Born, the old harbour quarter.",
-        },
-        {
-          id: "raval", name: "El Raval",
-          question: "Which CUPRA model carries the name of this district?",
-          answers: ["CUPRA Raval", "CUPRA Terramar", "CUPRA Tavascan"], correct: 0,
-          explain: "The new urban electric model is named after El Raval, Barcelona's most diverse district.",
-        },
+        { id: "campnou", correct: 0 },
+        { id: "casa", correct: 0 },
+        { id: "born", correct: 0 },
+        { id: "raval", correct: 0 },
       ],
     },
     points: { perStreak: 30, challengeMax: 300, fallbackScore: 240 },
-    result: { eyebrow: "Born in Barcelona · Completed", headline: "Strong start", line: "You know where CUPRA comes from." },
-    badge: { name: "Origin", state: "Complete", line: "The one who knows the roots." },
-  },
-
-  copy: {
-    openerLines: [
-      "The one who knows the roots.",
-      "The one who masters the craft.",
-      "The one who feels the drive.",
-      "The one they follow. You.",
-    ],
-    openerOutro1: "Chapter one is complete.",
-    openerOutro2: "The Digital Campaign begins.",
-    homeEyebrow: "CUPRA Training Experience",
-    homeHeadline: "The Digital Campaign",
-    homeProgramLabel: "Delta",
-    homeIntro: "Four chapters, one Performance Check. Every one of them has to be earned.",
-    archiveRow: "The Brand Chapters · Completed",
-    noLeaderboard: "See where you stand. Against your market, your role and the whole Tribe.",
   },
 };

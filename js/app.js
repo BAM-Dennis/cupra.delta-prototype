@@ -61,9 +61,10 @@
   }
 
   function isP0() { return state.phase === 0; }
-  function phasePoints() { return (state.nuggetSeen ? P.nugget : 0) + (state.k1Done ? state.k1Score : 0); }
-  function p0Points() { return (state.p0.nuggetSeen ? P.nugget : 0) + (state.p0.challengeDone ? state.p0.challengeScore : 0); }
-  function badgeCount() { return CFG.phase0.chapters.length + 1 + (state.badgeEarned ? 1 : 0); }
+  // Content Nuggets vergeben keine Punkte. Punkte kommen nur aus Challenges.
+  function phasePoints() { return state.k1Done ? state.k1Score : 0; }
+  function p0Points() { return state.p0.challengeDone ? state.p0.challengeScore : 0; }
+  function badgeCount() { return CFG.phase0.chapters.length + (state.badgeEarned ? 1 : 0); }
   function streakBest() { return state.streakBest === null ? CFG.demo.streakBest : state.streakBest; }
 
   /* ---------- DOM ---------- */
@@ -90,7 +91,7 @@
     var lines = $("[data-opener-lines]");
     if (lines) lines.innerHTML = CFG.copy.openerLines.map(function (l) { return '<p class="opener__line">' + esc(l) + "</p>"; }).join("");
     var ob = $("[data-opener-badges]");
-    if (ob) ob.innerHTML = CFG.phase0.chapters.map(function () { return '<img src="/assets/badge-copper.svg" alt="">'; }).join("") + '<img src="/assets/badge-teal.svg" alt="">';
+    if (ob) ob.innerHTML = CFG.phase0.chapters.map(function () { return '<img src="/assets/badge-copper.svg" alt="">'; }).join("");
     $$("[data-intro0-lines], [data-opener-carousel]").forEach(function (il) {
       var arr = P0.introLines || [];
       il.innerHTML = arr.concat([arr[0]]).map(function (l, i) {
@@ -125,7 +126,7 @@
 
   var PARENT = {
     intro0: "/", introvideo: "/", dashboard: "/", chapter0: "/", nugget0: "/chapter/origin", bib: "/chapter/origin",
-    profile: "/", k1: "/", nugget: "/k1", cintro: "/k1", cplay: "/k1/challenge", result: "/", badge: "/",
+    profile: "/", k1: "/", nugget: "/chapter/refresher", cintro: "/chapter/refresher", cplay: "/chapter/refresher/challenge", result: "/", badge: "/",
     archive: "/", leaderboard: "/", home: "/", opener: "/",
   };
   var current = null;
@@ -152,12 +153,12 @@
     }
     switch (path) {
       case "/": case "/home": return state.openerSeen ? "home" : "opener";
-      case "/k1": return "k1";
-      case "/k1/nugget": return "nugget";
-      case "/k1/challenge": return "cintro";
-      case "/k1/challenge/play": return "cplay";
-      case "/k1/result": return state.k1Done ? "result" : null;
-      case "/k1/badge": return state.k1Done ? "badge" : null;
+      case "/chapter/refresher": return "k1";
+      case "/chapter/refresher/nugget": return "nugget";
+      case "/chapter/refresher/challenge": return "cintro";
+      case "/chapter/refresher/challenge/play": return "cplay";
+      case "/chapter/refresher/result": return state.k1Done ? "result" : null;
+      case "/chapter/refresher/badge": return state.k1Done ? "badge" : null;
       case "/archive": return "archive";
       case "/leaderboard": return "leaderboard";
       default: return null;
@@ -376,13 +377,11 @@
   enter.nugget0 = function (el) {
     var thumb = $(".vthumb", el);
     var video = $("[data-nugget-video]", el);
-    var pill = $("[data-nugget0-pill]", el);
     var progress = $("[data-video-progress]", el);
     var src = CFG.video && CFG.video.storyCapsule;
     var revealed = false;
 
     thumb.classList.remove("is-playing");
-    pill.hidden = true;
     video.hidden = true;
     progress.style.transitionDuration = "0ms";
 
@@ -391,16 +390,15 @@
       revealed = true;
       state.p0.nuggetSeen = true;
       saveState();
-      pill.hidden = false;
       progress.style.transitionDuration = "300ms";
       thumb.classList.add("is-playing");
       updateCounters();
     };
 
-    if (state.p0.nuggetSeen) { revealed = true; pill.hidden = false; thumb.classList.add("is-playing"); return; }
+    if (state.p0.nuggetSeen) { revealed = true; thumb.classList.add("is-playing"); return; }
 
     if (src) {
-      // Echtes Video: Tap startet, Bonus am Ende
+      // Echtes Video: Tap startet, am Ende gilt der Nugget als gesehen
       if (video.getAttribute("src") !== src) video.setAttribute("src", src);
       video.onended = function () { nugget0Reveal(); };
       video.ontimeupdate = function () {
@@ -413,7 +411,7 @@
         if (p && p.catch) p.catch(function () { /* ignore */ });
       };
     } else {
-      // Mock: Balken läuft, nach revealAfterMs erscheint der Bonus
+      // Mock: Balken läuft, nach revealAfterMs gilt der Nugget als gesehen
       nugget0Play = null;
       later(function () { progress.style.transitionDuration = CFG.nugget.revealAfterMs + "ms"; thumb.classList.add("is-playing"); }, 60);
       later(function () { nugget0Reveal(); }, CFG.nugget.revealAfterMs);
@@ -679,15 +677,15 @@
     cta.removeAttribute("data-chapter");
     if (state.k1Done && !state.badgeEarned) {
       cta.textContent = "Claim your badge";
-      cta.setAttribute("data-nav", "/k1/badge");
+      cta.setAttribute("data-nav", "/chapter/refresher/badge");
     } else if (state.k1Done) {
-      cta.textContent = "Continue: K2 Segment";
+      cta.textContent = "Continue: Chapter 02";
       cta.setAttribute("data-nav", "");
       cta.setAttribute("data-action", "teaser");
       cta.setAttribute("data-chapter", "k2");
     } else {
-      cta.textContent = "Continue: K1 Refresher";
-      cta.setAttribute("data-nav", "/k1");
+      cta.textContent = "Continue: Refresher";
+      cta.setAttribute("data-nav", "/chapter/refresher");
     }
     $("[data-chapters]", el).innerHTML = CFG.chapters.map(renderP1Card).join("");
     setRing($(".dash-status [data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
@@ -719,7 +717,7 @@
     var st = chapterState(c);
     var o = { index: c.index, name: c.name, image: c.image, state: st };
     if (c.kind === "scan") {
-      o.claim = "Your Delta across five dimensions.";
+      o.claim = "Where you stand across five dimensions.";
       o.stateHtml = "Completed &nbsp;·&nbsp; <b>5 dimensions</b>";
       o.attrs = 'data-nav="' + c.nav + '"';
       o.full = true; o.ring = true;
@@ -794,7 +792,7 @@
 
   // K1
   enter.k1 = function (el) {
-    $("[data-k1-state]", el).textContent = "K1  ·  " + (state.k1Done ? "Completed" : "Open");
+    $("[data-k1-state]", el).textContent = "Chapter 01  ·  " + (state.k1Done ? "Completed" : "Open");
     setRing($("[data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
     setRowState($('[data-card="nugget"]', el), state.nuggetSeen, !state.nuggetSeen, "Watch");
     setRowState($('[data-card="challenge"]', el), state.k1Done, state.nuggetSeen && !state.k1Done, "Play");
@@ -811,11 +809,9 @@
   var nuggetReveal = null;
   enter.nugget = function (el) {
     var video = $(".vthumb", el);
-    var pill = $("[data-nugget-pill]", el);
     var progress = $("[data-video-progress]", el);
     var revealed = false;
     video.classList.remove("is-playing");
-    pill.hidden = true;
     progress.style.transitionDuration = "0ms";
 
     nuggetReveal = function () {
@@ -823,13 +819,12 @@
       revealed = true;
       state.nuggetSeen = true;
       saveState();
-      pill.hidden = false;
       progress.style.transitionDuration = "300ms";
       video.classList.add("is-playing");
       updateCounters();
     };
 
-    if (state.nuggetSeen) { revealed = true; pill.hidden = false; video.classList.add("is-playing"); return; }
+    if (state.nuggetSeen) { revealed = true; video.classList.add("is-playing"); return; }
     later(function () { progress.style.transitionDuration = CFG.nugget.revealAfterMs + "ms"; video.classList.add("is-playing"); }, 60);
     later(function () { nuggetReveal(); }, CFG.nugget.revealAfterMs);
   };
@@ -901,7 +896,7 @@
       state.k1Done = true;
       state.k1Score = Math.max(state.k1Score || 0, P.challenge);
       saveState();
-      navigate("/k1/result");
+      navigate("/chapter/refresher/result");
       return;
     }
     play.index += 1;
@@ -930,7 +925,7 @@
       tileLabel.textContent = "Correct";
       tileValue.textContent = correct + " / " + CFG.k1.challenge.cards.length;
     }
-    $("[data-result-cta]", el).setAttribute("data-nav", p0 ? "/chapter/origin/badge" : "/k1/badge");
+    $("[data-result-cta]", el).setAttribute("data-nav", p0 ? "/chapter/origin/badge" : "/chapter/refresher/badge");
     countUp($("[data-result-score]", el), score, 900);
   };
 
@@ -962,7 +957,7 @@
     var ch = CFG.phase0.chapters;
     $("[data-phase0-badges]", el).innerHTML = ch.map(function (c) {
       return '<figure><img src="/assets/badge-copper.svg" alt=""><figcaption>' + esc(c.name) + "</figcaption></figure>";
-    }).join("") + '<figure class="is-final"><img src="/assets/badge-teal.svg" alt=""><figcaption>' + esc(CFG.phase0.finalBadge) + "</figcaption></figure>";
+    }).join("");
     $("[data-phase0-chapters]", el).innerHTML = ch.map(function (c, i) {
       return imageCard({ index: "Chapter " + pad2(i + 1), name: c.name, claim: c.claim, image: c.image, state: "completed", ring: true, full: true,
         stateHtml: "Completed &nbsp;·&nbsp; <b>Badge earned</b>", attrs: "disabled" });
@@ -1126,6 +1121,8 @@
   function boot() {
     fillStatic();
     var params = new URLSearchParams(location.search);
+    var showDev = (CFG.dev && CFG.dev.showReplay) || params.get("dev") === "1";
+    $$("[data-dev-replay]").forEach(function (el) { el.hidden = !showDev; });
     var path = normalize(location.pathname);
     var toastText = null;
 

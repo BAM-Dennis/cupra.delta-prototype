@@ -129,7 +129,7 @@
             <div class="ccrow__thumb"><img src="/assets/figma/card-origin.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-play-24.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
               <p class="ccrow__title" data-p0="nugget.title"></p>
-              <p class="ccrow__meta"><span data-p0="nugget.meta"></span> · <b class="copper">+<span data-fmt="nugget"></span> Bonus pts</b></p>
+              <p class="ccrow__meta"><span data-p0="nugget.meta"></span> · <span data-p0="nugget.note"></span></p>
             </div>
             <span class="ccrow__right" data-card-state></span>
           </button>
@@ -157,13 +157,11 @@
           <video class="vthumb__video" data-nugget-video playsinline preload="metadata" hidden></video>
           <img class="vthumb__play" src="/assets/figma/icon-play-88.svg" alt="" width="88" height="88">
           <div class="video__bar"><span class="video__progress" data-video-progress></span></div>
-          <span class="gain gain--center" data-nugget0-pill hidden><img src="/assets/design/icon-plus.svg" alt="" class="icon24"><span data-fmt="nugget"></span></span>
         </button>
         <div class="ch-intro ch-intro--video">
           <p class="overline tr15" data-p0="nugget.eyebrow"></p>
           <h2 class="vtitle" data-p0="nugget.headline"></h2>
           <p class="vbody" data-p0="nugget.body"></p>
-          <div class="score24"><img src="/assets/figma/icon-plus-circle.svg" alt="" width="24" height="24"><span class="copper-label"><span data-fmt="nugget"></span> pts</span></div>
         </div>
         <div class="footer">
           <button type="button" class="btn btn--primary" data-nav="/chapter/origin">Continue</button>
@@ -288,10 +286,9 @@
             <p class="score32__text"><b data-phase-points>0</b> pts &nbsp;·&nbsp; Rank <b data-demo="rank"></b> &nbsp;·&nbsp; <b data-badge-count></b> badges</p>
           </div>
         </div>
-        <button type="button" class="btn btn--primary" data-home-cta data-nav="/k1">Continue: K1 Refresher</button>
+        <button type="button" class="btn btn--primary" data-home-cta data-nav="/chapter/refresher">Continue: Refresher</button>
 
-        <p class="overline tr15 section">Your path</p>
-        <ol class="ccards" data-chapters></ol>
+        <ol class="ccards ccards--top" data-chapters></ol>
 
         <p class="overline tr15 section">Play anytime</p>
         <button type="button" class="ccrow ccrow--hi" data-action="open-streak">
@@ -307,7 +304,7 @@
         <button type="button" class="ccrow" data-nav="/archive">
           <div class="ccrow__thumb"><img src="/assets/figma/card-origin.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-check-circle.svg" alt="" width="24" height="24"></span></div>
           <div class="ccrow__text">
-            <p class="ccrow__title">Become the CUPRA 1st</p>
+            <p class="ccrow__title">The Brand Chapters</p>
             <p class="ccrow__meta">Phase 0 · Completed · <b class="copper"><span data-fmt="phase0Total"></span> pts</b></p>
           </div>
           <span class="ccrow__right">Open</span>
@@ -322,8 +319,8 @@
         </div>
         <div class="ch-intro">
           <p class="overline tr15">Delta Scan &nbsp;·&nbsp; Completed</p>
-          <h1 class="ch-title ch-title--md">Your Delta Profile</h1>
-          <p class="ch-claim">Your starting point across five dimensions. The campaign sharpens what you need most.</p>
+          <h1 class="ch-title ch-title--md">Your starting point</h1>
+          <p class="ch-claim">Where you stand across five dimensions. The campaign sharpens what you need most.</p>
         </div>
 
         <section class="panel">
@@ -331,7 +328,7 @@
           <ul class="legend">
             <li><i class="dot dot--solid"></i>Solid</li>
             <li><i class="dot dot--sharpen"></i>Sharpen</li>
-            <li><i class="dot dot--delta"></i>Delta</li>
+            <li><i class="dot dot--train"></i>Train</li>
           </ul>
         </section>
 
@@ -357,7 +354,7 @@
 
         <p class="overline tr15 section">Prototype view</p>
         <div class="segmented" data-phase-toggle>
-          <button type="button" data-action="set-phase" data-phase="0">Phase 0 · CUPRA 1st</button>
+          <button type="button" data-action="set-phase" data-phase="0">Phase 0 · Brand Chapters</button>
           <button type="button" data-action="set-phase" data-phase="1">Phase 1 · Campaign</button>
         </div>
       </section>
@@ -369,9 +366,9 @@
           <button type="button" class="glassbtn glassbtn--icon" data-nav="/profile" aria-label="Profile"><img src="/assets/figma/icon-profile.svg" alt="" width="17" height="19"></button>
         </div>
         <div class="ch-intro">
-          <p class="overline tr15" data-k1-state>K1 · Open</p>
+          <p class="overline tr15" data-k1-state>Chapter 01 · Open</p>
           <h1 class="ch-title">Refresher</h1>
-          <p class="ch-claim">Prepares all three workshops.</p>
+          <p class="ch-claim">Know what is new before you sell it.</p>
           <span class="chip chip--copper" data-delta-chip></span>
           <div class="score32">
             <div class="ring32" data-ring>
@@ -385,16 +382,16 @@
         </div>
         <div class="clist">
           <p class="overline tr15">Content Nugget</p>
-          <button type="button" class="ccrow" data-nav="/k1/nugget" data-card="nugget">
+          <button type="button" class="ccrow" data-nav="/chapter/refresher/nugget" data-card="nugget">
             <div class="ccrow__thumb"><img src="/assets/figma/card-performance.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-play-24.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
               <p class="ccrow__title" data-k1="nugget.title"></p>
-              <p class="ccrow__meta"><span data-k1="nugget.meta"></span> · <b class="copper">+<span data-fmt="nugget"></span> Bonus pts</b></p>
+              <p class="ccrow__meta"><span data-k1="nugget.meta"></span> · <span data-k1="nugget.note"></span></p>
             </div>
             <span class="ccrow__right" data-card-state></span>
           </button>
           <p class="overline tr15 pt20">Challenges</p>
-          <button type="button" class="ccrow" data-nav="/k1/challenge" data-card="challenge">
+          <button type="button" class="ccrow" data-nav="/chapter/refresher/challenge" data-card="challenge">
             <div class="ccrow__thumb"><img src="/assets/figma/card-craftsmanship.jpg" alt=""><span class="ccrow__thumbicon"><img src="/assets/figma/icon-challenge.svg" alt="" width="24" height="24"></span></div>
             <div class="ccrow__text">
               <p class="ccrow__title" data-k1="challenge.title"></p>
@@ -416,16 +413,14 @@
           <div class="vthumb__overlay"></div>
           <img class="vthumb__play" src="/assets/figma/icon-play-88.svg" alt="" width="88" height="88">
           <div class="video__bar"><span class="video__progress" data-video-progress></span></div>
-          <span class="gain gain--center" data-nugget-pill hidden><img src="/assets/design/icon-plus.svg" alt="" class="icon24"><span data-fmt="nugget"></span></span>
         </button>
         <div class="ch-intro ch-intro--video">
           <p class="overline tr15" data-k1="nugget.eyebrow"></p>
           <h2 class="vtitle" data-k1="nugget.headline"></h2>
           <p class="vbody" data-k1="nugget.body"></p>
-          <div class="score24"><img src="/assets/figma/icon-plus-circle.svg" alt="" width="24" height="24"><span class="copper-label"><span data-fmt="nugget"></span> pts</span></div>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/k1/challenge">Continue to challenge</button>
+          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge">Continue to challenge</button>
         </div>
       </section>
 
@@ -436,7 +431,7 @@
           <span></span>
         </div>
         <div class="center grow">
-          <p class="overline tr15">K1 &nbsp;·&nbsp; Challenge 01</p>
+          <p class="overline tr15">Refresher &nbsp;·&nbsp; Challenge</p>
           <h1 class="ch-title ch-title--md" data-k1="challenge.title"></h1>
           <p class="ch-claim" data-k1="challenge.rule"></p>
           <div class="tiles tiles--wide">
@@ -447,7 +442,7 @@
           <p class="hint" data-challenge-done hidden>Already completed. Play again anytime, your points stay.</p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-nav="/k1/challenge/play">Start</button>
+          <button type="button" class="btn btn--primary" data-nav="/chapter/refresher/challenge/play">Start</button>
         </div>
       </section>
 
@@ -513,7 +508,7 @@
           <p class="body result__line" data-result-line></p>
         </div>
         <div class="footer">
-          <button type="button" class="btn btn--primary" data-result-cta data-nav="/k1/badge">Claim your badge</button>
+          <button type="button" class="btn btn--primary" data-result-cta data-nav="/chapter/refresher/badge">Claim your badge</button>
         </div>
       </section>
 
@@ -539,8 +534,8 @@
         </div>
         <div class="ch-intro">
           <p class="overline tr15">Phase 0 &nbsp;·&nbsp; Completed</p>
-          <h1 class="ch-title ch-title--md">Become the CUPRA 1st</h1>
-          <p class="ch-claim">Four chapters, five badges, <b data-fmt="phase0Total"></b> pts.</p>
+          <h1 class="ch-title ch-title--md">The Brand Chapters</h1>
+          <p class="ch-claim">Four chapters, four badges, <b data-fmt="phase0Total"></b> pts.</p>
         </div>
         <section class="panel">
           <div class="badges" data-phase0-badges></div>
@@ -557,7 +552,7 @@
         </div>
         <div class="ch-intro">
           <p class="overline tr15">The Competition</p>
-          <h1 class="ch-title ch-title--md">The Reveal</h1>
+          <h1 class="ch-title ch-title--md">Leaderboard</h1>
           <p class="ch-claim" data-copy="noLeaderboard"></p>
         </div>
 
@@ -566,7 +561,7 @@
         <ol class="board" data-board-rows></ol>
 
         <div class="board__me" data-board-me></div>
-        <button type="button" class="linkbtn" data-action="board-replay">Replay reveal</button>
+        <button type="button" class="linkbtn" data-action="board-replay" data-dev-replay hidden>Replay reveal</button>
       </section>
 
     </main>

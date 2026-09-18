@@ -274,7 +274,7 @@ b, strong { font-weight: 500; }
 .minibars i { flex: 1; border-radius: 1px; background: var(--w25); }
 .minibars .b-solid { height: 100%; background: var(--teal); }
 .minibars .b-sharpen { height: 66%; background: var(--copper-light); }
-.minibars .b-delta { height: 33%; background: var(--signal); }
+.minibars .b-train { height: 33%; background: var(--signal); }
 
 /* ---------- Ring ---------- */
 
@@ -299,14 +299,14 @@ b, strong { font-weight: 500; }
 .dim--solid .dim__bar i { background: var(--teal); }
 .dim--sharpen .dim__band { color: var(--copper-light); }
 .dim--sharpen .dim__bar i:nth-child(-n+2) { background: var(--copper-light); }
-.dim--delta .dim__band { color: var(--signal); }
-.dim--delta .dim__bar i:first-child { background: var(--signal); }
+.dim--train .dim__band { color: var(--signal); }
+.dim--train .dim__bar i:first-child { background: var(--signal); }
 .legend { display: flex; gap: 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--w50); }
 .legend li { display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .dot--solid { background: var(--teal); }
 .dot--sharpen { background: var(--copper-light); }
-.dot--delta { background: var(--signal); }
+.dot--train { background: var(--signal); }
 
 /* ---------- Thumb / Video ---------- */
 
@@ -503,7 +503,6 @@ b, strong { font-weight: 500; }
 
 .tr15 { letter-spacing: 1.5px; color: #fff; }
 .pt20 { padding-top: 20px; }
-.copper-label { font-size: 12px; font-weight: 500; text-transform: uppercase; color: var(--copper-light); letter-spacing: 0; }
 
 /* Hintergründe */
 .bg__sky { position: absolute; max-width: none; object-fit: cover; }
@@ -573,6 +572,7 @@ b, strong { font-weight: 500; }
 .dash-h1 { font-size: 26px; line-height: 1.2; font-weight: 500; text-transform: uppercase; margin: 0; }
 .dash-body { font-size: 16px; line-height: 1.5; opacity: .75; }
 .ccards { display: grid; gap: 10px; margin-top: 26px; }
+.ccards--top { margin-top: 30px; }
 
 .ccard {
   position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; width: 100%; min-height: 188px; padding: 24px;
@@ -621,7 +621,7 @@ b, strong { font-weight: 500; }
 .ccrow__thumbicon { position: relative; z-index: 1; width: 24px; height: 24px; }
 .ccrow__text { flex: 1; min-width: 0; display: grid; gap: 6px; }
 .ccrow__title { font-size: 18px; line-height: 1; text-transform: uppercase; font-weight: 350; }
-.ccrow__meta { font-size: 12px; line-height: 1; font-weight: 350; }
+.ccrow__meta { font-size: 12px; line-height: 1.3; font-weight: 350; }
 .ccrow__meta b { font-weight: 500; }
 .ccrow__right { flex: none; display: inline-flex; align-items: center; min-width: 24px; justify-content: flex-end; font-size: 10px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--copper-light); }
 .ccrow__right img { width: 24px; height: 24px; }
@@ -639,7 +639,6 @@ b, strong { font-weight: 500; }
 .ch-intro--video { margin-top: 39px; gap: 10px; }
 .vtitle { font-size: 24px; line-height: 1; font-weight: 350; text-transform: uppercase; margin: 0; }
 .vbody { font-size: 16px; line-height: 1.2; opacity: .75; }
-.score24 { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 
 /* ---------- Phase 1 im Phase-0-Stil ---------- */
 
@@ -692,10 +691,10 @@ b, strong { font-weight: 500; }
 .bib-map__svg { display: block; width: 393px; height: 308px; overflow: visible; }
 .bib-base, .bib-deco, .bib-labels { pointer-events: none; }
 .bib-d { cursor: pointer; }
-.bib-d__shape { fill: #fff; fill-opacity: var(--fo, .15); stroke: none; transition: fill .45s, fill-opacity .45s, stroke .3s; pointer-events: all; }
+.bib-d__shape { fill: #fff; fill-opacity: var(--fo, .15); stroke: rgba(255,255,255,.45); stroke-width: .8; stroke-linejoin: round; transition: fill .45s, fill-opacity .45s, stroke .3s; pointer-events: all; }
 .bib-d:not(.is-claimed):active .bib-d__shape { fill-opacity: .3; }
 .bib-d.is-active .bib-d__shape { fill: #B77F58; fill-opacity: .5; stroke: #fff; stroke-width: 1; stroke-linecap: square; }
-.bib-d.is-full .bib-d__shape { fill: url(#bib-copper); fill-opacity: 1; stroke: none; }
+.bib-d.is-full .bib-d__shape { fill: url(#bib-copper); fill-opacity: 1; stroke: rgba(224,168,118,.8); }
 .bib-d.is-half .bib-d__shape { fill: url(#bib-hatch); fill-opacity: 1; stroke: #B77F58; stroke-width: .8; }
 .bib-d.is-none .bib-d__shape { fill: #000; fill-opacity: .35; stroke: #B77F58; stroke-width: 1; }
 .bib-d.is-claimed { cursor: default; }

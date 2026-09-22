@@ -272,9 +272,9 @@ b, strong { font-weight: 500; }
 /* Delta-Mini-Balken auf der Home-Karte */
 .minibars { display: flex; align-items: flex-end; gap: 3px; width: 44px; height: 44px; flex: none; padding: 8px 6px; border-radius: 6px; background: var(--w05); }
 .minibars i { flex: 1; border-radius: 1px; background: var(--w25); }
-.minibars .b-solid { height: 100%; background: var(--teal); }
+.minibars .b-keep { height: 100%; background: var(--teal); }
 .minibars .b-sharpen { height: 66%; background: var(--copper-light); }
-.minibars .b-train { height: 33%; background: var(--signal); }
+.minibars .b-build { height: 33%; background: var(--signal); }
 
 /* ---------- Ring ---------- */
 
@@ -295,18 +295,18 @@ b, strong { font-weight: 500; }
 .dim__band { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 .dim__bar { display: flex; gap: 3px; height: 6px; }
 .dim__bar i { flex: 1; background: var(--w15); border-radius: 1px; }
-.dim--solid .dim__band { color: var(--teal); }
-.dim--solid .dim__bar i { background: var(--teal); }
+.dim--keep .dim__band { color: var(--teal); }
+.dim--keep .dim__bar i { background: var(--teal); }
 .dim--sharpen .dim__band { color: var(--copper-light); }
 .dim--sharpen .dim__bar i:nth-child(-n+2) { background: var(--copper-light); }
-.dim--train .dim__band { color: var(--signal); }
-.dim--train .dim__bar i:first-child { background: var(--signal); }
+.dim--build .dim__band { color: var(--signal); }
+.dim--build .dim__bar i:first-child { background: var(--signal); }
 .legend { display: flex; gap: 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--w50); }
 .legend li { display: flex; align-items: center; gap: 6px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.dot--solid { background: var(--teal); }
+.dot--keep { background: var(--teal); }
 .dot--sharpen { background: var(--copper-light); }
-.dot--train { background: var(--signal); }
+.dot--build { background: var(--signal); }
 
 /* ---------- Thumb / Video ---------- */
 

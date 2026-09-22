@@ -64,14 +64,14 @@ window.CTE_CONFIG = {
     revealAfterMs: 3000,
   },
 
-  /** Delta Scan, feste Demo-Werte. band: solid | sharpen | train */
+  /** Delta Scan, feste Demo-Werte. band: keep | sharpen | build */
   delta: {
     dimensions: [
       { id: "product", band: "sharpen" },
-      { id: "segment", band: "train" },
+      { id: "segment", band: "build" },
       { id: "competitors", band: "sharpen" },
-      { id: "brand", band: "solid" },
-      { id: "sales", band: "train" },
+      { id: "brand", band: "keep" },
+      { id: "sales", band: "build" },
     ],
   },
 

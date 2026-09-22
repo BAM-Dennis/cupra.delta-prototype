@@ -37,7 +37,7 @@
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
   function pad2(n) { return n < 10 ? "0" + n : String(n); }
-  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+  function fmt(n) { try { return Number(n).toLocaleString(locale); } catch (e) { return String(n); } }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function get(obj, path) { return path.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, obj); }
 
@@ -397,7 +397,7 @@
       cls = "";
     } else {
       left = '<div class="ring32 ring32--locked"><svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true"><circle class="ring32__track" cx="16" cy="16" r="15.5"/></svg><img class="ring32__lock" src="/assets/figma/icon-lock.svg" alt=""></div>';
-      stateHtml = t("ui.unlocksIn") + ' &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '" data-countdown-source="p0"></b>';
+      stateHtml = '<span class="countdown" data-countdown="' + c.id + '" data-countdown-source="p0" data-countdown-label="' + esc(t("ui.unlocksIn")) + '"></span>';
       attrs = 'data-action="teaser0" data-chapter="' + c.id + '"';
       cls = " ccard--locked";
     }
@@ -794,7 +794,7 @@
     } else {
       o.claim = c.teaser;
       o.stateHtml = c.lock === "countdown"
-        ? t("ui.unlocksIn") + ' &nbsp;·&nbsp; <b class="countdown" data-countdown="' + c.id + '"></b>'
+        ? '<span class="countdown" data-countdown="' + c.id + '" data-countdown-label="' + esc(t("ui.unlocksIn")) + '"></span>'
         : "<b>" + esc(c.lockText) + "</b>";
       o.attrs = 'data-action="teaser" data-chapter="' + c.id + '"';
     }
@@ -1034,8 +1034,15 @@
     var now = Date.now();
     $$("[data-countdown]").forEach(function (el) {
       var remaining = unlockTime(el.getAttribute("data-countdown"), el.getAttribute("data-countdown-source")) - now;
+      var value = formatCountdown(remaining, el.hasAttribute("data-countdown-seconds"));
+      var label = el.getAttribute("data-countdown-label");
+      if (label != null) {
+        // Vor dem Freischalten Label plus Restzeit, danach nur noch der Zustandstext
+        el.innerHTML = remaining > 0 ? esc(label) + " &nbsp;·&nbsp; <b>" + esc(value) + "</b>" : "<b>" + esc(value) + "</b>";
+        return;
+      }
       var prefix = el.getAttribute("data-countdown-prefix") || "";
-      el.textContent = (remaining > 0 ? prefix : "") + formatCountdown(remaining, el.hasAttribute("data-countdown-seconds"));
+      el.textContent = (remaining > 0 ? prefix : "") + value;
     });
   }
   setInterval(tickCountdowns, 1000);

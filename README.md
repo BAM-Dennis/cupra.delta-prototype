@@ -66,7 +66,7 @@ Eine Sprache ergänzen: Block in `js/i18n.js` kopieren, übersetzen und das Kür
 | `dev.showReplay` | „Replay reveal" auf dem Leaderboard, per `/?dev=1` einschaltbar |
 | `demo` | Rang, Streak-Bestwert, globaler Bestwert, Ø-Zeit |
 | `opener` / `nugget` | Timings |
-| `delta` | Fünf Dimensionen mit Band (solid / sharpen / delta), Feedback-Text |
+| `delta` | Fünf Dimensionen mit Band (keep / sharpen / build) |
 | `chapters` | Home-Karten inkl. Sperr-Logik und Teaser-Texte |
 | `k1` | Nugget, Challenge-Karten (Feature, Outcome, Auflösung), Result, Badge |
 | `phase0` | Archiv-Kapitel und Badges |
@@ -93,12 +93,14 @@ Phase 1: Der Wert wird als neue Bestleistung übernommen (Streak-Kachel „Your 
 
 ## Textstand
 
-Umgesetzt nach `Prototyp_Textaenderungen_Entwicklung.md` (18.09.2026). Die vier Regeln daraus:
+Umgesetzt nach `Prototyp_Textaenderungen_Entwicklung.md` (18.09.2026) und `Prototyp_Textaenderungen_Entwicklung_v2.md` (20.09.2026). Die vier Regeln daraus:
 
 1. **Kein CUPRA 1st.** Keine Gesamtauszeichnung, keine fünfte Badge. Das Archiv heißt „The Brand Chapters".
 2. **Keine Punkte auf Content.** Content Nuggets vergeben keine Punkte, auch mechanisch nicht. Punkte kommen nur aus Challenges, das Kapitel-Maximum ist damit 300.
 3. **Kein K im Interface.** Durchgehend CHAPTER 01 bis CHAPTER 04. Die Phase-1-Routen liegen unter `/chapter/refresher`.
-4. **Delta nur für das Fahrzeug.** Die Profilstufe heißt TRAIN statt DELTA, der Chip auf der Kapitelseite FOCUS statt DELTA. Der Screenname Delta Scan bleibt.
+4. **Delta nur für das Fahrzeug.** Die Profilstufen heißen KEEP, SHARPEN und BUILD, der Chip auf der Kapitelseite FOCUS. Der Screenname Delta Scan bleibt.
+
+Aus der zweiten Runde: Phase 1 hat einen eigenen Kicker, eine eigene Headline und eine eigene Subline, die Abschnittsüberschrift heißt CHALLENGE im Singular, und Zahlen folgen der Sprache (1,240 im Englischen, 1.240 im Deutschen und Spanischen). Der Countdown zeigt entweder Label plus Restzeit oder nur noch UNLOCKS SOON, nicht beides.
 
 Offen laut Dokument: finale Punkthöhen, Phasendauer für den Countdown, Punktabschlag bei Zweitversuchen, Integration der Streak Challenge.
 

@@ -50,11 +50,8 @@
       var stored = localStorage.getItem(LOCALE_KEY);
       if (hasLocale(stored)) return stored;
     } catch (e) { /* ignore */ }
-    var nav = (navigator.languages || [navigator.language || ""]);
-    for (var i = 0; i < nav.length; i++) {
-      var short = String(nav[i]).slice(0, 2).toLowerCase();
-      if (hasLocale(short)) return short;
-    }
+    // Standardsprache ist Englisch (config.defaultLocale), unabhängig von der Browsersprache.
+    // Nur eine im Umschalter gewählte Sprache wird gespeichert und wiederverwendet.
     return hasLocale(CFG.defaultLocale) ? CFG.defaultLocale : LOCALES[0].id;
   }
 

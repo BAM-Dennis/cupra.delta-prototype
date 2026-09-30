@@ -532,15 +532,17 @@ b, strong { font-weight: 500; }
 .screen--intro0 { padding-top: 0; }
 .intro0__emblem { position: absolute; left: 50%; top: 9.5%; width: 24.4%; max-width: 96px; transform: translateX(-50%); }
 .intro0__text { position: absolute; left: 0; right: 0; top: 32%; height: 125px; }
-.intro0__fixed { position: absolute; left: 27px; top: 50%; transform: translateY(-50%); font-size: 18px; line-height: 1.2; text-transform: uppercase; font-weight: 350; white-space: nowrap; }
+/* top/transform werden per JS auf die Grundlinie der aktiven Karussellzeile gesetzt (layoutIntroText) */
+.intro0__fixed { position: absolute; left: 27px; top: 50%; transform: translateY(-50%); font-size: clamp(13.5px, 4.07vw, 16px); line-height: 1.2; text-transform: uppercase; font-weight: 350; white-space: nowrap; }
 .intro0__mask {
-  position: absolute; left: 112px; right: 0; top: 0; height: 125px; overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 44%, #000 53%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 44%, #000 53%, transparent 100%);
+  position: absolute; left: 112px; right: 27px; top: 0; height: 125px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 44%, #000 66%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 44%, #000 66%, transparent 100%);
 }
-.intro0__lines { position: absolute; left: 0; top: 0; display: grid; gap: 16px; transition: transform .7s var(--ease); will-change: transform; }
+.intro0__lines { position: absolute; left: 0; right: 0; top: 0; display: grid; gap: 16px; transition: transform .7s var(--ease); will-change: transform; }
 .intro0__lines.no-anim { transition: none; }
-.intro0__line { font-size: 18px; line-height: 1.2; text-transform: uppercase; font-weight: 500; white-space: nowrap; opacity: .55; transition: opacity .5s; }
+/* Ganzzahlige Zeilenhoehe, damit die Karussellpositionen auf ganzen Pixeln liegen; auf schmalen Displays etwas kleiner */
+.intro0__line { font-size: clamp(15px, 4.58vw, 18px); line-height: 22px; text-transform: uppercase; font-weight: 500; text-wrap: balance; opacity: .55; transition: opacity .5s; }
 .intro0__line.is-active { opacity: 1; }
 .intro0__line--last { font-weight: 400; }
 .intro0__enter { opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .6s var(--ease); pointer-events: none; }
@@ -550,8 +552,13 @@ b, strong { font-weight: 500; }
 /* ---------- Intro-Video ---------- */
 
 .screen--introvideo { padding: 0; justify-content: flex-end; align-items: center; animation-duration: .15s; }
-.introvideo__bar { position: relative; display: grid; justify-items: center; gap: 12px; margin-bottom: max(40px, env(safe-area-inset-bottom)); }
+.introvideo__bar { position: relative; display: grid; justify-items: center; gap: 12px; width: 100%; padding: 0 var(--pad); margin-bottom: max(40px, env(safe-area-inset-bottom)); }
 .introvideo__bar .skiptext { margin-bottom: 0; }
+.introvideo__controls { position: relative; justify-self: stretch; display: flex; justify-content: center; align-items: center; }
+.introvideo__mute { position: absolute; right: 0; top: 0; }
+.introvideo__mute svg { width: 20px; height: 20px; display: block; }
+.introvideo__mute .ico--sound-off, .introvideo__mute.is-muted .ico--sound-on { display: none; }
+.introvideo__mute.is-muted .ico--sound-off { display: block; }
 .introvideo__unmute { padding: 3px 12px; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; }
 .introvideo__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .introvideo__fallback { position: absolute; inset: 0; overflow: hidden; display: grid; place-items: center; }
@@ -650,7 +657,7 @@ b, strong { font-weight: 500; }
 .screen--opener .opener__stage { margin-top: 30dvh; min-height: 0; flex: 1; align-content: start; align-items: start; }
 .opener__carousel { grid-area: 1 / 1; position: relative; left: auto; right: auto; top: auto; height: 125px; transition: opacity .5s, transform .5s; }
 .opener__carousel .intro0__fixed { left: 7px; }
-.opener__carousel .intro0__mask { left: 92px; }
+.opener__carousel .intro0__mask { left: 92px; right: 7px; }
 .phase-claim .opener__carousel, .phase-badges .opener__carousel, .phase-outro .opener__carousel { opacity: 0; transform: translateY(-8px); pointer-events: none; }
 .screen--opener .opener__claim { font-size: 40px; text-transform: uppercase; padding: 34px 7px 0; }
 .screen--opener .opener__badges { justify-content: flex-start; padding: 44px 7px 0; }
@@ -744,7 +751,7 @@ b, strong { font-weight: 500; }
 
 /* Badge-Screen nach Figma 396:20804 */
 .badge-eyebrow { font-size: 12px; letter-spacing: 1.8px; color: #fff; }
-.badge-title { font-size: 32px; line-height: 1.2; font-weight: 300; text-transform: uppercase; margin: 0; white-space: nowrap; }
+.badge-title { font-size: 32px; line-height: 1.2; font-weight: 300; text-transform: uppercase; margin: 0; max-width: 100%; padding: 0 8px; overflow-wrap: anywhere; text-wrap: balance; }
 .badge-line { font-size: 20px; line-height: normal; font-weight: 300; }
 .badge-stage { gap: 9px; }
 .badge-stage .badge-eyebrow, .badge-stage .badge-title, .badge-stage .badge-line { animation: fade-up .7s var(--ease) .4s both; }

@@ -163,6 +163,7 @@
     $$("[data-streak-best]").forEach(function (el) { el.textContent = streakBest(); });
     $$("[data-streak-meta]").forEach(function (el) { el.textContent = t("ui.streakMeta", { best: streakBest(), global: CFG.demo.streakGlobalBest }); });
     $$("[data-phase-toggle] button").forEach(function (b) { b.classList.toggle("is-active", parseInt(b.getAttribute("data-phase"), 10) === state.phase); });
+    syncIntroMute();
   }
 
   function setRing(ringEl, pct, done, length) {
@@ -297,7 +298,10 @@
       var item = items[i];
       if (!item) return;
       var center = mask.clientHeight / 2;
-      var y = center - (item.offsetTop + item.offsetHeight / 2);
+      // Erste Zeile des Eintrags mittig setzen, damit „THE ONE" auch bei umbrechenden
+      // Zeilen (z. B. Deutsch) auf der ersten Zeile steht. Ganze Pixel gegen Subpixel-Versatz.
+      var lh = parseFloat(getComputedStyle(item).lineHeight) || item.offsetHeight;
+      var y = Math.round(center - (item.offsetTop + lh / 2));
       lines.classList.toggle("no-anim", !!instant);
       lines.style.transform = "translateY(" + y + "px)";
       items.forEach(function (it, k) { it.classList.toggle("is-active", k === i); });
@@ -313,6 +317,31 @@
       later(step, index === n - 1 ? delay * 1.6 : delay);
     }
     later(step, delay);
+  }
+
+  // „THE ONE" auf die Grundlinie der aktiven Karussellzeile setzen und die Maske direkt
+  // hinter dem festen Text beginnen lassen (der ist je Sprache unterschiedlich breit).
+  function baselineOf(el) {
+    var probe = document.createElement("span");
+    probe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+    el.insertBefore(probe, el.firstChild);
+    var b = probe.getBoundingClientRect().bottom - el.getBoundingClientRect().top;
+    probe.remove();
+    return b;
+  }
+  function layoutIntroText(textEl) {
+    var fixed = $(".intro0__fixed", textEl), mask = $(".intro0__mask", textEl), line = $(".intro0__line", textEl);
+    if (!fixed || !mask || !line) return;
+    mask.style.left = (fixed.offsetLeft + fixed.offsetWidth + 8) + "px";
+    var lh = parseFloat(getComputedStyle(line).lineHeight) || line.offsetHeight;
+    // Gleiche Rundung wie in startCarousel/position(), damit beide Grundlinien exakt zusammenfallen.
+    var top = Math.round(mask.clientHeight / 2 - lh / 2) + baselineOf(line) - baselineOf(fixed);
+    fixed.style.top = top + "px";
+    fixed.style.transform = "none";
+  }
+  function layoutIntroTextWhenReady(textEl) {
+    layoutIntroText(textEl);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layoutIntroText(textEl); });
   }
 
   function prepareIntroVideo() {
@@ -333,6 +362,7 @@
     enterBtn.classList.remove("is-visible");
     later(function () { enterBtn.classList.add("is-visible"); }, (P0.intro && P0.intro.skipAfterMs) || 2000);
     startCarousel($("[data-intro0-lines]", el), $(".intro0__mask", el), (P0.intro && P0.intro.lineDelayMs) || 1500, true);
+    layoutIntroTextWhenReady($(".intro0__text", el));
   };
 
   function enterIntro() {
@@ -345,7 +375,9 @@
     var fallback = $("[data-intro-fallback]", el);
     var src = CFG.video && CFG.video.intro;
     var unmute = $("[data-intro-unmute]", el);
+    var muteBtn = $("[data-intro-mute]", el);
     unmute.hidden = true;
+    muteBtn.hidden = !src;
     if (src) {
       fallback.hidden = true;
       video.hidden = false;
@@ -355,10 +387,12 @@
       // Mit Ton starten: der Enter-Tap gilt als Nutzergeste. Wird das blockiert
       // (z. B. Direktaufruf der URL), stumm starten und „Sound on" anbieten.
       video.muted = false;
+      syncIntroMute();
       var p = video.play();
       if (p && p.catch) {
         p.catch(function () {
           video.muted = true;
+          syncIntroMute();
           var q = video.play();
           if (q && q.catch) q.catch(function () { /* Skip bleibt */ });
           unmute.hidden = false;
@@ -370,6 +404,32 @@
       later(finishIntroVideo, (CFG.video && CFG.video.introFallbackMs) || 6000);
     }
   };
+
+  // Mute-Button spiegelt video.muted (Icon, aria-pressed, Label in der aktiven Sprache).
+  function syncIntroMute() {
+    var video = $("[data-intro-video]"), btn = $("[data-intro-mute]");
+    if (!video || !btn) return;
+    var muted = !!video.muted;
+    var label = t(muted ? "ui.unmute" : "ui.mute");
+    btn.classList.toggle("is-muted", muted);
+    btn.setAttribute("aria-pressed", muted ? "true" : "false");
+    btn.setAttribute("aria-label", label);
+    btn.title = label;
+  }
+  function unmuteIntro() {
+    var video = $("[data-intro-video]");
+    video.muted = false;
+    video.volume = 1;
+    var p = video.play();
+    if (p && p.catch) p.catch(function () { /* ignore */ });
+    $("[data-intro-unmute]").hidden = true;
+    syncIntroMute();
+  }
+  function toggleIntroMute() {
+    var video = $("[data-intro-video]");
+    if (video.muted) unmuteIntro();
+    else { video.muted = true; syncIntroMute(); }
+  }
 
   function finishIntroVideo() {
     state.p0.introSeen = true;
@@ -715,6 +775,7 @@
     enterBtn.classList.remove("is-visible");
 
     startCarousel($("[data-opener-carousel]", el), $(".intro0__mask", el), O.lineDelayMs, false);
+    layoutIntroTextWhenReady($(".opener__carousel", el));
     var tClaim = O.lineDelayMs * n + 600;
     var tBadges = tClaim + O.claimHoldMs;
     var tOutro = tBadges + O.badgesHoldMs;
@@ -1128,7 +1189,8 @@
       case "back": goBack(); break;
       case "enter-intro": enterIntro(); break;
       case "skip-introvideo": finishIntroVideo(); break;
-      case "unmute-intro": (function () { var v = $("[data-intro-video]"); v.muted = false; v.volume = 1; var p = v.play(); if (p && p.catch) p.catch(function () {}); $("[data-intro-unmute]").hidden = true; })(); break;
+      case "unmute-intro": unmuteIntro(); break;
+      case "toggle-intro-mute": toggleIntroMute(); break;
       case "nugget0-tap": nugget0Tap(); break;
       case "bib-back": bibBack(); break;
       case "bib-next": bibNext(); break;

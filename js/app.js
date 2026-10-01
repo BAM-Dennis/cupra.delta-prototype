@@ -25,6 +25,8 @@
     nuggetSeen: false,
     k1Done: false,
     k1Score: 0,
+    /** Richtige Karten des besten Challenge-Durchlaufs (null: alter Spielstand ohne diesen Wert) */
+    k1Correct: null,
     badgeEarned: false,
     streakBest: null,
     // Phase 0
@@ -791,21 +793,6 @@
 
   // HOME
   enter.home = function (el) {
-    var cta = $("[data-home-cta]", el);
-    cta.removeAttribute("data-action");
-    cta.removeAttribute("data-chapter");
-    if (state.k1Done && !state.badgeEarned) {
-      cta.textContent = t("ui.claimBadge");
-      cta.setAttribute("data-nav", "/chapter/refresher/badge");
-    } else if (state.k1Done) {
-      cta.textContent = t("ui.continueWith", { name: t("chapters.k2.index") });
-      cta.setAttribute("data-nav", "");
-      cta.setAttribute("data-action", "teaser");
-      cta.setAttribute("data-chapter", "k2");
-    } else {
-      cta.textContent = t("ui.continueWith", { name: t("chapters.k1.name") });
-      cta.setAttribute("data-nav", "/chapter/refresher");
-    }
     $("[data-chapters]", el).innerHTML = CFG.chapters.map(function (c) { return renderP1Card(merged(c, "chapters")); }).join("");
     setRing($(".dash-status [data-ring]", el), phasePoints() / P.chapterMax, state.k1Done, RING32);
     var k1ring = $('[data-chapters] [data-ring]', el);
@@ -919,7 +906,8 @@
   // CHALLENGE PLAY
   var play = null;
   enter.cplay = function (el) {
-    play = { index: 0, phase: "card", points: 0 };
+    // results[i]: true/false pro beantworteter Karte (Tap verglichen mit card.answer)
+    play = { index: 0, phase: "card", points: 0, results: [] };
     renderPlay(el);
   };
 
@@ -933,7 +921,7 @@
     $("[data-play-index]", el).textContent = play.index + 1;
     $("[data-play-steps]", el).innerHTML = cards.map(function (card, i) {
       var cls = i < play.index || (i === play.index && play.phase === "feedback")
-        ? (card.outcome === "correct" ? "is-done" : "is-wrong")
+        ? (play.results[i] ? "is-done" : "is-wrong")
         : (i === play.index ? "is-current" : "");
       return "<i class=\"" + cls + "\"></i>";
     }).join("");
@@ -947,7 +935,7 @@
       $("[data-play-detail]", el).textContent = cx.detail;
       cardEl.hidden = false; fbEl.hidden = true;
     } else {
-      var ok = c.outcome === "correct";
+      var ok = play.results[play.index] === true;
       setGlow(ok ? "correct" : "wrong");
       var v = $("[data-play-verdict]", el);
       v.className = "verdict " + (ok ? "verdict--correct" : "verdict--wrong");
@@ -969,11 +957,13 @@
     later(function () { g.hidden = true; }, 2350);
   }
 
-  function playAnswer() {
+  function playAnswer(answer) {
     if (!play || play.phase !== "card") return;
     var c = CFG.k1.challenge.cards[play.index];
+    var ok = answer === c.answer;
+    play.results[play.index] = ok;
     play.phase = "feedback";
-    if (c.outcome === "correct") play.points += P.perCard;
+    if (ok) play.points += P.perCard;
     renderPlay(screens.cplay);
   }
 
@@ -981,7 +971,11 @@
     if (!play || play.phase !== "feedback") return;
     if (play.index >= CFG.k1.challenge.cards.length - 1) {
       state.k1Done = true;
-      state.k1Score = Math.max(state.k1Score || 0, P.challenge);
+      // Bester Durchlauf zählt: Punkte und Trefferzahl gehören zusammen
+      if (play.points >= (state.k1Score || 0)) {
+        state.k1Score = play.points;
+        state.k1Correct = play.results.filter(Boolean).length;
+      }
       saveState();
       navigate("/chapter/refresher/result");
       return;
@@ -1008,7 +1002,7 @@
       tileLabel.textContent = t("ui.firstTry");
       tileValue.textContent = full + " / " + (P0.bib.districts || []).length;
     } else {
-      var correct = CFG.k1.challenge.cards.filter(function (c) { return c.outcome === "correct"; }).length;
+      var correct = state.k1Correct != null ? state.k1Correct : Math.round((score || 0) / P.perCard);
       tileLabel.textContent = t("ui.correct");
       tileValue.textContent = correct + " / " + CFG.k1.challenge.cards.length;
     }
@@ -1201,7 +1195,7 @@
       case "teaser": openSheet(target.getAttribute("data-chapter")); break;
       case "close-sheet": closeSheet(); break;
       case "nugget-tap": if (nuggetReveal) nuggetReveal(); break;
-      case "play-answer": playAnswer(); break;
+      case "play-answer": playAnswer(target.getAttribute("data-answer")); break;
       case "play-next": playNext(); break;
       case "open-streak": openStreak(); break;
       case "set-phase": setPhase(parseInt(target.getAttribute("data-phase"), 10)); break;

@@ -23,9 +23,7 @@ window.CTE_CONFIG = {
   },
 
   points: {
-    /** Fester Demo-Wert der Refresher-Challenge „Known or New?" (2 von 3 richtig) */
-    challenge: 200,
-    /** Punkte pro richtiger Karte in der gemockten Challenge (3 × 100 = 300 möglich) */
+    /** Punkte pro richtiger Karte in der Refresher-Challenge „Known or New?" (3 × 100 = 300 möglich) */
     perCard: 100,
     /** Maximal erreichbare Punkte pro Kapitel. Content Nuggets geben keine Punkte. */
     chapterMax: 300,
@@ -90,11 +88,14 @@ window.CTE_CONFIG = {
     nugget: { thumb: "/assets/figma/card-performance.jpg" },
     challenge: {
       thumb: "/assets/figma/card-craftsmanship.jpg",
-      /** outcome steuert den Spielverlauf, die Texte liefert i18n.js */
+      /**
+       * answer ist die Wahrheit pro Karte („known" = vom Vorgänger bekannt, „new" = neu am Modell).
+       * Richtig/falsch ergibt sich zur Laufzeit aus dem Vergleich mit dem Tap; die Texte liefert i18n.js.
+       */
       cards: [
-        { id: "lightbar", outcome: "correct" },
-        { id: "cockpit", outcome: "wrong" },
-        { id: "v2h", outcome: "correct" },
+        { id: "lightbar", answer: "new" },
+        { id: "cockpit", answer: "known" },
+        { id: "v2h", answer: "new" },
       ],
     },
   },

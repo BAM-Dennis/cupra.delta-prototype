@@ -822,12 +822,7 @@
   function renderP1Card(c) {
     var st = chapterState(c);
     var o = { index: c.index, name: c.name, image: c.image, state: st };
-    if (c.kind === "scan") {
-      o.claim = c.claim;
-      o.stateHtml = t("ui.completed") + " &nbsp;·&nbsp; <b>5 " + t("ui.dimensions") + "</b>";
-      o.attrs = 'data-nav="' + c.nav + '"';
-      o.full = true; o.ring = true;
-    } else if (c.id === "k1") {
+    if (c.id === "k1") {
       o.claim = c.sub;
       o.ring = true;
       o.stateHtml = t(state.k1Done ? "ui.completed" : "ui.open") + " &nbsp;·&nbsp; <b>" + phasePoints() + " / " + P.chapterMax + " " + t("ui.pts") + "</b>";
@@ -847,7 +842,6 @@
   }
 
   function chapterState(c) {
-    if (c.kind === "scan") return "completed";
     if (c.id === "k1") return state.k1Done ? "completed" : "open";
     if (c.lock === "after-k1") return state.k1Done ? "open" : "locked";
     return "locked";

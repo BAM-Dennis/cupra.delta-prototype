@@ -146,7 +146,7 @@ window.CTE_I18N = {
         known: "Known", isNew: "New",
         correctPrefix: "Correct", wrongPrefix: "Not quite",
         cards: {
-          lightbar: { feature: "Coast-to-coast light bar", detail: "A single light signature running the full width of the rear.", verdict: "New", explain: "The previous model had separate tail lights." },
+          lightbar: { feature: "Coast-to-coast light bar", detail: "A single light signature running the full width of the rear.", verdict: "Known", explain: "Known from the previous model. The coast-to-coast light bar was already on board." },
           cockpit: { feature: "Digital cockpit 12.3''", detail: "Fully digital instrument display behind the wheel.", verdict: "Known", explain: "Known from the previous model. The 12.3'' cockpit was already on board." },
           v2h: { feature: "Bidirectional charging", detail: "The car feeds energy back into the home or the grid.", verdict: "New", explain: "Vehicle-to-home arrives with the new model." },
         },
@@ -355,7 +355,7 @@ window.CTE_I18N = {
         known: "Bekannt", isNew: "Neu",
         correctPrefix: "Richtig", wrongPrefix: "Knapp daneben",
         cards: {
-          lightbar: { feature: "Durchgehendes Lichtband", detail: "Eine Lichtsignatur über die gesamte Heckbreite.", verdict: "Neu", explain: "Der Vorgänger hatte getrennte Rückleuchten." },
+          lightbar: { feature: "Durchgehendes Lichtband", detail: "Eine Lichtsignatur über die gesamte Heckbreite.", verdict: "Bekannt", explain: "Vom Vorgänger bekannt. Das durchgehende Lichtband war schon an Bord." },
           cockpit: { feature: "Digitales Cockpit 12,3''", detail: "Voll digitales Kombiinstrument hinter dem Lenkrad.", verdict: "Bekannt", explain: "Vom Vorgänger bekannt. Das 12,3''-Cockpit war schon an Bord." },
           v2h: { feature: "Bidirektionales Laden", detail: "Das Auto speist Energie zurück ins Haus oder ins Netz.", verdict: "Neu", explain: "Vehicle-to-Home kommt mit dem neuen Modell." },
         },
@@ -564,7 +564,7 @@ window.CTE_I18N = {
         known: "Conocido", isNew: "Nuevo",
         correctPrefix: "Correcto", wrongPrefix: "Casi",
         cards: {
-          lightbar: { feature: "Barra de luz de lado a lado", detail: "Una sola firma lumínica que recorre todo el ancho trasero.", verdict: "Nuevo", explain: "El modelo anterior tenía pilotos separados." },
+          lightbar: { feature: "Barra de luz de lado a lado", detail: "Una sola firma lumínica que recorre todo el ancho trasero.", verdict: "Conocido", explain: "Ya estaba en el modelo anterior. La barra de luz de lado a lado ya venía de serie." },
           cockpit: { feature: "Cockpit digital de 12,3''", detail: "Cuadro de instrumentos totalmente digital tras el volante.", verdict: "Conocido", explain: "Ya estaba en el modelo anterior. El cockpit de 12,3'' ya venía de serie." },
           v2h: { feature: "Carga bidireccional", detail: "El coche devuelve energía a la casa o a la red.", verdict: "Nuevo", explain: "El vehicle-to-home llega con el nuevo modelo." },
         },

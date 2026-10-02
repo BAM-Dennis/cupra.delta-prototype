@@ -75,7 +75,6 @@ window.CTE_CONFIG = {
 
   /** Home-Karten der Phase 1 */
   chapters: [
-    { id: "delta", kind: "scan", nav: "/profile", image: "/assets/figma/thumb-born-in-barcelona.jpg" },
     { id: "k1", nav: "/chapter/refresher", image: "/assets/figma/card-origin.jpg" },
     { id: "k2", lock: "after-k1", image: "/assets/figma/card-craftsmanship.jpg" },
     { id: "k3", lock: "countdown", image: "/assets/figma/card-performance.jpg" },
@@ -93,7 +92,7 @@ window.CTE_CONFIG = {
        * Richtig/falsch ergibt sich zur Laufzeit aus dem Vergleich mit dem Tap; die Texte liefert i18n.js.
        */
       cards: [
-        { id: "lightbar", answer: "new" },
+        { id: "lightbar", answer: "known" },
         { id: "cockpit", answer: "known" },
         { id: "v2h", answer: "new" },
       ],
